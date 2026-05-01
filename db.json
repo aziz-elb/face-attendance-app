@@ -1,0 +1,91 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "firstName": "Alice",
+      "lastName": "Martin",
+      "email": "user@demo.com",
+      "password": "password",
+      "role": "USER",
+      "department_id": "1",
+      "createdAt": "2026-01-01T08:00:00Z",
+      "updatedAt": "2026-01-01T08:00:00Z"
+    },
+    {
+      "id": "2",
+      "firstName": "Bob",
+      "lastName": "Chen",
+      "email": "admin@demo.com",
+      "password": "password",
+      "role": "ADMIN",
+      "department_id": "1",
+      "createdAt": "2026-01-01T08:00:00Z",
+      "updatedAt": "2026-01-01T08:00:00Z"
+    },
+    {
+      "id": "3",
+      "firstName": "Carol",
+      "lastName": "White",
+      "email": "super@demo.com",
+      "password": "password",
+      "role": "SUPER_ADMIN",
+      "department_id": null,
+      "createdAt": "2026-01-01T08:00:00Z",
+      "updatedAt": "2026-01-01T08:00:00Z"
+    },
+    {
+      "firstName": "aziz",
+      "lastName": "elb",
+      "email": "aziz@gmail.com",
+      "password": "123",
+      "department_id": "1",
+      "role": "USER",
+      "createdAt": "2026-05-01T10:39:40.750Z",
+      "updatedAt": "2026-05-01T10:39:40.752Z",
+      "id": "IENftmn"
+    }
+  ],
+  "departments": [
+    {
+      "id": "1",
+      "title": "Computer Science",
+      "description": "Information Technology and Software Engineering",
+      "createdAt": "2026-01-01T08:00:00Z",
+      "updatedAt": "2026-01-01T08:00:00Z"
+    },
+    {
+      "id": "2",
+      "title": "Mathematics",
+      "description": "Pure and Applied Mathematics department",
+      "createdAt": "2026-01-01T08:00:00Z",
+      "updatedAt": "2026-01-01T08:00:00Z"
+    }
+  ],
+  "departmentOwners": [
+    {
+      "id": "1",
+      "department_id": "1",
+      "user_id": "2"
+    }
+  ],
+  "attendance": [
+    {
+      "id": "1",
+      "user_id": "1",
+      "date": "2026-05-01",
+      "arrivedDate": "2026-05-01T08:05:00Z",
+      "status": "PRESENT",
+      "method": "FACIAL",
+      "createdAt": "2026-05-01T08:05:00Z"
+    },
+    {
+      "id": "2",
+      "user_id": "1",
+      "date": "2026-04-30",
+      "arrivedDate": "2026-04-30T08:45:00Z",
+      "status": "LATE",
+      "method": "MANUAL",
+      "createdAt": "2026-04-30T08:45:00Z"
+    }
+  ]
+}
