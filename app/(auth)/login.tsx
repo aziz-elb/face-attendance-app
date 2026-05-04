@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { Button, HelperText, Surface, Text, TextInput, useTheme } from 'react-native-paper';
 import { api } from '../../lib/api';
+import { User } from '../../lib/types';
 
 export default function LoginScreen() {
   const { colors } = useTheme();
@@ -24,10 +25,18 @@ export default function LoginScreen() {
     setError('');
 
     try {
-      const user = await api.login(email, password);
+      const user: User = await api.login(email, password);
+      api.currentUser = user;
       console.log('Logged in user:', user);
-      // Navigate to home page
-      router.replace('/(user)');
+      
+      // Role-based navigation
+      if (user.role === 'SUPER_ADMIN') {
+        router.replace('/(super-admin)');
+      } else if (user.role === 'ADMIN') {
+        router.replace('/(admin)');
+      } else {
+        router.replace('/(user)');
+      }
     } catch (err: any) {
       setError(err.message || 'Login failed');
     } finally {

@@ -2,25 +2,18 @@
   "users": [
     {
       "id": "1",
-      "firstName": "Alice",
-      "lastName": "Martin",
-      "email": "user@demo.com",
+      "firstName": "Mohamed",
+      "lastName": "Badiaa",
+      "email": "mohamed.badia@demo.com",
       "password": "password",
       "role": "USER",
-      "department_id": "1",
+      "department": {
+        "id": 2,
+        "title": "Marketing "
+      },
+      "isActive": true,
       "createdAt": "2026-01-01T08:00:00Z",
-      "updatedAt": "2026-01-01T08:00:00Z"
-    },
-    {
-      "id": "2",
-      "firstName": "Bob",
-      "lastName": "Chen",
-      "email": "admin@demo.com",
-      "password": "password",
-      "role": "ADMIN",
-      "department_id": "1",
-      "createdAt": "2026-01-01T08:00:00Z",
-      "updatedAt": "2026-01-01T08:00:00Z"
+      "updatedAt": "2026-05-03T22:22:34.132Z"
     },
     {
       "id": "3",
@@ -29,43 +22,91 @@
       "email": "super@demo.com",
       "password": "password",
       "role": "SUPER_ADMIN",
-      "department_id": null,
+      "department": {
+        "id": 3,
+        "title": "hllo gggg"
+      },
+      "isActive": true,
       "createdAt": "2026-01-01T08:00:00Z",
-      "updatedAt": "2026-01-01T08:00:00Z"
+      "updatedAt": "2026-05-04T12:04:56.829Z"
     },
     {
+      "id": "IENftmn",
       "firstName": "aziz",
       "lastName": "elb",
       "email": "aziz@gmail.com",
       "password": "123",
-      "department_id": "1",
-      "role": "USER",
+      "department": {
+        "id": 2,
+        "title": "Marketing "
+      },
+      "role": "SUPER_ADMIN",
+      "isActive": true,
       "createdAt": "2026-05-01T10:39:40.750Z",
-      "updatedAt": "2026-05-01T10:39:40.752Z",
-      "id": "IENftmn"
+      "updatedAt": "2026-05-03T22:22:42.262Z"
+    },
+    {
+      "firstName": "Ahmed",
+      "lastName": "kadiri",
+      "email": "ahmed@gmail.com",
+      "password": "123",
+      "department": {
+        "id": 2,
+        "title": "Marketing "
+      },
+      "role": "USER",
+      "isActive": true,
+      "createdAt": "2026-05-03T18:38:06.024Z",
+      "updatedAt": "2026-05-04T12:06:08.962Z",
+      "id": "u_R2zpd"
+    },
+    {
+      "firstName": "aziz",
+      "lastName": "el abbassi",
+      "email": "aziz22@gmail.com",
+      "password": "password123",
+      "role": "ADMIN",
+      "department": {
+        "id": 2,
+        "title": "Marketing "
+      },
+      "isActive": true,
+      "createdAt": "2026-05-03T21:21:13.908Z",
+      "updatedAt": "2026-05-03T22:22:50.060Z",
+      "id": "PQAqRaw"
+    },
+    {
+      "firstName": "abdessamad",
+      "lastName": "Qadiri",
+      "email": "qadiri123@gmail.com",
+      "password": "pzjdjdkdvddjj13",
+      "role": "ADMIN",
+      "department": {
+        "id": 2,
+        "title": "Marketing "
+      },
+      "isActive": false,
+      "createdAt": "2026-05-03T21:22:01.958Z",
+      "updatedAt": "2026-05-03T22:22:53.412Z",
+      "id": "84Yxu3S"
     }
   ],
   "departments": [
     {
-      "id": "1",
-      "title": "Computer Science",
-      "description": "Information Technology and Software Engineering",
-      "createdAt": "2026-01-01T08:00:00Z",
-      "updatedAt": "2026-01-01T08:00:00Z"
+      "title": "Resources homaine ",
+      "description": "département de ressources humaines ",
+      "code": "RH01",
+      "createdAt": "2026-05-03T21:19:09.885Z",
+      "updatedAt": "2026-05-03T21:19:32.656Z",
+      "id": 1
     },
     {
-      "id": "2",
-      "title": "Mathematics",
-      "description": "Pure and Applied Mathematics department",
-      "createdAt": "2026-01-01T08:00:00Z",
-      "updatedAt": "2026-01-01T08:00:00Z"
-    }
-  ],
-  "departmentOwners": [
-    {
-      "id": "1",
-      "department_id": "1",
-      "user_id": "2"
+      "title": "Marketing ",
+      "description": "département de marketing ",
+      "code": "M01",
+      "createdAt": "2026-05-03T21:19:57.368Z",
+      "updatedAt": "2026-05-03T21:19:57.368Z",
+      "id": 2
     }
   ],
   "attendance": [
@@ -73,19 +114,180 @@
       "id": "1",
       "user_id": "1",
       "date": "2026-05-01",
-      "arrivedDate": "2026-05-01T08:05:00Z",
       "status": "PRESENT",
-      "method": "FACIAL",
-      "createdAt": "2026-05-01T08:05:00Z"
+      "is_justified": false,
+      "justification": null
     },
     {
       "id": "2",
       "user_id": "1",
       "date": "2026-04-30",
-      "arrivedDate": "2026-04-30T08:45:00Z",
       "status": "LATE",
-      "method": "MANUAL",
-      "createdAt": "2026-04-30T08:45:00Z"
+      "is_justified": false,
+      "justification": null
+    },
+    {
+      "user_id": "1",
+      "date": "2026-05-03",
+      "status": "ABSENT",
+      "is_justified": false,
+      "justification": null,
+      "createdAt": "2026-05-03T19:20:47.893Z",
+      "id": "bEkFHv5"
+    },
+    {
+      "user_id": "1",
+      "date": "2026-05-03",
+      "status": "ABSENT",
+      "is_justified": false,
+      "justification": null,
+      "createdAt": "2026-05-03T22:48:04.418Z",
+      "id": "yq5RvbX"
+    },
+    {
+      "user_id": "u_R2zpd",
+      "date": "2026-05-03",
+      "status": "ABSENT",
+      "is_justified": false,
+      "justification": null,
+      "createdAt": "2026-05-03T22:48:04.418Z",
+      "id": "rD_l8Kj"
+    },
+    {
+      "user_id": "1",
+      "date": "2026-05-03",
+      "status": "ABSENT",
+      "is_justified": false,
+      "justification": null,
+      "createdAt": "2026-05-03T22:48:04.998Z",
+      "id": "Go6MrL3"
+    },
+    {
+      "user_id": "u_R2zpd",
+      "date": "2026-05-03",
+      "status": "ABSENT",
+      "is_justified": false,
+      "justification": null,
+      "createdAt": "2026-05-03T22:48:04.999Z",
+      "id": "Hmb0iCj"
+    },
+    {
+      "user_id": "1",
+      "date": "2026-05-03",
+      "status": "ABSENT",
+      "is_justified": false,
+      "justification": null,
+      "createdAt": "2026-05-03T22:49:44.953Z",
+      "id": "0_BzQ7M"
+    },
+    {
+      "user_id": "u_R2zpd",
+      "date": "2026-05-03",
+      "status": "ABSENT",
+      "is_justified": false,
+      "justification": null,
+      "createdAt": "2026-05-03T22:49:44.953Z",
+      "id": "7U7Xbzb"
+    },
+    {
+      "user_id": "1",
+      "date": "2026-05-03",
+      "status": "ABSENT",
+      "is_justified": false,
+      "justification": null,
+      "createdAt": "2026-05-03T22:50:42.656Z",
+      "id": "4DZqy2O"
+    },
+    {
+      "user_id": "u_R2zpd",
+      "date": "2026-05-03",
+      "status": "ABSENT",
+      "is_justified": false,
+      "justification": null,
+      "createdAt": "2026-05-03T22:50:42.656Z",
+      "id": "JtGhRO8"
+    },
+    {
+      "user_id": "1",
+      "date": "2026-05-03",
+      "status": "ABSENT",
+      "is_justified": false,
+      "justification": null,
+      "createdAt": "2026-05-03T23:02:33.809Z",
+      "id": "jK6puOh"
+    },
+    {
+      "user_id": "u_R2zpd",
+      "date": "2026-05-03",
+      "status": "PRESENT",
+      "is_justified": false,
+      "justification": null,
+      "createdAt": "2026-05-03T23:02:33.810Z",
+      "id": "FLs0XW7"
+    },
+    {
+      "user_id": "1",
+      "date": "2026-05-03",
+      "status": "ABSENT",
+      "is_justified": false,
+      "justification": null,
+      "createdAt": "2026-05-03T23:03:02.073Z",
+      "id": "wxZrNIb"
+    },
+    {
+      "user_id": "u_R2zpd",
+      "date": "2026-05-03",
+      "status": "ABSENT",
+      "is_justified": false,
+      "justification": null,
+      "createdAt": "2026-05-03T23:03:02.074Z",
+      "id": "Ibsx5_C"
+    }
+  ],
+  "notifications": [
+    {
+      "id": "1",
+      "recipient_id": "1",
+      "sender_id": "3",
+      "content": "Welcome to the system!",
+      "status": "Unread",
+      "isArchived": false
+    },
+    {
+      "recipient_id": "1",
+      "sender_id": "ADMIN_ID",
+      "content": "to much absence",
+      "status": "Unread",
+      "isArchived": false,
+      "createdAt": "2026-05-03T19:17:08.351Z",
+      "id": "lQjdKBM"
+    },
+    {
+      "recipient_id": "u_R2zpd",
+      "sender_id": "ADMIN_ID",
+      "content": "cc cv",
+      "status": "Unread",
+      "isArchived": false,
+      "createdAt": "2026-05-03T19:17:33.790Z",
+      "id": "-nWBL8_"
+    },
+    {
+      "recipient_id": "1",
+      "sender_id": "ADMIN_ID",
+      "content": "hiiuu",
+      "status": "Unread",
+      "isArchived": false,
+      "createdAt": "2026-05-03T19:17:52.556Z",
+      "id": "8-svrBU"
+    },
+    {
+      "recipient_id": "1",
+      "sender_id": "ADMIN_ID",
+      "content": "toooo much ziin",
+      "status": "Unread",
+      "isArchived": false,
+      "createdAt": "2026-05-03T19:20:34.368Z",
+      "id": "nIetvkp"
     }
   ]
 }

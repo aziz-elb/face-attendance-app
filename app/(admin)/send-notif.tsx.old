@@ -1,0 +1,174 @@
+import React, { useState, useEffect } from 'react';
+import { View, StyleSheet, ScrollView, Alert } from 'react-native';
+import { Text, Appbar, TextInput, Button, Surface, SegmentedButtons, Menu, ActivityIndicator } from 'react-native-paper';
+import { api } from '../../lib/api';
+
+export default function SendNotification() {
+  const [target, setTarget] = useState('all');
+  const [selectedUser, setSelectedUser] = useState(null);
+  const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [menuVisible, setMenuVisible] = useState(false);
+  const [users, setUsers] = useState([]);
+  const [fetchingUsers, setFetchingUsers] = useState(false);
+
+  useEffect(() => {
+    if (target === 'user') {
+      loadUsers();
+    }
+  }, [target]);
+
+  const loadUsers = async () => {
+    setFetchingUsers(true);
+    try {
+      const data = await api.getUsers();
+      setUsers(data);
+    } catch (error) {
+      Alert.alert('Error', 'Failed to load users');
+    } finally {
+      setFetchingUsers(false);
+    }
+  };
+
+  const handleSend = async () => {
+    if (!message) return;
+    setLoading(true);
+    try {
+      if (target === 'user' && selectedUser) {
+        await api.addNotification({
+          recipient_id: selectedUser.id,
+          sender_id: '3', // Mock current super admin ID
+          content: message,
+        });
+      } else {
+        // Send to multiple users if 'all' or 'dept' (Logic simplified for mock)
+        const recipients = target === 'all' ? users : users.filter(u => u.department?.id === '1');
+        for (const user of recipients) {
+          await api.addNotification({
+            recipient_id: user.id,
+            sender_id: '3',
+            content: message,
+          });
+        }
+      }
+      setMessage('');
+      setSelectedUser(null);
+      Alert.alert('Success', 'Notification(s) sent successfully!');
+    } catch (error) {
+      Alert.alert('Error', 'Failed to send notification');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <Appbar.Header elevated>
+        <Appbar.Content title="Send Notification" />
+      </Appbar.Header>
+      
+      <ScrollView contentContainerStyle={styles.content}>
+        <Surface style={styles.surface} elevation={1}>
+          <Text variant="titleMedium" style={styles.label}>Recipient Group</Text>
+          <SegmentedButtons
+            value={target}
+            onValueChange={setTarget}
+            buttons={[
+              { value: 'all', label: 'Everyone' },
+              { value: 'dept', label: 'Department' },
+              { value: 'user', label: 'Student' },
+            ]}
+            style={styles.segments}
+          />
+
+          {target === 'user' && (
+            <View style={styles.selectorContainer}>
+              {fetchingUsers ? <ActivityIndicator size="small" /> : (
+                <Menu
+                  visible={menuVisible}
+                  onDismiss={() => setMenuVisible(false)}
+                  anchor={
+                    <Button 
+                      mode="outlined" 
+                      onPress={() => setMenuVisible(true)} 
+                      style={styles.selectorButton}
+                      icon="account-search"
+                    >
+                      {selectedUser ? `${selectedUser.firstName} ${selectedUser.lastName}` : 'Select Student'}
+                    </Button>
+                  }
+                >
+                  <ScrollView style={{ maxHeight: 200 }}>
+                    {users.map((user) => (
+                      <Menu.Item 
+                        key={user.id}
+                        onPress={() => {
+                          setSelectedUser(user);
+                          setMenuVisible(false);
+                        }} 
+                        title={`${user.firstName} ${user.lastName}`} 
+                      />
+                    ))}
+                  </ScrollView>
+                </Menu>
+              )}
+            </View>
+          )}
+
+          <TextInput
+            label="Message Content"
+            value={message}
+            onChangeText={setMessage}
+            mode="outlined"
+            multiline
+            numberOfLines={5}
+            style={styles.input}
+          />
+
+          <Button 
+            icon="send" 
+            mode="contained" 
+            onPress={handleSend} 
+            loading={loading}
+            disabled={!message || loading || (target === 'user' && !selectedUser)}
+            style={styles.button}
+          >
+            Broadcast Message
+          </Button>
+        </Surface>
+      </ScrollView>
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+  content: {
+    padding: 16,
+  },
+  surface: {
+    padding: 20,
+    borderRadius: 12,
+  },
+  label: {
+    marginBottom: 12,
+  },
+  segments: {
+    marginBottom: 20,
+  },
+  selectorContainer: {
+    marginBottom: 16,
+  },
+  selectorButton: {
+    borderRadius: 8,
+  },
+  input: {
+    marginBottom: 16,
+  },
+  button: {
+    marginTop: 8,
+  }
+});
+

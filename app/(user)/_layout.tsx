@@ -44,7 +44,7 @@ export default function UserLayout() {
           ),
         }}
       />
-      
+
       {/* Hidden screens reachable from Profile */}
       <Tabs.Screen
         name="edit-info"
@@ -75,7 +75,7 @@ export default function UserLayout() {
         }}
       />
 
-       <Tabs.Screen
+      <Tabs.Screen
         name="notification"
         options={{
           href: null,
