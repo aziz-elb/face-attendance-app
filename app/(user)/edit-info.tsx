@@ -1,6 +1,7 @@
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet } from 'react-native';
+import { KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import { Button, HelperText, Surface, TextInput, useTheme } from 'react-native-paper';
 
 export default function EditInfoScreen() {
@@ -9,9 +10,9 @@ export default function EditInfoScreen() {
 
   // Mock initial data - in a real app this would come from a state manager or context
   const [formData, setFormData] = useState({
-    firstName: 'Aziz',
-    lastName: 'Elb',
-    email: 'aziz@gmail.com',
+    firstName: 'Ahmed',
+    lastName: 'Kadiri',
+    email: 'ahmed@gmail.com',
   });
 
   const [loading, setLoading] = useState(false);
@@ -43,7 +44,7 @@ export default function EditInfoScreen() {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}
+      style={[styles.container, { backgroundColor: colors.background }]}
     >
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <Surface style={styles.surface} elevation={1}>
@@ -89,7 +90,7 @@ export default function EditInfoScreen() {
 
           <Button
             mode="text"
-            onPress={() => router.replace('/(user)/profile')}
+            onPress={() => router.back()}
             disabled={loading}
             style={styles.cancelButton}
           >
@@ -104,7 +105,6 @@ export default function EditInfoScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8f9fa',
   },
   scrollContent: {
     padding: 20,

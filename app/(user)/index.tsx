@@ -1,7 +1,9 @@
 import { useRouter } from 'expo-router';
 import React from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
-import { Appbar, Text, useTheme } from 'react-native-paper';
+import { StyleSheet, View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+import { Text, useTheme, Card, Surface } from 'react-native-paper';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import StatCard from '../../components/StatCard';
 
 export default function UserHome() {
@@ -9,14 +11,12 @@ export default function UserHome() {
   const { colors } = useTheme();
 
   return (
-    <View style={styles.container}>
-      <Appbar.Header elevated>
-        <Appbar.Content title="Face Attendance" subtitle="Overview" />
-        <Appbar.Action icon="bell-outline" onPress={() => router.push('/(user)/notification')} />
-      </Appbar.Header>
-
-      <ScrollView contentContainerStyle={styles.content}>
-        <Text variant="titleLarge" style={styles.sectionTitle}>Dashboard Statistics</Text>
+    <ScrollView style={[styles.container, { backgroundColor: colors.background }]}>
+      <View style={styles.content}>
+        <View style={styles.welcomeSection}>
+          <Text variant="headlineSmall" style={styles.welcomeText}>Welcome back!</Text>
+          <Text variant="bodyMedium" style={{ color: colors.outline }}>Here is your attendance summary</Text>
+        </View>
 
         <View style={styles.statsGrid}>
           <StatCard
@@ -45,44 +45,48 @@ export default function UserHome() {
           />
           <StatCard
             title="Department"
-            value="IT"
-            icon="domain"
-            color="#2196F3"
-            subtitle="Computer Science"
+            value="Marketing"
+            icon="office-building"
+            color="#6200ee"
+            subtitle="Current Assignment"
           />
         </View>
 
-        <Text variant="titleMedium" style={styles.sectionTitle}>Recent Activity</Text>
-        <View style={styles.placeholderCard}>
-          <Text variant="bodyMedium">Check-in at 08:30 AM (Today)</Text>
-        </View>
-      </ScrollView>
-    </View>
+        <Card style={styles.recentActivityCard}>
+          <Card.Title 
+            title="Next Shift" 
+            subtitle="Tomorrow at 09:00 AM"
+            left={(props) => <MaterialCommunityIcons {...props} name="calendar-clock" color={colors.primary} />}
+          />
+          <Card.Content>
+            <Text variant="bodyMedium">You are scheduled for the Morning Shift in the Marketing Department.</Text>
+          </Card.Content>
+        </Card>
+      </View>
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8f9fa',
   },
   content: {
-    padding: 12,
+    padding: 16,
   },
-  sectionTitle: {
-    marginVertical: 16,
-    marginHorizontal: 8,
+  welcomeSection: {
+    marginBottom: 24,
+  },
+  welcomeText: {
     fontWeight: 'bold',
   },
   statsGrid: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginBottom: 8,
   },
-  placeholderCard: {
-    padding: 20,
-    backgroundColor: 'white',
-    borderRadius: 12,
-    margin: 8,
-    elevation: 1,
+  recentActivityCard: {
+    marginTop: 16,
+    elevation: 2,
   }
 });

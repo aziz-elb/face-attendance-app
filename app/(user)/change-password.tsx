@@ -1,6 +1,7 @@
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet } from 'react-native';
+import { KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
 import { Button, HelperText, Surface, TextInput, useTheme } from 'react-native-paper';
 
 export default function ChangePasswordScreen() {
@@ -48,7 +49,7 @@ export default function ChangePasswordScreen() {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-      style={styles.container}
+      style={[styles.container, { backgroundColor: colors.background }]}
     >
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <Surface style={styles.surface} elevation={1}>
@@ -103,7 +104,7 @@ export default function ChangePasswordScreen() {
 
           <Button
             mode="text"
-            onPress={() => router.replace('/(user)/profile')}
+            onPress={() => router.back()}
             disabled={loading}
             style={styles.cancelButton}
           >
@@ -118,7 +119,6 @@ export default function ChangePasswordScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8f9fa',
   },
   scrollContent: {
     padding: 20,

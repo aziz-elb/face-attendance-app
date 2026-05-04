@@ -256,8 +256,13 @@
       "user_id": "u_R2zpd",
       "date": "2026-05-04",
       "status": "ABSENT",
-      "is_justified": false,
-      "justification": null,
+      "is_justified": true,
+      "justification": {
+        "message": "Teacher i was sleep i dind woke ip at time",
+        "file_path": "document_placeholder.pdf",
+        "status": "ACCEPTED",
+        "isArchived": false
+      },
       "createdAt": "2026-05-04T12:16:40.778Z",
       "id": "2WXXzbX"
     }
@@ -315,6 +320,15 @@
       "isArchived": false,
       "createdAt": "2026-05-04T12:11:46.380Z",
       "id": "284GZ5v"
+    },
+    {
+      "recipient_id": "u_R2zpd",
+      "sender_id": "ADMIN_ID",
+      "content": "hello there dear student",
+      "status": "Unread",
+      "isArchived": false,
+      "createdAt": "2026-05-04T12:35:50.042Z",
+      "id": "o7Lsoat"
     }
   ]
 }

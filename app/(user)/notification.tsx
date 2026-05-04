@@ -1,99 +1,69 @@
-import React from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
-import { List, Text, Surface, useTheme, Divider, Badge } from 'react-native-paper';
-
-interface Notification {
-  id: string;
-  title: string;
-  message: string;
-  time: string;
-  type: 'attendance' | 'system' | 'alert';
-  isRead: boolean;
-}
-
-const MOCK_NOTIFICATIONS: Notification[] = [
-  {
-    id: '1',
-    title: 'Attendance Success',
-    message: 'Your check-in at 08:30 AM has been successfully recorded.',
-    time: '2 hours ago',
-    type: 'attendance',
-    isRead: false,
-  },
-  {
-    id: '2',
-    title: 'Department Update',
-    message: 'A new meeting has been scheduled for the Computer Science department.',
-    time: '5 hours ago',
-    type: 'system',
-    isRead: false,
-  },
-  {
-    id: '3',
-    title: 'Late Arrival',
-    message: 'You were marked late for your shift yesterday.',
-    time: '1 day ago',
-    type: 'alert',
-    isRead: true,
-  },
-  {
-    id: '4',
-    title: 'Welcome!',
-    message: 'Welcome to the Face Attendance app. Complete your profile to get started.',
-    time: '2 days ago',
-    type: 'system',
-    isRead: true,
-  },
-];
+import React, { useEffect, useState } from 'react';
+import { View, StyleSheet, Alert, RefreshControl } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+import { List, Text, Surface, useTheme, Divider, Badge, ActivityIndicator } from 'react-native-paper';
+import { api } from '../../lib/api';
+import { Notification } from '../../lib/types';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default function NotificationScreen() {
   const { colors } = useTheme();
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
 
-  const getIcon = (type: string) => {
-    switch (type) {
-      case 'attendance': return 'calendar-check';
-      case 'alert': return 'alert-circle';
-      default: return 'bell';
+  const fetchNotifications = async () => {
+    try {
+      const data = await api.getNotifications();
+      const userId = "u_R2zpd"; // Placeholder, should be api.currentUser.id
+      setNotifications(data.filter(n => n.recipient_id === userId).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()));
+    } catch (error) {
+      Alert.alert('Error', 'Failed to fetch notifications');
+    } finally {
+      setLoading(false);
+      setRefreshing(false);
     }
   };
 
-  const getIconColor = (type: string) => {
-    switch (type) {
-      case 'attendance': return '#4CAF50';
-      case 'alert': return '#F44336';
-      default: return colors.primary;
-    }
+  useEffect(() => {
+    fetchNotifications();
+  }, []);
+
+  const onRefresh = () => {
+    setRefreshing(true);
+    fetchNotifications();
   };
+
+  if (loading) return <ActivityIndicator style={{ flex: 1 }} />;
 
   return (
-    <View style={styles.container}>
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        {MOCK_NOTIFICATIONS.length === 0 ? (
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <ScrollView 
+        contentContainerStyle={styles.scrollContent}
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+      >
+        {notifications.length === 0 ? (
           <View style={styles.emptyState}>
-            <List.Icon icon="bell-off-outline" color={colors.outline} />
-            <Text variant="bodyLarge">No notifications yet</Text>
+            <MaterialCommunityIcons name="bell-off-outline" size={48} color={colors.outline} />
+            <Text variant="bodyLarge" style={{ marginTop: 8 }}>No notifications yet</Text>
           </View>
         ) : (
           <Surface style={styles.surface} elevation={1}>
-            {MOCK_NOTIFICATIONS.map((notif, index) => (
+            {notifications.map((notif, index) => (
               <React.Fragment key={notif.id}>
                 <List.Item
-                  title={notif.title}
-                  description={notif.message}
-                  titleStyle={[styles.title, !notif.isRead && { fontWeight: 'bold' }]}
-                  descriptionStyle={styles.description}
+                  title={notif.content}
+                  description={new Date(notif.createdAt).toLocaleString()}
+                  titleStyle={[styles.title, notif.status === 'Unread' && { fontWeight: 'bold' }]}
                   left={props => (
                     <View style={styles.iconContainer}>
-                      <List.Icon {...props} icon={getIcon(notif.type)} color={getIconColor(notif.type)} />
-                      {!notif.isRead && <Badge size={8} style={styles.badge} />}
+                      <List.Icon {...props} icon="bell-ring" color={notif.status === 'Unread' ? colors.primary : colors.outline} />
+                      {notif.status === 'Unread' && <Badge size={8} style={styles.badge} />}
                     </View>
-                  )}
-                  right={() => (
-                    <Text variant="bodySmall" style={styles.time}>{notif.time}</Text>
                   )}
                   onPress={() => {}}
                 />
-                {index < MOCK_NOTIFICATIONS.length - 1 && <Divider />}
+                {index < notifications.length - 1 && <Divider />}
               </React.Fragment>
             ))}
           </Surface>
@@ -113,17 +83,10 @@ const styles = StyleSheet.create({
   surface: {
     borderRadius: 12,
     overflow: 'hidden',
+    backgroundColor: '#fff',
   },
   title: {
     fontSize: 16,
-  },
-  description: {
-    marginTop: 4,
-  },
-  time: {
-    alignSelf: 'center',
-    opacity: 0.5,
-    marginRight: 8,
   },
   iconContainer: {
     justifyContent: 'center',

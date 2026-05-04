@@ -6,21 +6,40 @@ export default function UserLayout() {
   const { colors } = useTheme();
   const router = useRouter();
 
+  const HeaderRight = () => (
+    <IconButton 
+      icon="bell" 
+      onPress={() => router.push('/(user)/notification')} 
+    />
+  );
+
   return (
     <Tabs
       screenOptions={{
-        headerShown: false,
+        headerShown: true,
         tabBarActiveTintColor: colors.primary,
+        tabBarInactiveTintColor: colors.outline,
         tabBarStyle: {
           backgroundColor: colors.surface,
           borderTopColor: colors.outlineVariant,
+          height: 60,
+          paddingBottom: 8,
         },
+        headerStyle: {
+          backgroundColor: colors.surface,
+        },
+        headerTitleStyle: {
+          color: colors.onSurface,
+          fontWeight: 'bold',
+        },
+        headerRight: HeaderRight,
       }}
     >
       <Tabs.Screen
         name="index"
         options={{
           title: "Home",
+          tabBarLabel: "Home",
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="home" color={color} size={size} />
           ),
@@ -29,7 +48,8 @@ export default function UserLayout() {
       <Tabs.Screen
         name="attendance"
         options={{
-          title: "Attendance",
+          title: "My Attendance",
+          tabBarLabel: "Attendance",
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="calendar-check" color={color} size={size} />
           ),
@@ -38,25 +58,34 @@ export default function UserLayout() {
       <Tabs.Screen
         name="profile"
         options={{
-          title: "Profile",
+          title: "My Profile",
+          tabBarLabel: "Profile",
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="account" color={color} size={size} />
           ),
         }}
       />
 
-      {/* Hidden screens reachable from Profile */}
+      <Tabs.Screen
+        name="justify-absence"
+        options={{
+          href: null,
+          title: "Justify Absence",
+          tabBarStyle: { display: 'none' },
+          headerLeft: () => (
+            <IconButton icon="arrow-left" onPress={() => router.back()} />
+          ),
+        }}
+      />
+
       <Tabs.Screen
         name="edit-info"
         options={{
           href: null,
-          headerShown: true,
           title: "Edit Information",
+          tabBarStyle: { display: 'none' },
           headerLeft: () => (
-            <IconButton
-              icon="arrow-left"
-              onPress={() => router.replace('/(user)/profile')}
-            />
+            <IconButton icon="arrow-left" onPress={() => router.back()} />
           ),
         }}
       />
@@ -64,13 +93,10 @@ export default function UserLayout() {
         name="change-password"
         options={{
           href: null,
-          headerShown: true,
           title: "Change Password",
+          tabBarStyle: { display: 'none' },
           headerLeft: () => (
-            <IconButton
-              icon="arrow-left"
-              onPress={() => router.replace('/(user)/profile')}
-            />
+            <IconButton icon="arrow-left" onPress={() => router.back()} />
           ),
         }}
       />
@@ -79,13 +105,10 @@ export default function UserLayout() {
         name="notification"
         options={{
           href: null,
-          headerShown: true,
-          title: "notification",
+          title: "Notifications",
+          tabBarStyle: { display: 'none' },
           headerLeft: () => (
-            <IconButton
-              icon="arrow-left"
-              onPress={() => router.back()}
-            />
+            <IconButton icon="arrow-left" onPress={() => router.back()} />
           ),
         }}
       />
