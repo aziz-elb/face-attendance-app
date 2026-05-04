@@ -53,15 +53,6 @@ export default function AdminProfile() {
         </Card>
 
         <View style={styles.actionContainer}>
-          <Text variant="titleMedium" style={styles.sectionTitle}>Management</Text>
-          <Button 
-            mode="contained-tonal" 
-            onPress={() => router.push('/(admin)/justifications')} 
-            style={styles.button}
-            icon="file-document-check"
-          >
-            Review Justifications
-          </Button>
 
           <Text variant="titleMedium" style={styles.sectionTitle}>Settings</Text>
           <Button 

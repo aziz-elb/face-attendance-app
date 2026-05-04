@@ -25,15 +25,7 @@ export default function AdminLayout() {
           ),
         }}
       />
-      <Tabs.Screen
-        name="users"
-        options={{
-          title: "Users",
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="account-group" color={color} size={size} />
-          ),
-        }}
-      />
+     
       <Tabs.Screen
         name="attendance"
         options={{
@@ -44,24 +36,16 @@ export default function AdminLayout() {
           ),
         }}
       />
-      {/* <Tabs.Screen
-        name="history"
+       <Tabs.Screen
+        name="users"
         options={{
-          title: "History",
+          title: "Users",
           tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="history" color={color} size={size} />
+            <MaterialCommunityIcons name="account-group" color={color} size={size} />
           ),
         }}
       />
-      <Tabs.Screen
-        name="send-notif"
-        options={{
-          title: "Notify",
-          tabBarIcon: ({ color, size }) => (
-            <MaterialCommunityIcons name="send" color={color} size={size} />
-          ),
-        }}
-      /> */}
+      
       <Tabs.Screen
         name="justifications"
         options={{

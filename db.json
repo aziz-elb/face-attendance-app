@@ -40,7 +40,7 @@
         "id": 2,
         "title": "Marketing "
       },
-      "role": "SUPER_ADMIN",
+      "role": "ADMIN",
       "isActive": true,
       "createdAt": "2026-05-01T10:39:40.750Z",
       "updatedAt": "2026-05-03T22:22:42.262Z"
@@ -242,6 +242,24 @@
       "justification": null,
       "createdAt": "2026-05-03T23:03:02.074Z",
       "id": "Ibsx5_C"
+    },
+    {
+      "user_id": "1",
+      "date": "2026-05-04",
+      "status": "ABSENT",
+      "is_justified": false,
+      "justification": null,
+      "createdAt": "2026-05-04T12:16:40.777Z",
+      "id": "rqdYzi-"
+    },
+    {
+      "user_id": "u_R2zpd",
+      "date": "2026-05-04",
+      "status": "ABSENT",
+      "is_justified": false,
+      "justification": null,
+      "createdAt": "2026-05-04T12:16:40.778Z",
+      "id": "2WXXzbX"
     }
   ],
   "notifications": [
@@ -288,6 +306,15 @@
       "isArchived": false,
       "createdAt": "2026-05-03T19:20:34.368Z",
       "id": "nIetvkp"
+    },
+    {
+      "recipient_id": "1",
+      "sender_id": "ADMIN_ID",
+      "content": "heelo",
+      "status": "Unread",
+      "isArchived": false,
+      "createdAt": "2026-05-04T12:11:46.380Z",
+      "id": "284GZ5v"
     }
   ]
 }
