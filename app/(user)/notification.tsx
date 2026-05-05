@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, StyleSheet, Alert, RefreshControl } from 'react-native';
+import { View, StyleSheet, Alert, RefreshControl, Platform } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { List, Text, Surface, useTheme, Divider, Badge, ActivityIndicator } from 'react-native-paper';
 import { api } from '../../lib/api';
@@ -18,7 +18,12 @@ export default function NotificationScreen() {
       const userId = "u_R2zpd"; // Placeholder, should be api.currentUser.id
       setNotifications(data.filter(n => n.recipient_id === userId).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()));
     } catch (error) {
-      Alert.alert('Error', 'Failed to fetch notifications');
+      if(Platform.OS === "web"){
+        alert("Error: Failed to fetch notifications");
+      }
+      else{
+        Alert.alert('Error', 'Failed to fetch notifications');
+      }
     } finally {
       setLoading(false);
       setRefreshing(false);

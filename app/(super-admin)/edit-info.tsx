@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView, Alert } from 'react-native';
+import { View, StyleSheet, ScrollView, Alert, Platform } from 'react-native';
 import { TextInput, Button, Surface, HelperText, useTheme } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { api } from '../../lib/api';
@@ -34,7 +34,13 @@ export default function SuperAdminEditInfo() {
       setSuccess('Super Admin profile updated!');
       setTimeout(() => router.replace('/(super-admin)/profile'), 1000);
     } catch (error: any) {
-      Alert.alert('Error', error.message || 'Failed to update profile');
+      if(Platform.OS === "web"){
+        alert('Error\n' + error.message || 'Failed to update profile');
+        return;
+      }
+      else {
+        Alert.alert('Error', error.message || 'Failed to update profile');
+      }
     } finally {
       setLoading(false);
     }

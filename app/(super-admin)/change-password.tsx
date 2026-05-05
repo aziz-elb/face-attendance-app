@@ -22,11 +22,20 @@ export default function SuperAdminChangePassword() {
     if (!user) return;
 
     if (formData.newPassword !== formData.confirmPassword) {
-      if(Platform.OS == "web"){
+      if(Platform.OS === "web"){
         alert('Error\nNew passwords do not match');
         return;
       }
       Alert.alert('Error', 'New passwords do not match');
+      return;
+    }
+
+    if(formData.newPassword.length < 6){
+      if(Platform.OS === "web"){
+        alert('Error\nNew password must be at least 6 characters long');
+        return;
+      }
+      Alert.alert('Error', 'New password must be at least 6 characters long');
       return;
     }
 
@@ -35,7 +44,7 @@ export default function SuperAdminChangePassword() {
     try {
       // In a real app, you'd verify currentPassword first. 
       if(user.password !== formData.currentPassword){
-        if(Platform.OS == "web"){
+        if(Platform.OS === "web"){
           alert('Error\nIncorrect current password');
           return;
         }
@@ -52,11 +61,13 @@ export default function SuperAdminChangePassword() {
       setSuccess('Super Admin password changed!');
       setTimeout(() => router.replace('/(super-admin)/profile'), 1000);
     } catch (error: any) {
-      if(Platform.OS == "web"){
+      if(Platform.OS === "web"){
         alert('Error\n' + error.message || 'Failed to change password');
         return;
       }
-      Alert.alert('Error', error.message || 'Failed to change password');
+      else {
+        Alert.alert('Error', error.message || 'Failed to change password');
+      }
     } finally {
       setLoading(false);
     }

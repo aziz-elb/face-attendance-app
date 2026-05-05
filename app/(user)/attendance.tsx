@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Alert, RefreshControl } from 'react-native';
+import { StyleSheet, View, Alert, RefreshControl, Platform } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Card, Text, IconButton, useTheme, ActivityIndicator } from 'react-native-paper';
 import { useRouter } from 'expo-router';
@@ -24,7 +24,12 @@ export default function AttendanceScreen() {
       const userId = "u_R2zpd"; // Placeholder, should be api.currentUser.id
       setAttendance(data.filter(a => a.user_id === userId).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()));
     } catch (error) {
-      Alert.alert('Error', 'Failed to fetch attendance history');
+      if (Platform.OS === "web") {
+        alert("Error: Failed to fetch attendance history");
+      }
+      else {
+        Alert.alert('Error', 'Failed to fetch attendance history');
+      }
     } finally {
       setLoading(false);
       setRefreshing(false);

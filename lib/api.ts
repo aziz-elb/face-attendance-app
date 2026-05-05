@@ -43,7 +43,7 @@ export const api = {
         ...userData,
         department: userData.department || null,
         role: userData.role || "USER",
-        isActive: false,
+        isActive: userData.isActive || false,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       }),

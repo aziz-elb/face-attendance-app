@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Alert } from 'react-native';
+import { StyleSheet, View, Alert, Platform } from 'react-native';
 import { TextInput, Button, Text, useTheme, Card } from 'react-native-paper';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { api } from '../../lib/api';
@@ -14,7 +14,12 @@ export default function JustifyAbsenceScreen() {
 
   const handleSubmit = async () => {
     if (!message.trim()) {
-      Alert.alert('Error', 'Please provide a reason for your absence');
+      if (Platform.OS === "web") {
+        alert("Error: Please provide a reason for your absence");
+      }
+      else {
+        Alert.alert('Error', 'Please provide a reason for your absence');
+      }
       return;
     }
 
@@ -29,10 +34,20 @@ export default function JustifyAbsenceScreen() {
           isArchived: false
         }
       });
-      Alert.alert('Success', 'Justification submitted successfully');
+      if (Platform.OS === "web") {
+        alert("Success: Justification submitted successfully");
+      }
+      else {
+        Alert.alert('Success', 'Justification submitted successfully');
+      }
       router.back();
     } catch (error) {
-      Alert.alert('Error', 'Failed to submit justification');
+      if (Platform.OS === "web") {
+        alert("Error: Failed to submit justification");
+      }
+      else {
+        Alert.alert('Error', 'Failed to submit justification');
+      }
     } finally {
       setLoading(false);
     }

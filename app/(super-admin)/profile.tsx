@@ -30,6 +30,7 @@ export default function SuperAdminProfile() {
         { text: 'Logout', onPress: () => router.replace('/(auth)/login') }
       ]);
     } else {
+  
       router.replace('/(auth)/login');
     }
   };

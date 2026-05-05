@@ -13,7 +13,7 @@
       },
       "isActive": false,
       "createdAt": "2026-01-01T08:00:00Z",
-      "updatedAt": "2026-05-05T12:07:49.731Z"
+      "updatedAt": "2026-05-05T15:31:49.404Z"
     },
     {
       "id": "3",
@@ -29,29 +29,26 @@
     },
     {
       "id": "IENftmn",
-      "firstName": "azizoo",
-      "lastName": "elboo",
+      "firstName": "aziz",
+      "lastName": "elb",
       "email": "aziz@gmail.com",
-      "password": "abcd",
+      "password": "abcd123",
       "department": {},
       "role": "SUPER_ADMIN",
       "isActive": true,
       "createdAt": "2026-05-01T10:39:40.750Z",
-      "updatedAt": "2026-05-05T12:34:09.972Z"
+      "updatedAt": "2026-05-05T15:36:01.926Z"
     },
     {
       "firstName": "Ahmed",
       "lastName": "kadiri",
       "email": "ahmed@gmail.com",
       "password": "123",
-      "department": {
-        "id": 2,
-        "title": "Ressource Houmaine"
-      },
+      "department": null,
       "role": "USER",
       "isActive": true,
       "createdAt": "2026-05-03T18:38:06.024Z",
-      "updatedAt": "2026-05-05T12:07:19.331Z",
+      "updatedAt": "2026-05-05T15:36:46.391Z",
       "id": "u_R2zpd"
     },
     {
@@ -60,13 +57,10 @@
       "email": "admin1@gmail.com",
       "password": "123",
       "role": "ADMIN",
-      "department": {
-        "id": 2,
-        "title": "Ressource Houmaine"
-      },
+      "department": null,
       "isActive": false,
       "createdAt": "2026-05-05T10:57:25.219Z",
-      "updatedAt": "2026-05-05T12:07:56.956Z",
+      "updatedAt": "2026-05-05T15:16:26.841Z",
       "id": "Q3XI3nF"
     },
     {

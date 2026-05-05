@@ -24,7 +24,12 @@ export default function AdminManagementPage() {
       const users = await api.getUsers();
       setAdmins(users.filter(u => u.role === 'ADMIN'));
     } catch (error) {
-      Alert.alert('Error', 'Failed to fetch admins');
+      if(Platform.OS === "web"){
+        alert("Error: Failed to fetch admins");
+      }
+      else{
+        Alert.alert('Error', 'Failed to fetch admins');
+      }
     } finally {
       setFetchLoading(false);
     }
@@ -54,12 +59,12 @@ export default function AdminManagementPage() {
 
   const handleSave = async () => {
     if (!formData.email || !formData.firstName || !formData.lastName || !formData.password) {
-      if(Platform.OS = "web"){
-        alert("Error: Please fill required fields");
+      if(Platform.OS === "web"){
+        alert("Error: Please fill all fields");
         return;
       }
       else{
-        Alert.alert('Error', 'Please fill required fields');
+        Alert.alert('Error', 'Please fill all fields');
         return;
       }
     }
@@ -68,12 +73,17 @@ export default function AdminManagementPage() {
       if (editingAdmin) {
         await api.updateUser(editingAdmin.id, formData);
       } else {
-        await api.signup({ ...formData, role: 'ADMIN' });
+        await api.signup({ ...formData, role: 'ADMIN' , isActive: true });
       }
       fetchAdmins();
       hideModal();
     } catch (error) {
-      Alert.alert('Error', 'Failed to save admin');
+      if(Platform.OS === "web"){
+        alert("Error: Failed to save admin");
+      }
+      else{
+        Alert.alert('Error', 'Failed to save admin');
+      }
     } finally {
       setLoading(false);
     }

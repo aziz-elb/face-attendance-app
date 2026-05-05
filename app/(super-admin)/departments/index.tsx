@@ -47,7 +47,7 @@ export default function DepartmentsPage() {
 
   const handleSave = async () => {
     if (!title || !code) {
-      if (Platform.OS = "web") {
+      if (Platform.OS === "web") {
         alert("Error: Please fill required fields");
         return;
       }
@@ -66,13 +66,18 @@ export default function DepartmentsPage() {
       fetchDepartments();
       hideModal();
     } catch (error) {
-      Alert.alert('Error', 'Failed to save department');
+      if (Platform.OS === "web") {
+        alert("Error: Failed to save department");
+      }
+      else {
+        Alert.alert('Error', 'Failed to save department');
+      }
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDelete = async (id:any) => {
+  const handleDelete = async (id: any) => {
     const message = 'Are you sure you want to delete this department?';
     const title = 'Delete Department';
 
@@ -96,7 +101,7 @@ export default function DepartmentsPage() {
   };
 
   // Fonction utilitaire pour éviter la répétition du try/catch
-  const executeDelete = async (id:any) => {
+  const executeDelete = async (id: any) => {
     try {
       await api.deleteDepartment(id);
       fetchDepartments();
@@ -114,7 +119,7 @@ export default function DepartmentsPage() {
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <FlatList
         data={departments}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => String(item.id)}
         renderItem={({ item }) => (
           <List.Item
             title={`${item.title} (${item.code})`}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, FlatList, StyleSheet, View } from 'react-native';
+import { Alert, FlatList, Platform, StyleSheet, View } from 'react-native';
 import { ActivityIndicator, Button, Divider, List, Searchbar, Switch, Text, useTheme } from 'react-native-paper';
 import { api } from '../../../lib/api';
 import { User } from '../../../lib/types';
@@ -17,7 +17,12 @@ export default function UserManagementPage() {
       // The request says "Users Pages", usually means regular users.
       setUsers(data.filter(u => u.role === 'USER'));
     } catch (error) {
-      Alert.alert('Error', 'Failed to fetch users');
+      if (Platform.OS === "web") {
+        alert("Error: Failed to fetch users");
+      }
+      else {
+        Alert.alert('Error', 'Failed to fetch users');
+      }
     } finally {
       setLoading(false);
     }
@@ -33,7 +38,12 @@ export default function UserManagementPage() {
       await api.updateUser(user.id, { isActive: newStatus });
       fetchUsers();
     } catch (error) {
-      Alert.alert('Error', 'Failed to update status');
+      if (Platform.OS === "web") {
+        alert("Error: Failed to update status");
+      }
+      else {
+        Alert.alert('Error', 'Failed to update status');
+      }
     }
   };
 
