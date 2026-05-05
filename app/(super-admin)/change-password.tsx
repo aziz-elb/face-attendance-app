@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView, Alert } from 'react-native';
+import { View, StyleSheet, ScrollView, Alert, Platform } from 'react-native';
 import { TextInput, Button, Surface, HelperText, useTheme } from 'react-native-paper';
 import { useRouter } from 'expo-router';
 import { api } from '../../lib/api';
 
-export default function AdminChangePassword() {
+export default function SuperAdminChangePassword() {
   const { colors } = useTheme();
   const router = useRouter();
   const user = api.currentUser;
@@ -22,26 +22,40 @@ export default function AdminChangePassword() {
     if (!user) return;
 
     if (formData.newPassword !== formData.confirmPassword) {
+      if(Platform.OS == "web"){
+        alert('Error\nNew passwords do not match');
+        return;
+      }
       Alert.alert('Error', 'New passwords do not match');
       return;
     }
 
-    if (formData.newPassword.length < 6) {
-      Alert.alert('Error', 'Password must be at least 6 characters');
-      return;
-    }
-
+ 
     setLoading(true);
     try {
+      // In a real app, you'd verify currentPassword first. 
+      if(user.password !== formData.currentPassword){
+        if(Platform.OS == "web"){
+          alert('Error\nIncorrect current password');
+          return;
+        }
+        Alert.alert('Error', 'Incorrect current password');
+        return;
+      }
+      // For this implementation, we directly update.
       const updatedUser = await api.updateUser(user.id, {
         password: formData.newPassword
       });
       
       api.currentUser = updatedUser;
       
-      setSuccess('Admin password changed!');
-      setTimeout(() => router.replace('/(admin)/profile'), 1000);
+      setSuccess('Super Admin password changed!');
+      setTimeout(() => router.replace('/(super-admin)/profile'), 1000);
     } catch (error: any) {
+      if(Platform.OS == "web"){
+        alert('Error\n' + error.message || 'Failed to change password');
+        return;
+      }
       Alert.alert('Error', error.message || 'Failed to change password');
     } finally {
       setLoading(false);
@@ -64,7 +78,7 @@ export default function AdminChangePassword() {
           />
 
           <TextInput
-            label="New Admin Password"
+            label="New Super Admin Password"
             value={formData.newPassword}
             onChangeText={(val) => setFormData({...formData, newPassword: val})}
             mode="outlined"

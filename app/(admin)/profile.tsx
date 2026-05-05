@@ -1,13 +1,19 @@
-import React from 'react';
-import { View, StyleSheet, ScrollView } from 'react-native';
+import { router, useFocusEffect } from 'expo-router';
+import React, { useState, useCallback } from 'react';
+import { View, StyleSheet, ScrollView, Platform, Alert } from 'react-native';
 import { Text, Appbar, Avatar, Card, List, Divider, Button, useTheme } from 'react-native-paper';
-import { useRouter } from 'expo-router';
 import { api } from '../../lib/api';
 
 export default function AdminProfile() {
-  const router = useRouter();
   const { colors } = useTheme();
-  const user = api.currentUser;
+  const [user, setUser] = useState(api.currentUser);
+
+  // Refresh user data when screen comes into focus
+  useFocusEffect(
+    useCallback(() => {
+      setUser(api.currentUser);
+    }, [])
+  );
 
   return (
     <View style={styles.container}>

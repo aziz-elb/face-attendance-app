@@ -28,7 +28,7 @@ export default function DepartmentsPage() {
     fetchDepartments();
   }, []);
 
-  const showModal = (dept = null) => {
+  const showModal = (dept: Department | null = null) => {
     if (dept) {
       setEditingDept(dept);
       setTitle(dept.title);
@@ -47,8 +47,14 @@ export default function DepartmentsPage() {
 
   const handleSave = async () => {
     if (!title || !code) {
-      Alert.alert('Error', 'Title and Code are required');
-      return;
+      if (Platform.OS = "web") {
+        alert("Error: Please fill required fields");
+        return;
+      }
+      else {
+        Alert.alert('Error', 'Title and Code are required');
+        return;
+      }
     }
     setLoading(true);
     try {
@@ -66,34 +72,40 @@ export default function DepartmentsPage() {
     }
   };
 
-  const handleDelete = async (id) => {
-    if (Platform.OS == "android" || Platform.OS == "ios") {
-      Alert.alert(
-        'Delete Department',
-        'Are you sure you want to delete this department?',
-        [
-          { text: 'Cancel', style: 'cancel' },
-          {
-            text: 'Delete',
-            style: 'destructive',
-            onPress: async () => {
-              try {
-                await api.deleteDepartment(id);
-                fetchDepartments();
-              } catch (error) {
-                Alert.alert('Error', 'Failed to delete');
-              }
-            }
-          }
-        ]
-      );
+  const handleDelete = async (id:any) => {
+    const message = 'Are you sure you want to delete this department?';
+    const title = 'Delete Department';
+
+    // --- LOGIQUE WEB ---
+    if (Platform.OS === 'web') {
+      if (window.confirm(`${title}\n\n${message}`)) {
+        await executeDelete(id);
+      }
+      return;
     }
-    else {
-      try {
-        await api.deleteDepartment(id);
-        fetchDepartments();
-      } catch (error) {
-        window.alert('Error\nFailed to delete');
+
+    // --- LOGIQUE MOBILE (iOS/Android) ---
+    Alert.alert(title, message, [
+      { text: 'Cancel', style: 'cancel' },
+      {
+        text: 'Delete',
+        style: 'destructive',
+        onPress: () => executeDelete(id)
+      }
+    ]);
+  };
+
+  // Fonction utilitaire pour éviter la répétition du try/catch
+  const executeDelete = async (id:any) => {
+    try {
+      await api.deleteDepartment(id);
+      fetchDepartments();
+    } catch (error) {
+      const errorMsg = 'Failed to delete';
+      if (Platform.OS === 'web') {
+        window.alert(errorMsg);
+      } else {
+        Alert.alert('Error', errorMsg);
       }
     }
   };

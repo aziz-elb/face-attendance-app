@@ -1,54 +1,30 @@
-import { router } from 'expo-router';
-import React, { useState } from 'react';
-import { Alert, Platform, ScrollView, StyleSheet, View } from 'react-native';
-import { Avatar, Button, Card, Divider, List, Modal, Portal, Text, TextInput, useTheme } from 'react-native-paper';
+import { router, useFocusEffect } from 'expo-router';
+import React, { useState, useCallback } from 'react';
+import { View, StyleSheet, ScrollView, Platform, Alert } from 'react-native';
+import { Avatar, Button, Card, Divider, List, Text, Appbar, useTheme } from 'react-native-paper';
+import { api } from '../../lib/api';
 
 export default function SuperAdminProfile() {
   const { colors } = useTheme();
-  const [visible, setVisible] = useState(false);
-  const [modalType, setModalType] = useState(''); // 'info' or 'password'
+  const [user, setUser] = useState(api.currentUser);
 
-  // Mock data for current super admin
-  const [adminInfo, setAdminInfo] = useState({
+  // Refresh user data when screen comes into focus
+  useFocusEffect(
+    useCallback(() => {
+      setUser(api.currentUser);
+    }, [])
+  );
+
+  // Fallback mock data if user is not available
+  const adminInfo = user || {
     firstName: 'Super',
     lastName: 'Admin',
     email: 'super@demo.com',
-  });
-
-  const [passwords, setPasswords] = useState({
-    current: '',
-    new: '',
-    confirm: '',
-  });
-
-  const showModal = (type:any) => {
-    setModalType(type);
-    setVisible(true);
-  };
-
-  const hideModal = () => {
-    setVisible(false);
-    setPasswords({ current: '', new: '', confirm: '' });
-  };
-
-  const handleUpdateInfo = () => {
-    // Logic to update info via API
-    Alert.alert('Success', 'Information updated successfully');
-    hideModal();
-  };
-
-  const handleChangePassword = () => {
-    if (passwords.new !== passwords.confirm) {
-      Alert.alert('Error', 'Passwords do not match');
-      return;
-    }
-    // Logic to change password via API
-    Alert.alert('Success', 'Password changed successfully');
-    hideModal();
+    role: 'Super Administrator' as any
   };
 
   const handleLogout = () => {
-    if (Platform.OS == "android") {
+    if (Platform.OS === "android") {
       Alert.alert('Logout', 'Are you sure you want to logout?', [
         { text: 'Cancel' },
         { text: 'Logout', onPress: () => router.replace('/(auth)/login') }
@@ -56,174 +32,133 @@ export default function SuperAdminProfile() {
     } else {
       router.replace('/(auth)/login');
     }
-
   };
 
   return (
-    <ScrollView style={[styles.container, { backgroundColor: colors.background }]}>
-      <View style={[styles.header, { backgroundColor: colors.primary }]}>
-        <Avatar.Icon size={80} icon="account-tie" style={styles.avatar} />
-        <Text variant="headlineMedium" style={styles.userName}>
-          {adminInfo.firstName} {adminInfo.lastName}
-        </Text>
-        <Text variant="bodyLarge" style={styles.userRole}>Super Administrator</Text>
-      </View>
-
-      <View style={styles.content}>
-        <Card style={styles.card}>
-          <Card.Content>
-            <List.Section>
-              <List.Subheader>Account Information</List.Subheader>
-              <List.Item
-                title="Full Name"
-                description={`${adminInfo.firstName} ${adminInfo.lastName}`}
-                left={props => <List.Icon {...props} icon="account-details" />}
-                onPress={() => showModal('info')}
-              />
-              <Divider />
-              <List.Item
-                title="Email Address"
-                description={adminInfo.email}
-                left={props => <List.Icon {...props} icon="email" />}
-                onPress={() => showModal('info')}
-              />
-              <Divider />
-              <List.Item
-                title="Security"
-                description="Change account password"
-                left={props => <List.Icon {...props} icon="lock-outline" />}
-                onPress={() => showModal('password')}
-              />
-            </List.Section>
+    <View style={styles.container}>
+      <ScrollView contentContainerStyle={styles.content}>
+        <Card style={styles.profileCard}>
+          <Card.Content style={styles.headerContent}>
+            <Avatar.Icon 
+              size={80} 
+              icon="account-tie" 
+              style={{ backgroundColor: colors.primaryContainer }} 
+              color={colors.primary} 
+            />
+            <Text variant="headlineSmall" style={styles.name}>
+              {adminInfo.firstName} {adminInfo.lastName}
+            </Text>
+            <Text variant="bodyLarge" style={styles.role}>
+              {adminInfo.role || 'Super Administrator'}
+            </Text>
           </Card.Content>
         </Card>
 
-        <Button
-          mode="outlined"
-          onPress={handleLogout}
-          style={styles.logoutBtn}
-          icon="logout"
-          textColor={colors.error}
-        >
-          Logout
-        </Button>
-      </View>
+        <Card style={styles.infoCard}>
+          <List.Section>
+            <List.Subheader>Account Information</List.Subheader>
+            <List.Item
+              title="Full Name"
+              description={`${adminInfo.firstName} ${adminInfo.lastName}`}
+              left={props => <List.Icon {...props} icon="account-details" />}
+            />
+            <Divider />
+            <List.Item
+              title="Email Address"
+              description={adminInfo.email}
+              left={props => <List.Icon {...props} icon="email" />}
+            />
+            <Divider />
+            <List.Item
+              title="Security"
+              description="Change account password"
+              left={props => <List.Icon {...props} icon="lock-outline" />}
+              onPress={() => router.push('/(super-admin)/change-password')}
+              right={props => <List.Icon {...props} icon="chevron-right" />}
+            />
+          </List.Section>
+        </Card>
 
-      <Portal>
-        <Modal
-          visible={visible}
-          onDismiss={hideModal}
-          contentContainerStyle={[styles.modal, { backgroundColor: colors.surface }]}
-        >
-          {modalType === 'info' ? (
-            <>
-              <Text variant="headlineSmall" style={styles.modalTitle}>Update Information</Text>
-              <TextInput
-                label="First Name"
-                value={adminInfo.firstName}
-                onChangeText={(v) => setAdminInfo({ ...adminInfo, firstName: v })}
-                mode="outlined"
-                style={styles.input}
-              />
-              <TextInput
-                label="Last Name"
-                value={adminInfo.lastName}
-                onChangeText={(v) => setAdminInfo({ ...adminInfo, lastName: v })}
-                mode="outlined"
-                style={styles.input}
-              />
-              <Button mode="contained" onPress={handleUpdateInfo} style={styles.modalActionBtn}>
-                Update
-              </Button>
-            </>
-          ) : (
-            <>
-              <Text variant="headlineSmall" style={styles.modalTitle}>Change Password</Text>
-              <TextInput
-                label="Current Password"
-                secureTextEntry
-                mode="outlined"
-                value={passwords.current}
-                onChangeText={(v) => setPasswords({ ...passwords, current: v })}
-                style={styles.input}
-              />
-              <TextInput
-                label="New Password"
-                secureTextEntry
-                mode="outlined"
-                value={passwords.new}
-                onChangeText={(v) => setPasswords({ ...passwords, new: v })}
-                style={styles.input}
-              />
-              <TextInput
-                label="Confirm New Password"
-                secureTextEntry
-                mode="outlined"
-                value={passwords.confirm}
-                onChangeText={(v) => setPasswords({ ...passwords, confirm: v })}
-                style={styles.input}
-              />
-              <Button mode="contained" onPress={handleChangePassword} style={styles.modalActionBtn}>
-                Change Password
-              </Button>
-            </>
-          )}
-          <Button onPress={hideModal} style={{ marginTop: 8 }}>Cancel</Button>
-        </Modal>
-      </Portal>
-    </ScrollView>
+        <View style={styles.actionContainer}>
+          <Text variant="titleMedium" style={styles.sectionTitle}>Settings</Text>
+          <Button 
+            mode="contained" 
+            onPress={() => router.push('/(super-admin)/edit-info')} 
+            style={styles.button}
+            icon="account-edit"
+          >
+            Edit Profile Info
+          </Button>
+          
+          <Button 
+            mode="outlined" 
+            onPress={() => router.push('/(super-admin)/change-password')} 
+            style={styles.button}
+            icon="lock-reset"
+          >
+            Change Password
+          </Button>
+
+          <Button 
+            mode="text" 
+            onPress={handleLogout} 
+            style={styles.logoutButton}
+            icon="logout"
+            textColor={colors.error}
+          >
+            Sign Out
+          </Button>
+        </View>
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-  },
-  header: {
-    padding: 32,
-    alignItems: 'center',
-    borderBottomLeftRadius: 30,
-    borderBottomRightRadius: 30,
-    elevation: 4,
-  },
-  avatar: {
-    backgroundColor: '#fff',
-    marginBottom: 16,
-  },
-  userName: {
-    color: '#fff',
-    fontWeight: 'bold',
-  },
-  userRole: {
-    color: 'rgba(255,255,255,0.8)',
+    backgroundColor: '#f5f5f5',
   },
   content: {
     padding: 16,
-    marginTop: -20,
+    paddingBottom: 32,
   },
-  card: {
-    borderRadius: 15,
-    elevation: 4,
-    backgroundColor: '#fff',
+  profileCard: {
+    marginBottom: 16,
+    borderRadius: 16,
+    elevation: 2,
   },
-  logoutBtn: {
-    marginTop: 24,
-    borderColor: '#ff5252',
+  headerContent: {
+    alignItems: 'center',
+    paddingVertical: 20,
   },
-  modal: {
-    padding: 20,
-    margin: 20,
-    borderRadius: 12,
-  },
-  modalTitle: {
-    marginBottom: 20,
+  name: {
+    marginTop: 12,
     fontWeight: 'bold',
-    textAlign: 'center',
   },
-  input: {
-    marginBottom: 12,
+  role: {
+    opacity: 0.7,
+    marginTop: 4,
   },
-  modalActionBtn: {
+  infoCard: {
+    marginBottom: 24,
+    borderRadius: 16,
+    elevation: 1,
+  },
+  sectionTitle: {
+    marginBottom: 8,
     marginTop: 8,
+    fontWeight: '600',
+    opacity: 0.8,
+  },
+  actionContainer: {
+    gap: 8,
+  },
+  button: {
+    borderRadius: 12,
+    paddingVertical: 4,
+  },
+  logoutButton: {
+    marginTop: 16,
   }
 });

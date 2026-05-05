@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { View, FlatList, StyleSheet, Alert } from 'react-native';
-import { Text, List, FAB, Portal, Modal, TextInput, Button, useTheme, IconButton, ActivityIndicator } from 'react-native-paper';
+import React, { useEffect, useState } from 'react';
+import { Alert, FlatList, Platform, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Button, FAB, IconButton, List, Modal, Portal, Text, TextInput, useTheme } from 'react-native-paper';
 import { api } from '../../../lib/api';
 import { User } from '../../../lib/types';
 
@@ -11,7 +11,7 @@ export default function AdminManagementPage() {
   const [loading, setLoading] = useState(false);
   const [fetchLoading, setFetchLoading] = useState(true);
   const [editingAdmin, setEditingAdmin] = useState<User | null>(null);
-  
+
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -34,14 +34,14 @@ export default function AdminManagementPage() {
     fetchAdmins();
   }, []);
 
-  const showModal = (admin = null) => {
+  const showModal = (admin:User | null = null) => {
     if (admin) {
       setEditingAdmin(admin);
       setFormData({
         firstName: admin.firstName,
         lastName: admin.lastName,
         email: admin.email,
-        password: admin.password,
+        password: admin.password || "",
       });
     } else {
       setEditingAdmin(null);
@@ -53,9 +53,15 @@ export default function AdminManagementPage() {
   const hideModal = () => setVisible(false);
 
   const handleSave = async () => {
-    if (!formData.email || !formData.firstName) {
-      Alert.alert('Error', 'Please fill required fields');
-      return;
+    if (!formData.email || !formData.firstName || !formData.lastName || !formData.password) {
+      if(Platform.OS = "web"){
+        alert("Error: Please fill required fields");
+        return;
+      }
+      else{
+        Alert.alert('Error', 'Please fill required fields');
+        return;
+      }
     }
     setLoading(true);
     try {
@@ -73,14 +79,35 @@ export default function AdminManagementPage() {
     }
   };
 
-  const handleDelete = (id) => {
+  const handleDelete = (id:any) => {
+    // Logique pour le Web
+    if (Platform.OS === "web") {
+      const confirmed = window.confirm("Delete Admin: Delete this admin account?");
+      if (confirmed) {
+        processDelete(id);
+      }
+      return; // On arrête la fonction ici pour le web
+    }
+
+    // Logique pour Mobile (iOS/Android)
     Alert.alert('Delete Admin', 'Delete this admin account?', [
       { text: 'Cancel' },
-      { text: 'Delete', style: 'destructive', onPress: async () => {
-        await api.deleteUser(id);
-        fetchAdmins();
-      }}
+      {
+        text: 'Delete',
+        style: 'destructive',
+        onPress: () => processDelete(id)
+      }
     ]);
+  };
+
+  // Petite fonction utilitaire pour éviter de répéter le code de suppression
+  const processDelete = async (id:any) => {
+    try {
+      await api.deleteUser(id);
+      fetchAdmins();
+    } catch (error) {
+      console.error("Erreur lors de la suppression:", error);
+    }
   };
 
   if (fetchLoading) return <ActivityIndicator style={{ flex: 1 }} />;
@@ -114,21 +141,22 @@ export default function AdminManagementPage() {
           <TextInput
             label="First Name"
             value={formData.firstName}
-            onChangeText={(v) => setFormData({...formData, firstName: v})}
+            onChangeText={(v) => setFormData({ ...formData, firstName: v })}
             mode="outlined"
             style={styles.input}
+            
           />
           <TextInput
             label="Last Name"
             value={formData.lastName}
-            onChangeText={(v) => setFormData({...formData, lastName: v})}
+            onChangeText={(v) => setFormData({ ...formData, lastName: v })}
             mode="outlined"
             style={styles.input}
           />
           <TextInput
             label="Email"
             value={formData.email}
-            onChangeText={(v) => setFormData({...formData, email: v})}
+            onChangeText={(v) => setFormData({ ...formData, email: v })}
             mode="outlined"
             keyboardType="email-address"
             style={styles.input}
@@ -137,7 +165,7 @@ export default function AdminManagementPage() {
             <TextInput
               label="Password"
               value={formData.password}
-              onChangeText={(v) => setFormData({...formData, password: v})}
+              onChangeText={(v) => setFormData({ ...formData, password: v })}
               mode="outlined"
               secureTextEntry
               style={styles.input}

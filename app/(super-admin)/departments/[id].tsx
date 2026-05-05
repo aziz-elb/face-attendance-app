@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
-import { View, FlatList, StyleSheet, Alert } from 'react-native';
-import { Text, List, Button, Portal, Modal, Searchbar, useTheme, IconButton, ActivityIndicator } from 'react-native-paper';
-import { useLocalSearchParams, router } from 'expo-router';
+import { useLocalSearchParams } from 'expo-router';
+import React, { useEffect, useState } from 'react';
+import { Alert, FlatList, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Button, IconButton, List, Modal, Portal, Searchbar, Text, useTheme } from 'react-native-paper';
 import { api } from '../../../lib/api';
-import { User, Department } from '../../../lib/types';
+import { Department, User } from '../../../lib/types';
 
 export default function ManageDepartmentUsers() {
   const { id } = useLocalSearchParams();
@@ -41,8 +41,8 @@ export default function ManageDepartmentUsers() {
   const addUserToDept = async (userId: string) => {
     if (!currentDept) return;
     try {
-      await api.updateUser(userId, { 
-        department: { id: currentDept.id, title: currentDept.title } 
+      await api.updateUser(userId, {
+        department: { id: currentDept.id, title: currentDept.title }
       });
       fetchData();
       setVisible(false);
@@ -60,19 +60,17 @@ export default function ManageDepartmentUsers() {
     }
   };
 
-  const filteredUsers = allUsers.filter(u => 
-    `${u.firstName} ${u.lastName}`.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    u.email.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredUsers = allUsers.filter(u => (`${u.firstName} ${u.lastName}`.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    u.email.toLowerCase().includes(searchQuery.toLowerCase())) && u.role !== "SUPER_ADMIN"
   );
 
   if (loading) return <ActivityIndicator style={{ flex: 1 }} />;
 
+
+
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
-      <View style={styles.header}>
-        <IconButton icon="arrow-left" onPress={() => router.back()} />
-        <Text variant="headlineSmall" style={styles.title}>Department Users</Text>
-      </View>
+
 
       <FlatList
         data={deptUsers}
@@ -80,14 +78,28 @@ export default function ManageDepartmentUsers() {
         ListEmptyComponent={<Text style={styles.emptyText}>No users in this department</Text>}
         renderItem={({ item }) => (
           <List.Item
-            title={`${item.firstName} ${item.lastName}`}
-            description={`${item.role} - ${item.email}`}
+            title={() => (
+              <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                <Text style={{ fontSize: 16, fontWeight: '500' }}>
+                  {item.firstName} {item.lastName}
+                </Text>
+                <Text style={{
+                  marginLeft: 8,
+                  color: item.role?.toUpperCase() === 'ADMIN' ? '#D32F2F' : '#2E7D32',
+                  fontWeight: 'bold',
+                  fontSize: 14
+                }}>
+                  ({item.role})
+                </Text>
+              </View>
+            )}
+            description={`${item.email}`}
             left={props => <List.Icon {...props} icon="account" />}
             right={props => (
-              <IconButton 
-                icon="account-remove" 
-                iconColor={colors.error} 
-                onPress={() => removeUserFromDept(item.id)} 
+              <IconButton
+                icon="account-remove"
+                iconColor={colors.error}
+                onPress={() => removeUserFromDept(item.id)}
               />
             )}
             style={styles.listItem}
@@ -95,9 +107,9 @@ export default function ManageDepartmentUsers() {
         )}
       />
 
-      <Button 
-        mode="contained" 
-        onPress={() => setVisible(true)} 
+      <Button
+        mode="contained"
+        onPress={() => setVisible(true)}
         style={styles.addBtn}
         icon="plus"
       >
@@ -105,9 +117,9 @@ export default function ManageDepartmentUsers() {
       </Button>
 
       <Portal>
-        <Modal 
-          visible={visible} 
-          onDismiss={() => setVisible(false)} 
+        <Modal
+          visible={visible}
+          onDismiss={() => setVisible(false)}
           contentContainerStyle={[styles.modal, { backgroundColor: colors.surface }]}
         >
           <Text variant="headlineSmall" style={styles.modalTitle}>Add User</Text>
@@ -123,8 +135,22 @@ export default function ManageDepartmentUsers() {
             style={{ maxHeight: 300 }}
             renderItem={({ item }) => (
               <List.Item
-                title={`${item.firstName} ${item.lastName}`}
-                description={item.email}
+                title={() => (
+                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <Text style={{ fontSize: 16, fontWeight: '500' }}>
+                      {item.firstName} {item.lastName}
+                    </Text>
+                    <Text style={{
+                      marginLeft: 8,
+                      color: item.role?.toUpperCase() === 'ADMIN' ? '#D32F2F' : '#2E7D32',
+                      fontWeight: 'bold',
+                      fontSize: 14
+                    }}>
+                      ({item.role})
+                    </Text>
+                  </View>
+                )}
+                description={`${item.email}`}
                 onPress={() => addUserToDept(item.id)}
                 right={props => <List.Icon {...props} icon="plus" />}
               />

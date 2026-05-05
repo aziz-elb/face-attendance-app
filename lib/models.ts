@@ -6,15 +6,12 @@ export const Models = {
    */
   user: (data: any): User => {
     let department: DepartmentRef | null = null;
-    
-    if (data.department && typeof data.department === 'object' && data.department.id) {
+
+    if (data.department) {
       department = {
         id: data.department.id,
-        title: data.department.title || 'Unknown Department'
+        title: data.department.title
       };
-    } else if (typeof data.department === 'string' && data.department !== 'Unknown') {
-       // Fallback for cases where it might just be an ID string (though not expected in current db.json)
-       department = { id: data.department, title: 'Department' };
     }
 
     return {

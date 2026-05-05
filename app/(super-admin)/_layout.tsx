@@ -1,6 +1,6 @@
-import { Tabs, router } from "expo-router";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useTheme, IconButton } from "react-native-paper";
+import { Tabs, router } from "expo-router";
+import { IconButton, useTheme } from "react-native-paper";
 
 export default function SuperAdminLayout() {
   const { colors } = useTheme();
@@ -53,6 +53,13 @@ export default function SuperAdminLayout() {
           href: null,
           title: "Department Users",
           tabBarStyle: { display: 'none' },
+          headerShown: true, // Assurez-vous que le header est affiché
+          headerLeft: () => (
+            <IconButton
+              icon="arrow-left" // Nom de l'icône selon votre bibliothèque
+              onPress={() => router.push("/(super-admin)/departments")} // Redirige vers la page précédente
+            />
+          ),
         }}
       />
       <Tabs.Screen
@@ -82,6 +89,36 @@ export default function SuperAdminLayout() {
           tabBarLabel: "Profile",
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="account-circle" color={color} size={size} />
+          ),
+        }}
+      />
+
+      {/* Hidden screens reachable from Profile */}
+      <Tabs.Screen
+        name="edit-info"
+        options={{
+          href: null,
+          headerShown: true,
+          title: "Super Admin Info",
+          headerLeft: () => (
+            <IconButton
+              icon="arrow-left"
+              onPress={() => router.replace('/(super-admin)/profile')}
+            />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="change-password"
+        options={{
+          href: null,
+          headerShown: true,
+          title: "Super Admin Password",
+          headerLeft: () => (
+            <IconButton
+              icon="arrow-left"
+              onPress={() => router.replace('/(super-admin)/profile')}
+            />
           ),
         }}
       />

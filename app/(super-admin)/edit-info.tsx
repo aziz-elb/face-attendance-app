@@ -4,7 +4,7 @@ import { TextInput, Button, Surface, HelperText, useTheme } from 'react-native-p
 import { useRouter } from 'expo-router';
 import { api } from '../../lib/api';
 
-export default function AdminEditInfo() {
+export default function SuperAdminEditInfo() {
   const { colors } = useTheme();
   const router = useRouter();
   const user = api.currentUser;
@@ -28,10 +28,11 @@ export default function AdminEditInfo() {
         email: formData.email,
       });
       
+      // Update global currentUser
       api.currentUser = updatedUser;
       
-      setSuccess('Admin profile updated!');
-      setTimeout(() => router.replace('/(admin)/profile'), 1000);
+      setSuccess('Super Admin profile updated!');
+      setTimeout(() => router.replace('/(super-admin)/profile'), 1000);
     } catch (error: any) {
       Alert.alert('Error', error.message || 'Failed to update profile');
     } finally {
@@ -62,7 +63,7 @@ export default function AdminEditInfo() {
           />
 
           <TextInput
-            label="Admin Email"
+            label="Super Admin Email"
             value={formData.email}
             onChangeText={(val) => setFormData({...formData, email: val})}
             mode="outlined"
@@ -77,7 +78,7 @@ export default function AdminEditInfo() {
             style={styles.button}
             disabled={loading}
           >
-            Update Admin Profile
+            Update Super Admin Profile
           </Button>
         </Surface>
       </ScrollView>

@@ -9,11 +9,11 @@
       "role": "USER",
       "department": {
         "id": 2,
-        "title": "Marketing "
+        "title": "Ressource Houmaine"
       },
-      "isActive": true,
+      "isActive": false,
       "createdAt": "2026-01-01T08:00:00Z",
-      "updatedAt": "2026-05-03T22:22:34.132Z"
+      "updatedAt": "2026-05-05T12:07:49.731Z"
     },
     {
       "id": "3",
@@ -21,29 +21,23 @@
       "lastName": "White",
       "email": "super@demo.com",
       "password": "password",
-      "role": "SUPER_ADMIN",
-      "department": {
-        "id": 3,
-        "title": "hllo gggg"
-      },
+      "role": "ADMIN",
+      "department": null,
       "isActive": true,
       "createdAt": "2026-01-01T08:00:00Z",
-      "updatedAt": "2026-05-04T12:04:56.829Z"
+      "updatedAt": "2026-05-05T12:00:18.811Z"
     },
     {
       "id": "IENftmn",
-      "firstName": "aziz",
-      "lastName": "elb",
+      "firstName": "azizoo",
+      "lastName": "elboo",
       "email": "aziz@gmail.com",
-      "password": "123",
-      "department": {
-        "id": 2,
-        "title": "Marketing "
-      },
-      "role": "ADMIN",
+      "password": "abcd",
+      "department": {},
+      "role": "SUPER_ADMIN",
       "isActive": true,
       "createdAt": "2026-05-01T10:39:40.750Z",
-      "updatedAt": "2026-05-03T22:22:42.262Z"
+      "updatedAt": "2026-05-05T12:34:09.972Z"
     },
     {
       "firstName": "Ahmed",
@@ -52,60 +46,57 @@
       "password": "123",
       "department": {
         "id": 2,
-        "title": "Marketing "
+        "title": "Ressource Houmaine"
       },
       "role": "USER",
       "isActive": true,
       "createdAt": "2026-05-03T18:38:06.024Z",
-      "updatedAt": "2026-05-04T12:06:08.962Z",
+      "updatedAt": "2026-05-05T12:07:19.331Z",
       "id": "u_R2zpd"
     },
     {
-      "firstName": "aziz",
-      "lastName": "el abbassi",
-      "email": "aziz22@gmail.com",
-      "password": "password123",
+      "firstName": "admin",
+      "lastName": "one",
+      "email": "admin1@gmail.com",
+      "password": "123",
       "role": "ADMIN",
       "department": {
         "id": 2,
-        "title": "Marketing "
-      },
-      "isActive": true,
-      "createdAt": "2026-05-03T21:21:13.908Z",
-      "updatedAt": "2026-05-03T22:22:50.060Z",
-      "id": "PQAqRaw"
-    },
-    {
-      "firstName": "abdessamad",
-      "lastName": "Qadiri",
-      "email": "qadiri123@gmail.com",
-      "password": "pzjdjdkdvddjj13",
-      "role": "ADMIN",
-      "department": {
-        "id": 2,
-        "title": "Marketing "
+        "title": "Ressource Houmaine"
       },
       "isActive": false,
-      "createdAt": "2026-05-03T21:22:01.958Z",
-      "updatedAt": "2026-05-03T22:22:53.412Z",
-      "id": "84Yxu3S"
+      "createdAt": "2026-05-05T10:57:25.219Z",
+      "updatedAt": "2026-05-05T12:07:56.956Z",
+      "id": "Q3XI3nF"
+    },
+    {
+      "firstName": "admin",
+      "lastName": "two2",
+      "email": "admin2@gmail.com",
+      "password": "123",
+      "role": "ADMIN",
+      "department": null,
+      "isActive": false,
+      "createdAt": "2026-05-05T10:57:39.231Z",
+      "updatedAt": "2026-05-05T10:57:54.849Z",
+      "id": "Bc_6erm"
     }
   ],
   "departments": [
     {
-      "title": "Resources homaine ",
-      "description": "département de ressources humaines ",
-      "code": "RH01",
-      "createdAt": "2026-05-03T21:19:09.885Z",
-      "updatedAt": "2026-05-03T21:19:32.656Z",
+      "title": "Marketing",
+      "description": "this is the marketing",
+      "code": "MK01",
+      "createdAt": "2026-05-05T11:28:05.473Z",
+      "updatedAt": "2026-05-05T11:29:25.023Z",
       "id": 1
     },
     {
-      "title": "Marketing ",
-      "description": "département de marketing ",
-      "code": "M01",
-      "createdAt": "2026-05-03T21:19:57.368Z",
-      "updatedAt": "2026-05-03T21:19:57.368Z",
+      "title": "Ressource Houmaine",
+      "description": "This is the departement",
+      "code": "RH02",
+      "createdAt": "2026-05-05T11:28:23.205Z",
+      "updatedAt": "2026-05-05T11:29:10.790Z",
       "id": 2
     }
   ],

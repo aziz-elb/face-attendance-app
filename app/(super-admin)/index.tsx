@@ -64,15 +64,7 @@ export default function SuperAdminDashboard() {
         />
       </View>
 
-      <Card style={styles.recentActivityCard}>
-        <Card.Title title="System Status" subtitle="All services are running normally" 
-          left={(props) => <MaterialCommunityIcons {...props} name="server-network" color={colors.primary} />} 
-        />
-        <Card.Content>
-          <Text variant="bodyMedium">Last automated backup: 2 hours ago</Text>
-          <Text variant="bodyMedium">System Load: 12%</Text>
-        </Card.Content>
-      </Card>
+  
     </ScrollView>
   );
 }

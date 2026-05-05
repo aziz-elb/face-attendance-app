@@ -1,8 +1,8 @@
 import { Platform } from "react-native";
-import { User, Department, Attendance, Notification } from "./types";
 import { Models } from "./models";
+import { Attendance, Department, Notification, User } from "./types";
 
-const API_URL = Platform.OS === "android" ? "http://192.168.1.8:3000" : "http://localhost:3000"; 
+const API_URL = Platform.OS === "android" ? "http://192.168.1.8:3000" : "http://localhost:3000";
 // Note: 10.0.2.2 is the default IP for Android Emulator to access localhost. 
 // For physical devices, use the machine's local IP (e.g., 192.168.x.x).
 
@@ -14,7 +14,7 @@ export const api = {
     const data = await response.json();
     return Array.isArray(data) ? data.map(Models.user) : [];
   },
-  
+
   login: async (email: string, password: string): Promise<User> => {
     const response = await fetch(`${API_URL}/users?email=${email}&password=${password}`);
     const users = await response.json();
@@ -27,21 +27,21 @@ export const api = {
     }
     throw new Error("Invalid email or password");
   },
-  
-  signup: async (userData: Partial<User> & { department_id?: string }): Promise<User> => {
+
+  signup: async (userData: Partial<User> ): Promise<User> => {
     const existingResponse = await fetch(`${API_URL}/users?email=${userData.email}`);
     const existingUsers = await existingResponse.json();
-    
+
     if (Array.isArray(existingUsers) && existingUsers.length > 0) {
       throw new Error("User with this email already exists");
     }
-    
+
     const response = await fetch(`${API_URL}/users`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         ...userData,
-        department: userData.department || "Unknown",
+        department: userData.department || null,
         role: userData.role || "USER",
         isActive: false,
         createdAt: new Date().toISOString(),
@@ -50,6 +50,15 @@ export const api = {
     });
     return Models.user(await response.json());
   },
+
+  deleteUser: async (id: string): Promise<void> => {
+    await fetch(`${API_URL}/users/${id}`, { method: 'DELETE' });
+  },
+
+
+
+
+  // DEPARTEMENTS CRUD 
 
   getDepartments: async (): Promise<Department[]> => {
     const response = await fetch(`${API_URL}/departments`);
@@ -79,33 +88,23 @@ export const api = {
     await fetch(`${API_URL}/departments/${id}`, { method: 'DELETE' });
   },
 
-  updateUser: async (id: string, userData: Partial<User> & { department_id?: string }): Promise<User> => {
-    let normalizedData: any = { ...userData };
-    
-    if (userData.department_id && !userData.department) {
-      try {
-        const depts = await api.getDepartments();
-        const dept = depts.find(d => String(d.id) === String(userData.department_id));
-        if (dept) {
-          normalizedData.department = { id: dept.id, title: dept.title };
-          delete normalizedData.department_id;
-        }
-      } catch (e) {
-        normalizedData.department = { id: userData.department_id, title: "Unknown" };
-      }
-    }
-    
+  updateUser: async (id: string, userData: Partial<User>): Promise<User> => {
     const response = await fetch(`${API_URL}/users/${id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...normalizedData, updatedAt: new Date().toISOString() }),
+      body: JSON.stringify({
+        ...userData,
+        updatedAt: new Date().toISOString()
+      }),
     });
+
+    if (!response.ok) throw new Error('Update failed');
+
     return Models.user(await response.json());
   },
 
-  deleteUser: async (id: string): Promise<void> => {
-    await fetch(`${API_URL}/users/${id}`, { method: 'DELETE' });
-  },
+
+  // ATTENDANCE CRUD 
 
   getAttendance: async (): Promise<Attendance[]> => {
     const response = await fetch(`${API_URL}/attendance`);
@@ -126,6 +125,19 @@ export const api = {
     });
     return Models.attendance(await response.json());
   },
+  updateAttendance: async (id: string, attendanceData: Partial<Attendance>): Promise<Attendance> => {
+    const response = await fetch(`${API_URL}/attendance/${id}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        ...attendanceData,
+      }),
+    });
+    return Models.attendance(await response.json());
+  },
+
+
+  // NOTIFICATIONS CRUD 
 
   getNotifications: async (): Promise<Notification[]> => {
     const response = await fetch(`${API_URL}/notifications`);
@@ -146,16 +158,22 @@ export const api = {
     });
     return Models.notification(await response.json());
   },
-  updateAttendance: async (id: string, attendanceData: Partial<Attendance>): Promise<Attendance> => {
-    const response = await fetch(`${API_URL}/attendance/${id}`, {
+
+  updateNotification: async (id: string, notifData: Partial<Notification>): Promise<Notification> => {
+    const response = await fetch(`${API_URL}/notifications/${id}`, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        ...attendanceData,
+        ...notifData,
       }),
     });
-    return Models.attendance(await response.json());
+    return Models.notification(await response.json());
   },
+
+  deleteNotification: async (id: string): Promise<void> => {
+    await fetch(`${API_URL}/notifications/${id}`, { method: 'DELETE' });
+  },
+
 };
 
 
