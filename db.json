@@ -34,7 +34,7 @@
       "email": "aziz@gmail.com",
       "password": "123",
       "department": null,
-      "role": "ADMIN",
+      "role": "SUPER_ADMIN",
       "isActive": true,
       "createdAt": "2026-05-01T10:39:40.750Z",
       "updatedAt": "2026-05-05T16:03:15.725Z"
@@ -102,151 +102,91 @@
   ],
   "attendance": [
     {
-      "user_id": "u_R2zpd",
-      "date": "2026-05-05",
+      "user_id": "1",
+      "date": "2026-05-06",
       "status": "ABSENT",
       "is_justified": true,
       "justification": {
-        "message": "heu theacher i was sleep",
+        "message": "hiiii\nthere is fadsbfdsfdsf",
         "file_path": "document_placeholder.pdf",
         "status": "ACCEPTED",
-        "isArchived": false
+        "isArchived": true
       },
-      "createdAt": "2026-05-05T16:15:04.357Z",
+      "createdAt": "2026-05-06T09:21:16.381Z",
+      "id": 1
+    },
+    {
+      "user_id": "u_R2zpd",
+      "date": "2026-05-06",
+      "status": "ABSENT",
+      "is_justified": false,
+      "justification": null,
+      "createdAt": "2026-05-06T09:21:16.383Z",
       "id": 2
     },
     {
       "user_id": "1",
-      "date": "2026-05-04",
-      "status": "PRESENT",
-      "is_justified": false,
-      "justification": null,
-      "createdAt": "2026-05-04T08:00:00.000Z",
+      "date": "2026-05-08",
+      "status": "ABSENT",
+      "is_justified": true,
+      "justification": {
+        "message": "hello there .",
+        "file_path": "document_placeholder.pdf",
+        "status": "REJECTED",
+        "isArchived": true
+      },
+      "createdAt": "2026-05-08T09:24:50.053Z",
       "id": 3
     },
     {
-      "user_id": "u_R2zpd",
-      "date": "2026-05-04",
-      "status": "PRESENT",
-      "is_justified": false,
-      "justification": null,
-      "createdAt": "2026-05-04T08:05:00.000Z",
+      "user_id": "1",
+      "date": "2026-05-01",
+      "status": "ABSENT",
+      "is_justified": true,
+      "justification": {
+        "message": "hhhh wah is that",
+        "file_path": "document_placeholder.pdf",
+        "status": "ACCEPTED",
+        "isArchived": true
+      },
+      "createdAt": "2026-05-08T09:24:50.054Z",
       "id": 4
     },
     {
       "user_id": "1",
+      "date": "2026-05-09",
+      "status": "PRESENT",
+      "is_justified": false,
+      "justification": null,
+      "createdAt": "2026-05-09T09:24:50.054Z",
+      "id": 5
+    },
+    {
+      "user_id": "1",
+      "date": "2026-05-02",
+      "status": "PRESENT",
+      "is_justified": false,
+      "justification": null,
+      "createdAt": "2026-05-09T09:24:50.054Z",
+      "id": 5
+    },
+    {
+      "user_id": "1",
       "date": "2026-05-03",
-      "status": "ABSENT",
-      "is_justified": true,
-      "justification": {
-        "message": "hey wassap",
-        "file_path": "document_placeholder.pdf",
-        "status": "REJECTED",
-        "isArchived": false
-      },
-      "createdAt": "2026-05-03T09:15:00.000Z",
+      "status": "PRESENT",
+      "is_justified": false,
+      "justification": null,
+      "createdAt": "2026-05-09T09:24:50.054Z",
       "id": 5
     },
     {
       "user_id": "u_R2zpd",
-      "date": "2026-05-03",
-      "status": "PRESENT",
+      "date": "2026-05-09",
+      "status": "ABSENT",
       "is_justified": false,
       "justification": null,
-      "createdAt": "2026-05-03T08:00:00.000Z",
+      "createdAt": "2026-05-09T09:24:50.054Z",
       "id": 6
-    },
-    {
-      "user_id": "1",
-      "date": "2026-05-02",
-      "status": "PRESENT",
-      "is_justified": false,
-      "justification": null,
-      "createdAt": "2026-05-02T07:55:00.000Z",
-      "id": 7
-    },
-    {
-      "user_id": "u_R2zpd",
-      "date": "2026-05-02",
-      "status": "ABSENT",
-      "is_justified": true,
-      "justification": {
-        "message": "hiasdf",
-        "file_path": "document_placeholder.pdf",
-        "status": "REJECTED",
-        "isArchived": false
-      },
-      "createdAt": "2026-05-02T10:00:00.000Z",
-      "id": 8
-    },
-    {
-      "user_id": "1",
-      "date": "2026-05-06",
-      "status": "ABSENT",
-      "is_justified": true,
-      "justification": {
-        "message": "hey teacher i was in a journey i could not assist sorry",
-        "file_path": "document_placeholder.pdf",
-        "status": "ACCEPTED",
-        "isArchived": false
-      },
-      "createdAt": "2026-05-06T07:44:13.916Z",
-      "id": 9
-    },
-    {
-      "user_id": "u_R2zpd",
-      "date": "2026-05-06",
-      "status": "PRESENT",
-      "is_justified": false,
-      "justification": null,
-      "createdAt": "2026-05-06T07:44:13.917Z",
-      "id": 10
-    },
-    {
-      "user_id": "1",
-      "date": "2026-05-07",
-      "status": "ABSENT",
-      "is_justified": true,
-      "justification": {
-        "message": "Hey teacher i was runnnig so a jump and fall in a river",
-        "file_path": "document_placeholder.pdf",
-        "status": "ACCEPTED",
-        "isArchived": false
-      },
-      "createdAt": "2026-05-07T08:00:39.220Z",
-      "id": 11
-    },
-    {
-      "user_id": "u_R2zpd",
-      "date": "2026-05-07",
-      "status": "PRESENT",
-      "is_justified": false,
-      "justification": null,
-      "createdAt": "2026-05-07T08:00:39.221Z",
-      "id": 12
-    },
-    {
-      "user_id": "1",
-      "date": "2026-05-08",
-      "status": "ABSENT",
-      "is_justified": true,
-      "justification": {
-        "message": "Hshsjshzhzz\nSsjzjzuz\nSjdjdjzd\nDjdud",
-        "file_path": "document_placeholder.pdf",
-        "status": "ACCEPTED",
-        "isArchived": false
-      },
-      "createdAt": "2026-05-08T08:25:32.947Z",
-      "id": 13
-    },
-    {
-      "user_id": "u_R2zpd",
-      "date": "2026-05-08",
-      "status": "PRESENT",
-      "is_justified": false,
-      "justification": null,
-      "createdAt": "2026-05-08T08:25:32.947Z",
-      "id": 14
     }
   ],
   "notifications": [
@@ -303,6 +243,15 @@
       "isArchived": true,
       "createdAt": "2026-05-08T08:30:06.401Z",
       "id": 9
+    },
+    {
+      "recipient_id": "1",
+      "sender_id": "Q3XI3nF",
+      "content": "Hello mohamed what is that",
+      "status": "Read",
+      "isArchived": false,
+      "createdAt": "2026-05-06T09:40:17.637Z",
+      "id": 10
     }
   ]
 }

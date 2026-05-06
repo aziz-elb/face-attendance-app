@@ -2,7 +2,7 @@ import { useRouter } from 'expo-router';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Text, useTheme } from 'react-native-paper';
+import { Appbar, Text, useTheme } from 'react-native-paper';
 import StatCard from '../../components/StatCard';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -13,6 +13,10 @@ export default function UserHome() {
   return (
     
       <ScrollView style={[styles.container, { backgroundColor: colors.background }]}>
+        <Appbar.Header elevated >
+        <Appbar.Content title="Home" titleStyle={{ fontWeight: 'bold' }} />
+        <Appbar.Action icon="bell" onPress={() => router.push('/(user)/notification')} /> 
+      </Appbar.Header>
         <View style={styles.content}>
           <View style={styles.welcomeSection}>
             <Text variant="headlineSmall" style={styles.welcomeText}>Welcome back!</Text>

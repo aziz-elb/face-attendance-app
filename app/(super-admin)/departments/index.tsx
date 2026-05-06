@@ -119,6 +119,8 @@ export default function DepartmentsPage() {
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <Appbar.Header elevated>
         <Appbar.Content title="Departments" titleStyle={{ fontWeight: 'bold' }} />
+        <Appbar.Action icon="logout" onPress={() => router.replace('/(auth)/login')} />
+
       </Appbar.Header>
 
       <FlatList

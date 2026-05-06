@@ -36,6 +36,17 @@ export default function AdminLayout() {
           ),
         }}
       />
+
+        <Tabs.Screen
+        name="archived-justifications"
+        options={{
+          href: null,
+          title: "Archived Justifications",
+          tabBarStyle: { display: 'none' },
+        }}
+      />
+
+
        <Tabs.Screen
         name="users"
         options={{

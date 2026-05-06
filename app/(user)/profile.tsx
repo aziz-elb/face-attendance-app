@@ -3,7 +3,7 @@ import { useFocusEffect, useRouter } from 'expo-router';
 import React, { useCallback, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Avatar, Button, Card, Divider, List, Text, useTheme } from 'react-native-paper';
+import { Appbar, Avatar, Button, Card, Divider, List, Text, useTheme } from 'react-native-paper';
 
 export default function ProfileScreen() {
   const router = useRouter();
@@ -27,8 +27,16 @@ export default function ProfileScreen() {
     }, [fetchUserData])
   );
 
+  const handleExit = () => {
+    api.currentUser = null;
+    router.replace('/(auth)/login');
+  }
   return (
     <ScrollView style={[styles.container, { backgroundColor: colors.background }]}>
+       <Appbar.Header elevated >
+        <Appbar.Content title="Profile" titleStyle={{ fontWeight: 'bold' }} />
+        <Appbar.Action icon="logout" onPress={handleExit} />
+      </Appbar.Header>
       <View style={styles.content}>
         <View style={styles.header}>
           <Avatar.Text 
@@ -95,7 +103,7 @@ export default function ProfileScreen() {
         <Button 
           mode="contained-tonal" 
           icon="logout" 
-          onPress={() => router.replace('/(auth)/login')}
+          onPress={handleExit}
           style={styles.logoutButton}
         >
           Logout

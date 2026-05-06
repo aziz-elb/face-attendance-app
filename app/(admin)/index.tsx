@@ -7,7 +7,9 @@ export default function AdminDashboard() {
   return (
     <View style={styles.container}>
       <Appbar.Header elevated>
-        <Appbar.Content title="Dashboard" />
+        <Appbar.Content title="Dashboard" titleStyle={{ fontWeight: 'bold' }} />
+        <Appbar.Action icon="logout" onPress={() => router.replace('/(auth)/login')} />
+
       </Appbar.Header>
       
       <ScrollView contentContainerStyle={styles.content}>

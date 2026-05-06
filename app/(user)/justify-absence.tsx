@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, Alert, Platform } from 'react-native';
-import { TextInput, Button, Text, useTheme, Card } from 'react-native-paper';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { api } from '../../lib/api';
+import React, { useState } from 'react';
+import { Alert, Platform, StyleSheet, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
+import { Button, Card, Text, TextInput, useTheme } from 'react-native-paper';
+import { api } from '../../lib/api';
 
 export default function JustifyAbsenceScreen() {
   const { attendanceId, date } = useLocalSearchParams();
@@ -32,7 +32,7 @@ export default function JustifyAbsenceScreen() {
           file_path: "document_placeholder.pdf", // In a real app, this would be an uploaded file path
           status: 'PENDING',
           isArchived: false,
-          
+
         }
       });
       if (Platform.OS === "web") {
@@ -75,16 +75,16 @@ export default function JustifyAbsenceScreen() {
           numberOfLines={6}
           value={message}
           onChangeText={setMessage}
-          style={styles.input , {minHeight: 150 , textAlignVertical: 'top'}}
+          style={styles.input}
         />
 
         <Text variant="bodySmall" style={styles.hint}>
           Note: You can attach supporting documents (medical certificates, etc.) once the file upload feature is enabled.
         </Text>
 
-        <Button 
-          mode="contained" 
-          onPress={handleSubmit} 
+        <Button
+          mode="contained"
+          onPress={handleSubmit}
           loading={loading}
           disabled={loading}
           style={styles.button}
@@ -115,6 +115,8 @@ const styles = StyleSheet.create({
   input: {
     marginBottom: 16,
     backgroundColor: '#fff',
+    minHeight: 150, 
+    textAlignVertical: 'top'
   },
   hint: {
     marginBottom: 24,

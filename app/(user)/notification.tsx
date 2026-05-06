@@ -1,9 +1,9 @@
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import React, { useCallback, useEffect, useState } from 'react';
-import { useFocusEffect } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
 import { Alert, Platform, RefreshControl, StyleSheet, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { ActivityIndicator, Badge, Button, Divider, IconButton, List, Modal, Portal, Surface, Text, useTheme } from 'react-native-paper';
+import { ActivityIndicator, Appbar, Badge, Button, Divider, IconButton, List, Modal, Portal, Surface, Text, useTheme } from 'react-native-paper';
 import { api } from '../../lib/api';
 import { Notification, User } from '../../lib/types';
 
@@ -84,6 +84,10 @@ export default function NotificationScreen() {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
+       <Appbar.Header elevated >
+        <Appbar.Action icon="arrow-left" onPress={() => router.back()} /> 
+        <Appbar.Content title="Notifications" titleStyle={{ fontWeight: 'bold' }} />
+      </Appbar.Header>
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
@@ -218,7 +222,7 @@ const styles = StyleSheet.create({
   },
   fullMessage: {
     lineHeight: 24,
-    marginBottom: 16,
+    marginBottom: 20,
   },
   modalDate: {
     opacity: 0.6,

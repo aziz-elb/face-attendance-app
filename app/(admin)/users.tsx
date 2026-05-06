@@ -102,6 +102,7 @@ export default function StudentListing() {
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <Appbar.Header elevated>
         <Appbar.Content title="Students" titleStyle={{ fontWeight: 'bold' }} />
+        <Appbar.Action icon="logout" onPress={() => router.replace('/(auth)/login')} />
       </Appbar.Header>
 
       <View style={styles.header}>
@@ -116,9 +117,9 @@ export default function StudentListing() {
           onValueChange={setFilter}
           buttons={[
             { value: 'all', label: 'All' },
-            { value: 'poor', label: '<70%' },
-            { value: 'moderate', label: '70-85%' },
-            { value: 'good', label: '>85%' },
+            { value: 'poor', label: 'Risk' },
+            { value: 'moderate', label: 'At Risk' },
+            { value: 'good', label: 'Good' },
           ]}
           style={styles.filterBtns}
         />
@@ -134,8 +135,12 @@ export default function StudentListing() {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <List.Item
-            title={`${item.firstName} ${item.lastName}`}
-            description={`${item.email} | Rate: ${Math.round(item.attendanceRate)}%`}
+            title={`${item.firstName} ${item.lastName} ${Math.round(item.attendanceRate)}%`}
+            description={`${item.email}`}
+            descriptionStyle={{
+              fontSize: 12,
+              color: '#888',
+            }}
             left={props => <List.Icon {...props} icon="account" color={getRateColor(item.attendanceRate)} />}
             right={props => (
               <IconButton 
@@ -214,6 +219,8 @@ const styles = StyleSheet.create({
   },
   input: {
     marginBottom: 16,
+    minHeight: 100,
+    textAlignVertical: 'top',
   },
   modalButtons: {
     flexDirection: 'row',

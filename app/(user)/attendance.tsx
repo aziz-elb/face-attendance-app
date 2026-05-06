@@ -1,12 +1,12 @@
-import React, { useState, useCallback } from 'react';
-import { StyleSheet, View, Alert, RefreshControl, Platform } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useFocusEffect, useRouter } from 'expo-router';
+import React, { useCallback, useState } from 'react';
+import { Alert, Platform, RefreshControl, StyleSheet, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Card, Text, IconButton, useTheme, ActivityIndicator, Divider } from 'react-native-paper';
-import { useRouter, useFocusEffect } from 'expo-router';
+import { ActivityIndicator, Appbar, Card, IconButton, Text, useTheme } from 'react-native-paper';
+import StatCard from '../../components/StatCard';
 import { api } from '../../lib/api';
 import { Attendance } from '../../lib/types';
-import StatCard from '../../components/StatCard';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export default function AttendanceScreen() {
   const { colors } = useTheme();
@@ -18,8 +18,8 @@ export default function AttendanceScreen() {
   const fetchAttendance = useCallback(async () => {
     try {
       const data = await api.getAttendance();
-     
-      const userId = api.currentUser.id; 
+
+      const userId = api.currentUser?.id;
       setAttendance(data.filter(a => a.user_id === userId).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()));
     } catch (error) {
       if (Platform.OS === "web") {
@@ -61,10 +61,15 @@ export default function AttendanceScreen() {
   const lateDays = attendance.filter(a => a.status === 'LATE').length;
 
   return (
-    <ScrollView 
+    <ScrollView
       style={[styles.container, { backgroundColor: colors.background }]}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
     >
+
+      <Appbar.Header elevated >
+        <Appbar.Content title="Attendance" titleStyle={{ fontWeight: 'bold' }} />
+        <Appbar.Action icon="bell" onPress={() => router.push('/(user)/notification')} /> 
+      </Appbar.Header>
       <View style={styles.content}>
         <View style={styles.statsGrid}>
           <StatCard
@@ -73,7 +78,7 @@ export default function AttendanceScreen() {
             icon="account-check"
             color="#4CAF50"
           />
-          
+
           <StatCard
             title="Absent"
             value={absences.length}
@@ -84,11 +89,11 @@ export default function AttendanceScreen() {
 
         <Text variant="titleMedium" style={styles.sectionTitle}>Attendance History</Text>
 
-        {attendance.filter(item => item.status ==="ABSENT").map((item) => (
-          <Card 
-            key={item.id} 
+        {attendance.filter(item => item.status === "ABSENT").map((item) => (
+          <Card
+            key={item.id}
             style={[
-              styles.attendanceCard, 
+              styles.attendanceCard,
               { borderLeftWidth: 6, borderLeftColor: getStatusColor(item) }
             ]}
           >
@@ -101,15 +106,15 @@ export default function AttendanceScreen() {
                     <Text variant="bodySmall" style={{ color: getStatusColor(item), fontWeight: 'bold' }}>
                       Justification: {item.justification.status}
                     </Text>
-                    
+
                   </View>
                 )}
               </View>
-              
+
               <View style={styles.actionSection}>
                 {item.status === 'ABSENT' && !item.justification && (
-                  <IconButton 
-                    icon="email-outline" 
+                  <IconButton
+                    icon="email-outline"
                     mode="contained-tonal"
                     onPress={() => router.push({
                       pathname: '/(user)/justify-absence',

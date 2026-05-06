@@ -37,6 +37,11 @@ export default function SuperAdminProfile() {
 
   return (
     <View style={styles.container}>
+      <Appbar.Header elevated >
+        <Appbar.Content title="Profile" titleStyle={{ fontWeight: 'bold' }} />
+        <Appbar.Action icon="logout" onPress={handleLogout} />
+      </Appbar.Header>
+      
       <ScrollView contentContainerStyle={styles.content}>
         <Card style={styles.profileCard}>
           <Card.Content style={styles.headerContent}>

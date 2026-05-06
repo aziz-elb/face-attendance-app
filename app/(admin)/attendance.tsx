@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, FlatList, Alert } from 'react-native';
-import { Text, Appbar, List, Button, useTheme, ActivityIndicator } from 'react-native-paper';
+import { useFocusEffect } from 'expo-router';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Alert, FlatList, Platform, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Appbar, Button, List, useTheme } from 'react-native-paper';
 import { api } from '../../lib/api';
 
 export default function MarkAttendance() {
@@ -11,11 +12,7 @@ export default function MarkAttendance() {
   const [attendance, setAttendance] = useState({}); // { userId: status }
   const [existingRecords, setExistingRecords] = useState([]); // Store today's records
 
-  useEffect(() => {
-    fetchUsers();
-  }, []);
-
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     try {
       const today = new Date().toISOString().split('T')[0];
       const [usersData, attendanceData] = await Promise.all([
@@ -25,29 +22,39 @@ export default function MarkAttendance() {
 
       // Filter only regular users of the SAME department as the admin
       const adminDeptId = api.currentUser?.department?.id;
-      const students = usersData.filter(u => 
-        u.role === 'USER' && 
+      const students = usersData.filter(u =>
+        u.role === 'USER' &&
         u.department?.id === adminDeptId
       );
       setUsers(students);
-      
+
       // Get today's attendance records
       const todayRecords = attendanceData.filter(a => a.date === today);
       setExistingRecords(todayRecords);
 
       // Initialize as PRESENT or with existing status
-      const initialAttendance = {};
+      const initialAttendance: Record<string, string> = {};
       students.forEach(u => {
         const record = todayRecords.find(r => r.user_id === u.id);
         initialAttendance[u.id] = record ? record.status : 'PRESENT';
       });
       setAttendance(initialAttendance);
     } catch (error) {
-      Alert.alert('Error', 'Failed to load users');
+      if (Platform.OS === "web") {
+        alert('Error\nFailed to load users')
+      } else {
+        Alert.alert('Error', 'Failed to load users');
+      }
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchUsers();
+    }, [fetchUsers])
+  );
 
   const toggleStatus = (userId) => {
     setAttendance(prev => ({
@@ -62,7 +69,7 @@ export default function MarkAttendance() {
       const today = new Date().toISOString().split('T')[0];
       const promises = Object.entries(attendance).map(([userId, status]) => {
         const existing = existingRecords.find(r => r.user_id === userId);
-        
+
         if (existing) {
           // Update existing record for today
           return api.updateAttendance(existing.id, { status });
@@ -77,13 +84,22 @@ export default function MarkAttendance() {
           });
         }
       });
-      
+
       await Promise.all(promises);
       // Refresh to update existingRecords state
       await fetchUsers();
-      Alert.alert('Success', 'Attendance synchronized successfully for today');
+      if (Platform.OS === "web") {
+        alert('Success\nAttendance synchronized successfully for today')
+      } else {
+
+        Alert.alert('Success', 'Attendance synchronized successfully for today');
+      }
     } catch (error) {
-      Alert.alert('Error', 'Failed to save attendance');
+      if (Platform.OS === "web") {
+        alert('Error\nFailed to save attendance')
+      } else {
+        Alert.alert('Error', 'Failed to save attendance');
+      }
     } finally {
       setSubmitting(false);
     }
@@ -94,7 +110,8 @@ export default function MarkAttendance() {
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <Appbar.Header elevated>
-        <Appbar.Content title="Attendance" titleStyle={{ fontWeight: 'bold' }}  />
+        <Appbar.Content title="Attendance" titleStyle={{ fontWeight: 'bold' }} />
+        <Appbar.Action icon="logout" onPress={() => router.replace('/(auth)/login')} />
       </Appbar.Header>
 
       <FlatList
@@ -107,13 +124,19 @@ export default function MarkAttendance() {
             <List.Item
               title={`${item.firstName} ${item.lastName}`}
               description={item.email}
+              descriptionStyle={{
+                fontSize: 12,
+                color: '#666',
+              }}
               left={props => <List.Icon {...props} icon="account" />}
               right={() => (
-                <Button 
-                  mode="contained" 
+                <Button
+                  mode="contained"
                   onPress={() => toggleStatus(item.id)}
                   buttonColor={isPresent ? '#4CAF50' : '#F44336'}
                   style={styles.toggleBtn}
+                  labelStyle={{fontSize: 12, fontWeight: 'bold'}}
+
                 >
                   {isPresent ? 'Present' : 'Absent'}
                 </Button>
@@ -125,10 +148,10 @@ export default function MarkAttendance() {
       />
 
       <View style={styles.footer}>
-        <Button 
-          mode="contained" 
-          onPress={handleSubmit} 
-          loading={submitting} 
+        <Button
+          mode="contained"
+          onPress={handleSubmit}
+          loading={submitting}
           disabled={submitting}
           style={styles.submitBtn}
           icon="check-all"

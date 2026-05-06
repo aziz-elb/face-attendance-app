@@ -1,7 +1,7 @@
 import { router, useFocusEffect } from 'expo-router';
-import React, { useState, useCallback } from 'react';
-import { View, StyleSheet, ScrollView, Platform, Alert } from 'react-native';
-import { Text, Appbar, Avatar, Card, List, Divider, Button, useTheme } from 'react-native-paper';
+import React, { useCallback, useState } from 'react';
+import { ScrollView, StyleSheet, View } from 'react-native';
+import { Appbar, Avatar, Button, Card, Divider, List, Text, useTheme } from 'react-native-paper';
 import { api } from '../../lib/api';
 
 export default function AdminProfile() {
@@ -21,10 +21,11 @@ export default function AdminProfile() {
   }
   return (
     <View style={styles.container}>
-      {/* <Appbar.Header elevated mode="center-aligned">
-        <Appbar.Content title="Admin Profile" titleStyle={{ fontWeight: 'bold' }} />
-      </Appbar.Header> */}
-      
+      <Appbar.Header elevated >
+        <Appbar.Content title="Profile" titleStyle={{ fontWeight: 'bold' }} />
+        <Appbar.Action icon="logout" onPress={handleExit} />
+      </Appbar.Header>
+
       <ScrollView contentContainerStyle={styles.content}>
         <Card style={styles.profileCard}>
           <Card.Content style={styles.header}>
@@ -64,27 +65,27 @@ export default function AdminProfile() {
         <View style={styles.actionContainer}>
 
           <Text variant="titleMedium" style={styles.sectionTitle}>Settings</Text>
-          <Button 
-            mode="contained" 
-            onPress={() => router.push('/(admin)/edit-info')} 
+          <Button
+            mode="contained"
+            onPress={() => router.push('/(admin)/edit-info')}
             style={styles.button}
             icon="account-edit"
           >
             Edit Profile Info
           </Button>
-          
-          <Button 
-            mode="outlined" 
-            onPress={() => router.push('/(admin)/change-password')} 
+
+          <Button
+            mode="outlined"
+            onPress={() => router.push('/(admin)/change-password')}
             style={styles.button}
             icon="lock-reset"
           >
             Change Password
           </Button>
 
-          <Button 
-            mode="text" 
-            onPress={handleExit} 
+          <Button
+            mode="text"
+            onPress={handleExit}
             style={styles.logoutButton}
             icon="logout"
             textColor={colors.error}

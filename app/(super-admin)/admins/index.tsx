@@ -24,10 +24,10 @@ export default function AdminManagementPage() {
       const users = await api.getUsers();
       setAdmins(users.filter(u => u.role === 'ADMIN'));
     } catch (error) {
-      if(Platform.OS === "web"){
+      if (Platform.OS === "web") {
         alert("Error: Failed to fetch admins");
       }
-      else{
+      else {
         Alert.alert('Error', 'Failed to fetch admins');
       }
     } finally {
@@ -39,7 +39,7 @@ export default function AdminManagementPage() {
     fetchAdmins();
   }, []);
 
-  const showModal = (admin:User | null = null) => {
+  const showModal = (admin: User | null = null) => {
     if (admin) {
       setEditingAdmin(admin);
       setFormData({
@@ -59,11 +59,11 @@ export default function AdminManagementPage() {
 
   const handleSave = async () => {
     if (!formData.email || !formData.firstName || !formData.lastName || !formData.password) {
-      if(Platform.OS === "web"){
+      if (Platform.OS === "web") {
         alert("Error: Please fill all fields");
         return;
       }
-      else{
+      else {
         Alert.alert('Error', 'Please fill all fields');
         return;
       }
@@ -73,15 +73,15 @@ export default function AdminManagementPage() {
       if (editingAdmin) {
         await api.updateUser(editingAdmin.id, formData);
       } else {
-        await api.signup({ ...formData, role: 'ADMIN' , isActive: true });
+        await api.signup({ ...formData, role: 'ADMIN', isActive: true });
       }
       fetchAdmins();
       hideModal();
     } catch (error) {
-      if(Platform.OS === "web"){
+      if (Platform.OS === "web") {
         alert("Error: Failed to save admin");
       }
-      else{
+      else {
         Alert.alert('Error', 'Failed to save admin');
       }
     } finally {
@@ -89,7 +89,7 @@ export default function AdminManagementPage() {
     }
   };
 
-  const handleDelete = (id:any) => {
+  const handleDelete = (id: any) => {
     // Logique pour le Web
     if (Platform.OS === "web") {
       const confirmed = window.confirm("Delete Admin: Delete this admin account?");
@@ -111,7 +111,7 @@ export default function AdminManagementPage() {
   };
 
   // Petite fonction utilitaire pour éviter de répéter le code de suppression
-  const processDelete = async (id:any) => {
+  const processDelete = async (id: any) => {
     try {
       await api.deleteUser(id);
       fetchAdmins();
@@ -126,8 +126,10 @@ export default function AdminManagementPage() {
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <Appbar.Header elevated>
         <Appbar.Content title="Admins" titleStyle={{ fontWeight: 'bold' }} />
+        <Appbar.Action icon="logout" onPress={() => router.replace('/(auth)/login')} />
+
       </Appbar.Header>
-      
+
       <FlatList
         data={admins}
         keyExtractor={(item) => item.id.toString()}
@@ -158,7 +160,7 @@ export default function AdminManagementPage() {
             onChangeText={(v) => setFormData({ ...formData, firstName: v })}
             mode="outlined"
             style={styles.input}
-            
+
           />
           <TextInput
             label="Last Name"

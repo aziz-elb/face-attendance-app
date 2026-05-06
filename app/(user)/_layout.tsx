@@ -16,14 +16,12 @@ export default function UserLayout() {
   return (
     <Tabs
       screenOptions={{
-        headerShown: true,
+        headerShown: false,
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.outline,
         tabBarStyle: {
           backgroundColor: colors.surface,
           borderTopColor: colors.outlineVariant,
-          // height: 60,
-          // paddingBottom: 8,
         },
         headerStyle: {
           backgroundColor: colors.surface,
@@ -60,6 +58,7 @@ export default function UserLayout() {
         options={{
           title: "My Profile",
           tabBarLabel: "Profile",
+          headerShown : false,
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="account" color={color} size={size} />
           ),
@@ -85,7 +84,7 @@ export default function UserLayout() {
           title: "Edit Information",
           tabBarStyle: { display: 'none' },
           headerLeft: () => (
-            <IconButton icon="arrow-left" onPress={() => router.back()} />
+            <IconButton icon="arrow-left" onPress={() => router.replace('/(user)/profile')} />
           ),
         }}
       />
@@ -96,7 +95,7 @@ export default function UserLayout() {
           title: "Change Password",
           tabBarStyle: { display: 'none' },
           headerLeft: () => (
-            <IconButton icon="arrow-left" onPress={() => router.back()} />
+            <IconButton icon="arrow-left" onPress={() => router.replace('/(user)/profile')} />
           ),
         }}
       />

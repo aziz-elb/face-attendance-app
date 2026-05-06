@@ -25,7 +25,7 @@ export default function EditInfoScreen() {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const user = await api.getUser(userId);
+        const user = await api.getUser(userId!);
         setFormData({
           firstName: user.firstName,
           lastName: user.lastName,
@@ -51,7 +51,7 @@ export default function EditInfoScreen() {
     setSuccess('');
 
     try {
-      await api.updateUser(userId, {
+      await api.updateUser(userId!, {
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,
@@ -124,7 +124,7 @@ export default function EditInfoScreen() {
 
           <Button
             mode="text"
-            onPress={() => router.back()}
+            onPress={() =>  router.replace('/(user)/profile')}
             disabled={saving}
             style={styles.cancelButton}
           >

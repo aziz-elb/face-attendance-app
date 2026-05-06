@@ -39,7 +39,7 @@ export default function ChangePasswordScreen() {
 
     try {
       // 1. Fetch user to verify current password
-      const user = await api.getUser(userId);
+      const user = await api.getUser(userId!);
 
       if (user.password !== formData.currentPassword) {
         setError('Current password is incorrect');
@@ -48,7 +48,7 @@ export default function ChangePasswordScreen() {
       }
 
       // 2. Update password
-      await api.updateUser(userId, {
+      await api.updateUser(userId!, {
         password: formData.newPassword
       });
 
@@ -126,7 +126,7 @@ export default function ChangePasswordScreen() {
 
           <Button
             mode="text"
-            onPress={() => router.back()}
+            onPress={() => router.replace('/(user)/profile')}
             disabled={loading}
             style={styles.cancelButton}
           >

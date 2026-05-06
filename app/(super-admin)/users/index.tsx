@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Alert, FlatList, Platform, StyleSheet, View } from 'react-native';
-import { ActivityIndicator, Appbar, Button, Divider, List, Searchbar, Switch, Text, useTheme } from 'react-native-paper';
+import { ActivityIndicator, Appbar, Divider, List, Searchbar, Switch, Text, useTheme } from 'react-native-paper';
 import { api } from '../../../lib/api';
 import { User } from '../../../lib/types';
+import { router } from 'expo-router';
 
 export default function UserManagementPage() {
   const { colors } = useTheme();
@@ -62,8 +63,10 @@ export default function UserManagementPage() {
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <Appbar.Header elevated>
         <Appbar.Content title="Users" titleStyle={{ fontWeight: 'bold' }} />
+        <Appbar.Action icon="logout" onPress={() => router.replace('/(auth)/login')} />
+
       </Appbar.Header>
-      
+
       <Searchbar
         placeholder="Search users..."
         onChangeText={setSearchQuery}
