@@ -81,7 +81,7 @@ export default function AdminLayout() {
         name="edit-info"
         options={{
           href: null,
-          headerShown: true,
+          headerShown: false,
           title: "Admin Info",
           headerLeft: () => (
             <IconButton
@@ -95,7 +95,7 @@ export default function AdminLayout() {
         name="change-password"
         options={{
           href: null,
-          headerShown: true,
+          headerShown: false,
           title: "Admin Password",
           headerLeft: () => (
             <IconButton

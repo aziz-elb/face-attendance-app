@@ -2,6 +2,7 @@ import React from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
 import { Text, Appbar, Surface, Button } from 'react-native-paper';
 import StatCard from '../../components/StatCard';
+import { router } from 'expo-router';
 
 export default function AdminDashboard() {
   return (

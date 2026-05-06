@@ -3,6 +3,7 @@ import { Alert, FlatList, Platform, StyleSheet, View } from 'react-native';
 import { ActivityIndicator, Appbar, Button, FAB, IconButton, List, Modal, Portal, Text, TextInput, useTheme } from 'react-native-paper';
 import { api } from '../../../lib/api';
 import { User } from '../../../lib/types';
+import { router } from 'expo-router';
 
 export default function AdminManagementPage() {
   const { colors } = useTheme();

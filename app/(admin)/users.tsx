@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useFocusEffect } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
 import { View, StyleSheet, FlatList, Alert } from 'react-native';
 import { Text, Appbar, List, IconButton, useTheme, ActivityIndicator, Searchbar, Portal, Modal, TextInput, Button, SegmentedButtons } from 'react-native-paper';
 import { api } from '../../lib/api';
+import { User } from '@/lib/types';
 
 export default function StudentListing() {
   const { colors } = useTheme();
@@ -79,12 +80,12 @@ export default function StudentListing() {
     }
   };
 
-  const filteredUsers = users.filter(u => {
+  const filteredUsers = users.filter((u:User) => {
     const matchesSearch = `${u.firstName} ${u.lastName}`.toLowerCase().includes(searchQuery.toLowerCase());
     if (!matchesSearch) return false;
 
     if (filter === 'all') return true;
-    if (filter === 'poor') return u.attendanceRate < 70;
+    if (filter === 'poor') return u.attendanceRate  < 70;
     if (filter === 'moderate') return u.attendanceRate >= 70 && u.attendanceRate < 85;
     if (filter === 'good') return u.attendanceRate >= 85;
     return true;
@@ -133,7 +134,7 @@ export default function StudentListing() {
         <FlatList
         data={filteredUsers}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }) => (
+        renderItem={({ item }:any  ) => (
           <List.Item
             title={`${item.firstName} ${item.lastName} ${Math.round(item.attendanceRate)}%`}
             description={`${item.email}`}

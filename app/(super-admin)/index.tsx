@@ -98,5 +98,21 @@ const styles = StyleSheet.create({
   },
   actionButton: {
     marginVertical: 6,
-  }
+  },
+  card: {
+    borderRadius: 8,
+  },
+  cardContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  cardTextContainer: {
+    flex: 1,
+    marginRight: 16,
+  },
+  iconContainer: {
+    padding: 8,
+    borderRadius: 8,
+  },
 });

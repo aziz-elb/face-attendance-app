@@ -2,10 +2,10 @@
   "users": [
     {
       "id": "1",
-      "firstName": "Mohamedd",
+      "firstName": "Mohamed",
       "lastName": "Badia",
       "email": "mohamed.badia@demo.com",
-      "password": "1234",
+      "password": "qwerty",
       "role": "USER",
       "department": {
         "id": 1,
@@ -13,7 +13,7 @@
       },
       "isActive": true,
       "createdAt": "2026-01-01T08:00:00Z",
-      "updatedAt": "2026-05-06T08:30:07.173Z"
+      "updatedAt": "2026-05-06T22:19:11.423Z"
     },
     {
       "id": "3",
@@ -37,7 +37,7 @@
       "role": "SUPER_ADMIN",
       "isActive": true,
       "createdAt": "2026-05-01T10:39:40.750Z",
-      "updatedAt": "2026-05-05T16:03:15.725Z"
+      "updatedAt": "2026-05-06T22:09:47.856Z"
     },
     {
       "firstName": "Ahmed",
@@ -55,10 +55,10 @@
       "id": "u_R2zpd"
     },
     {
-      "firstName": "adminn",
+      "firstName": "admin",
       "lastName": "one",
       "email": "admin1@gmail.com",
-      "password": "123456",
+      "password": "123",
       "role": "ADMIN",
       "department": {
         "id": 1,
@@ -66,7 +66,7 @@
       },
       "isActive": true,
       "createdAt": "2026-05-05T10:57:25.219Z",
-      "updatedAt": "2026-05-05T16:54:20.125Z",
+      "updatedAt": "2026-05-06T22:13:32.803Z",
       "id": "Q3XI3nF"
     },
     {
@@ -107,86 +107,22 @@
       "status": "ABSENT",
       "is_justified": true,
       "justification": {
-        "message": "hiiii\nthere is fadsbfdsfdsf",
+        "message": "helllo theacher",
         "file_path": "document_placeholder.pdf",
         "status": "ACCEPTED",
         "isArchived": true
       },
-      "createdAt": "2026-05-06T09:21:16.381Z",
+      "createdAt": "2026-05-06T22:12:36.985Z",
       "id": 1
     },
     {
       "user_id": "u_R2zpd",
       "date": "2026-05-06",
-      "status": "ABSENT",
+      "status": "PRESENT",
       "is_justified": false,
       "justification": null,
-      "createdAt": "2026-05-06T09:21:16.383Z",
+      "createdAt": "2026-05-06T22:12:36.986Z",
       "id": 2
-    },
-    {
-      "user_id": "1",
-      "date": "2026-05-08",
-      "status": "ABSENT",
-      "is_justified": true,
-      "justification": {
-        "message": "hello there .",
-        "file_path": "document_placeholder.pdf",
-        "status": "REJECTED",
-        "isArchived": true
-      },
-      "createdAt": "2026-05-08T09:24:50.053Z",
-      "id": 3
-    },
-    {
-      "user_id": "1",
-      "date": "2026-05-01",
-      "status": "ABSENT",
-      "is_justified": true,
-      "justification": {
-        "message": "hhhh wah is that",
-        "file_path": "document_placeholder.pdf",
-        "status": "ACCEPTED",
-        "isArchived": true
-      },
-      "createdAt": "2026-05-08T09:24:50.054Z",
-      "id": 4
-    },
-    {
-      "user_id": "1",
-      "date": "2026-05-09",
-      "status": "PRESENT",
-      "is_justified": false,
-      "justification": null,
-      "createdAt": "2026-05-09T09:24:50.054Z",
-      "id": 5
-    },
-    {
-      "user_id": "1",
-      "date": "2026-05-02",
-      "status": "PRESENT",
-      "is_justified": false,
-      "justification": null,
-      "createdAt": "2026-05-09T09:24:50.054Z",
-      "id": 5
-    },
-    {
-      "user_id": "1",
-      "date": "2026-05-03",
-      "status": "PRESENT",
-      "is_justified": false,
-      "justification": null,
-      "createdAt": "2026-05-09T09:24:50.054Z",
-      "id": 5
-    },
-    {
-      "user_id": "u_R2zpd",
-      "date": "2026-05-09",
-      "status": "ABSENT",
-      "is_justified": false,
-      "justification": null,
-      "createdAt": "2026-05-09T09:24:50.054Z",
-      "id": 6
     }
   ],
   "notifications": [
@@ -249,9 +185,18 @@
       "sender_id": "Q3XI3nF",
       "content": "Hello mohamed what is that",
       "status": "Read",
-      "isArchived": false,
+      "isArchived": true,
       "createdAt": "2026-05-06T09:40:17.637Z",
       "id": 10
+    },
+    {
+      "recipient_id": "1",
+      "sender_id": "Q3XI3nF",
+      "content": "helllo",
+      "status": "Read",
+      "isArchived": true,
+      "createdAt": "2026-05-06T22:12:55.573Z",
+      "id": 11
     }
   ]
 }

@@ -2,7 +2,7 @@ import { useLocalSearchParams, useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { Alert, Platform, StyleSheet, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Button, Card, Text, TextInput, useTheme } from 'react-native-paper';
+import { Appbar, Button, Card, Text, TextInput, useTheme } from 'react-native-paper';
 import { api } from '../../lib/api';
 
 export default function JustifyAbsenceScreen() {
@@ -57,6 +57,10 @@ export default function JustifyAbsenceScreen() {
 
   return (
     <ScrollView style={[styles.container, { backgroundColor: colors.background }]}>
+      <Appbar.Header elevated >
+        <Appbar.Action icon="arrow-left" onPress={() => router.push('/(user)/attendance')} /> 
+        <Appbar.Content title="Justify Absence" titleStyle={{ fontWeight: 'bold' }} />
+      </Appbar.Header>
       <View style={styles.content}>
         <Card style={styles.infoCard}>
           <Card.Content>

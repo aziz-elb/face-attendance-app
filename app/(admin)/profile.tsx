@@ -55,9 +55,9 @@ export default function AdminProfile() {
             />
             <Divider />
             <List.Item
-              title="Account Status"
-              description={user?.isActive ? 'Active' : 'Inactive'}
-              left={props => <List.Icon {...props} icon="account-check" color={user?.isActive ? '#4CAF50' : '#F44336'} />}
+              title="Role"
+              description={user?.role}
+              left={props => <List.Icon {...props} icon="account"  />}
             />
           </List.Section>
         </Card>

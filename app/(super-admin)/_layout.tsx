@@ -99,7 +99,7 @@ export default function SuperAdminLayout() {
         name="edit-info"
         options={{
           href: null,
-          headerShown: true,
+          headerShown: false,
           title: "Super Admin Info",
           headerLeft: () => (
             <IconButton
@@ -113,7 +113,7 @@ export default function SuperAdminLayout() {
         name="change-password"
         options={{
           href: null,
-          headerShown: true,
+          headerShown: false,
           title: "Super Admin Password",
           headerLeft: () => (
             <IconButton

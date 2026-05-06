@@ -2,7 +2,7 @@ import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Button, HelperText, Surface, TextInput, useTheme } from 'react-native-paper';
+import { Appbar, Button, HelperText, Surface, TextInput, useTheme } from 'react-native-paper';
 import { api } from '../../lib/api';
 
 export default function ChangePasswordScreen() {
@@ -58,7 +58,7 @@ export default function ChangePasswordScreen() {
         newPassword: '',
         confirmPassword: '',
       })
-      
+
 
       router.push('/(user)/profile')
     } catch (err) {
@@ -73,6 +73,10 @@ export default function ChangePasswordScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={[styles.container, { backgroundColor: colors.background }]}
     >
+      <Appbar.Header elevated >
+        <Appbar.Action icon="arrow-left" onPress={() => router.push('/(user)/profile')} />
+        <Appbar.Content title="Change Password" titleStyle={{ fontWeight: 'bold' }} />
+      </Appbar.Header>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <Surface style={styles.surface} elevation={1}>
           {error ? <HelperText type="error">{error}</HelperText> : null}

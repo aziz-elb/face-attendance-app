@@ -1,7 +1,7 @@
 import { useRouter } from 'expo-router';
 import React, { useState } from 'react';
 import { Alert, Platform, ScrollView, StyleSheet, View } from 'react-native';
-import { Button, HelperText, Surface, TextInput, useTheme } from 'react-native-paper';
+import { Appbar, Button, HelperText, Surface, TextInput, useTheme } from 'react-native-paper';
 import { api } from '../../lib/api';
 
 export default function AdminChangePassword() {
@@ -76,6 +76,10 @@ export default function AdminChangePassword() {
 
   return (
     <View style={styles.container}>
+      <Appbar.Header elevated >
+        <Appbar.Action icon="arrow-left" onPress={() => router.push('/(admin)/profile')} />
+        <Appbar.Content title="Change Password" titleStyle={{ fontWeight: 'bold' }} />
+      </Appbar.Header>
       <ScrollView contentContainerStyle={styles.content}>
         <Surface style={styles.surface} elevation={1}>
           {success ? <HelperText type="info" style={{ color: colors.primary }}>{success}</HelperText> : null}

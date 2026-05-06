@@ -76,11 +76,9 @@ export default function SuperAdminProfile() {
             />
             <Divider />
             <List.Item
-              title="Security"
-              description="Change account password"
-              left={props => <List.Icon {...props} icon="lock-outline" />}
-              onPress={() => router.push('/(super-admin)/change-password')}
-              right={props => <List.Icon {...props} icon="chevron-right" />}
+              title="Role"
+              description={adminInfo.role}
+              left={props => <List.Icon {...props} icon="account" />}
             />
           </List.Section>
         </Card>

@@ -2,7 +2,7 @@ import { useRouter } from 'expo-router';
 import React, { useState, useEffect } from 'react';
 import { KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Button, HelperText, Surface, TextInput, useTheme, ActivityIndicator } from 'react-native-paper';
+import { Button, HelperText, Surface, TextInput, useTheme, ActivityIndicator, Appbar } from 'react-native-paper';
 import { api } from '../../lib/api';
 
 export default function EditInfoScreen() {
@@ -78,6 +78,10 @@ export default function EditInfoScreen() {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={[styles.container, { backgroundColor: colors.background }]}
     >
+       <Appbar.Header elevated >
+        <Appbar.Action icon="arrow-left" onPress={() => router.push('/(user)/profile')} /> 
+        <Appbar.Content title="Edit Info" titleStyle={{ fontWeight: 'bold' }} />
+      </Appbar.Header>
       <ScrollView contentContainerStyle={styles.scrollContent}>
         <Surface style={styles.surface} elevation={1}>
           {error ? <HelperText type="error">{error}</HelperText> : null}
