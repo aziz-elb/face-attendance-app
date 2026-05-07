@@ -5,6 +5,7 @@ import { Appbar, Button, FAB, IconButton, List, Modal, Portal, Text, TextInput, 
 import { api } from '../../../lib/api';
 import { Department } from '../../../lib/types';
 import { useLogout } from '@/hooks/useLogout';
+import { AppTheme } from '@/lib/theme';
 
 export default function DepartmentsPage() {
   const { colors } = useTheme();
@@ -130,8 +131,9 @@ export default function DepartmentsPage() {
         keyExtractor={(item) => String(item.id)}
         renderItem={({ item }) => (
           <List.Item
-            title={`${item.title} (${item.code})`}
-            description={item.description}
+            title={`${item.title.slice(0, 10) + '...'}`}
+            description={item.description.slice(0, 20) + '...'}
+            descriptionStyle={{ fontSize: 10 }}
             left={props => <List.Icon {...props} icon="office-building" />}
             right={props => (
               <View style={styles.actions}>
@@ -172,7 +174,7 @@ export default function DepartmentsPage() {
             mode="outlined"
             multiline
             numberOfLines={3}
-            style={styles.input}
+            style={[styles.input, { minHeight: 100 }]}
           />
           <View style={styles.modalButtons}>
             <Button onPress={hideModal} style={styles.button}>Cancel</Button>
@@ -198,7 +200,7 @@ const styles = StyleSheet.create({
   },
   listItem: {
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: AppTheme.colors.outlineVariant,
   },
   actions: {
     flexDirection: 'row',
@@ -220,6 +222,7 @@ const styles = StyleSheet.create({
   },
   input: {
     marginBottom: 12,
+    
   },
   modalButtons: {
     flexDirection: 'row',

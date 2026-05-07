@@ -40,13 +40,13 @@ export default function AdminEditInfo() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <Appbar.Header elevated >
         <Appbar.Action icon="arrow-left" onPress={() => router.push('/(admin)/profile')} />
         <Appbar.Content title="Edit Info" titleStyle={{ fontWeight: 'bold' }} />
       </Appbar.Header>
       <ScrollView contentContainerStyle={styles.content}>
-        <Surface style={styles.surface} elevation={1}>
+        <Surface style={[styles.surface, { backgroundColor: colors.surface }]} elevation={1}>
           {success ? <HelperText type="info" style={{ color: colors.primary }}>{success}</HelperText> : null}
           
           <TextInput
@@ -105,5 +105,6 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 8,
+    borderRadius: 28,
   }
 });

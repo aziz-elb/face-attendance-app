@@ -18,7 +18,7 @@ export default function AdminProfile() {
   );
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <Appbar.Header elevated >
         <Appbar.Content title="Profile" titleStyle={{ fontWeight: 'bold' }} />
         <Appbar.Action icon="logout" onPress={handleLogout} />
@@ -99,7 +99,6 @@ export default function AdminProfile() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
   },
   content: {
     padding: 16,

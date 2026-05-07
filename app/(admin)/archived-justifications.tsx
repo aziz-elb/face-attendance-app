@@ -18,6 +18,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { api } from '../../lib/api';
 import { Attendance, User, JustificationStatus } from '../../lib/types';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { AppTheme } from '@/lib/theme';
 
 export default function ArchivedJustificationsScreen() {
   const router = useRouter();
@@ -82,12 +83,19 @@ export default function ArchivedJustificationsScreen() {
     }
   };
 
+  const STATUS_COLORS = {
+    ACCEPTED: '#66BB6A',
+    REJECTED: '#CF6679',
+    PENDING:  '#FFB74D',
+    DEFAULT:  colors.onSurfaceVariant,
+  };
+
   const getStatusColor = (status: JustificationStatus) => {
     switch (status) {
-      case 'ACCEPTED': return '#4CAF50';
-      case 'REJECTED': return '#F44336';
-      case 'PENDING': return '#FF9800';
-      default: return '#757575';
+      case 'ACCEPTED': return STATUS_COLORS.ACCEPTED;
+      case 'REJECTED': return STATUS_COLORS.REJECTED;
+      case 'PENDING':  return STATUS_COLORS.PENDING;
+      default:         return STATUS_COLORS.DEFAULT;
     }
   };
 
@@ -124,7 +132,7 @@ export default function ArchivedJustificationsScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <Appbar.Header elevated>
         <Appbar.BackAction onPress={() => router.replace('/(admin)/justifications')} />
         <Appbar.Content title="Archived Justifications" titleStyle={{ fontWeight: 'bold' }} />
@@ -138,8 +146,8 @@ export default function ArchivedJustificationsScreen() {
         </View>
       ) : archivedAttendances.length === 0 ? (
         <View style={styles.center}>
-          <MaterialCommunityIcons name="archive-outline" size={64} color="#ccc" />
-          <Text variant="titleMedium" style={{ color: '#aaa', marginTop: 16 }}>No archived justifications</Text>
+          <MaterialCommunityIcons name="archive-outline" size={64} color={colors.onSurfaceVariant} />
+          <Text variant="titleMedium" style={{ color: colors.onSurfaceVariant, marginTop: 16 }}>No archived justifications</Text>
         </View>
       ) : (
         <FlatList
@@ -154,7 +162,7 @@ export default function ArchivedJustificationsScreen() {
         <Modal
           visible={modalVisible}
           onDismiss={() => setModalVisible(false)}
-          contentContainerStyle={styles.modalContent}
+          contentContainerStyle={[styles.modalContent, { backgroundColor: colors.surface }]}
         >
           {selectedJustification && (
             <ScrollView>
@@ -213,7 +221,6 @@ export default function ArchivedJustificationsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8f9fa',
   },
   center: {
     flex: 1,
@@ -228,7 +235,6 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     borderRadius: 12,
     elevation: 2,
-    backgroundColor: '#fff',
     overflow: 'hidden',
   },
   cardHeader: {
@@ -239,10 +245,8 @@ const styles = StyleSheet.create({
   },
   messagePreview: {
     fontStyle: 'italic',
-    color: '#666',
   },
   modalContent: {
-    backgroundColor: 'white',
     padding: 20,
     margin: 20,
     borderRadius: 16,
@@ -261,7 +265,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   messageContainer: {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: AppTheme.colors.surfaceVariant,
     padding: 16,
     borderRadius: 8,
     marginTop: 8,

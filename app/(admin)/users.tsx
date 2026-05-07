@@ -5,6 +5,7 @@ import { Text, Appbar, List, IconButton, useTheme, ActivityIndicator, Searchbar,
 import { api } from '../../lib/api';
 import { User } from '@/lib/types';
 import { useLogout } from '@/hooks/useLogout';
+import { AppTheme } from '@/lib/theme';
 
 
 interface StudentWithAttendance extends User {
@@ -102,9 +103,9 @@ export default function StudentListing() {
   });
 
   const getRateColor = (rate: number) => {
-    if (rate >= 85) return '#4CAF50';
-    if (rate >= 70) return '#FF9800';
-    return '#F44336';
+    if (rate >= 85) return '#66BB6A';
+    if (rate >= 70) return '#FFB74D';
+    return '#CF6679';
   };
 
   if (loading) return <ActivityIndicator style={{ flex: 1 }} />;
@@ -150,7 +151,7 @@ export default function StudentListing() {
             description={`${item.email}`}
             descriptionStyle={{
               fontSize: 12,
-              color: '#888',
+              color: colors.onSurfaceVariant,
             }}
             left={props => <List.Icon {...props} icon="account" color={getRateColor(item.attendanceRate)} />}
             right={props => (
@@ -205,9 +206,9 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    padding: 16,
-    backgroundColor: '#fff',
-    elevation: 2,
+    padding: 20,
+    backgroundColor: AppTheme.colors.background,
+    elevation: 1,
   },
   searchBar: {
     marginBottom: 12,
@@ -217,7 +218,7 @@ const styles = StyleSheet.create({
   },
   listItem: {
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: AppTheme.colors.outlineVariant,
   },
   modal: {
     padding: 20,

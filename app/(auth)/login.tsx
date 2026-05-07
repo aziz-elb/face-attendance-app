@@ -4,6 +4,7 @@ import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 're
 import { Button, HelperText, Surface, Text, TextInput, useTheme } from 'react-native-paper';
 import { api } from '../../lib/api';
 import { User } from '../../lib/types';
+import { AppTheme } from '../../lib/theme';
 
 export default function LoginScreen() {
   const { colors } = useTheme();
@@ -114,7 +115,7 @@ export default function LoginScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: AppTheme.colors.background,
   },
   scrollContent: {
     flexGrow: 1,
@@ -124,7 +125,7 @@ const styles = StyleSheet.create({
   surface: {
     padding: 25,
     borderRadius: 15,
-    backgroundColor: 'white',
+    backgroundColor: AppTheme.colors.surface,
   },
   title: {
     textAlign: 'center',
@@ -142,6 +143,7 @@ const styles = StyleSheet.create({
   button: {
     marginTop: 8,
     paddingVertical: 4,
+    borderRadius: 28,
   },
   footer: {
     flexDirection: 'row',

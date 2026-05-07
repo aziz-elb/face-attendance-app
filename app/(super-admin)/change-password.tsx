@@ -74,13 +74,13 @@ export default function SuperAdminChangePassword() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <Appbar.Header elevated >
         <Appbar.Action icon="arrow-left" onPress={() => router.push('/(super-admin)/profile')} />
         <Appbar.Content title="Change Password" titleStyle={{ fontWeight: 'bold' }} />
       </Appbar.Header>
       <ScrollView contentContainerStyle={styles.content}>
-        <Surface style={styles.surface} elevation={1}>
+        <Surface style={[styles.surface, { backgroundColor: colors.surface }]} elevation={1}>
           {success ? <HelperText type="info" style={{ color: colors.primary }}>{success}</HelperText> : null}
           
           <TextInput
@@ -141,5 +141,6 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 8,
+    borderRadius: 28,
   }
 });

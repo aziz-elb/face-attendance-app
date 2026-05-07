@@ -5,6 +5,7 @@ import { ActivityIndicator, Appbar, Button, List, useTheme } from 'react-native-
 import { api } from '../../lib/api';
 import { useLogout } from '@/hooks/useLogout';
 import { Attendance, AttendanceStatus, User } from '../../lib/types';
+import { AppTheme } from '@/lib/theme';
 
 export default function MarkAttendance() {
   const { colors } = useTheme();
@@ -128,19 +129,15 @@ export default function MarkAttendance() {
             <List.Item
               title={`${item.firstName} ${item.lastName}`}
               description={item.email}
-              descriptionStyle={{
-                fontSize: 12,
-                color: '#666',
-              }}
+              descriptionStyle={{ fontSize: 12, color: colors.onSurfaceVariant }}
               left={props => <List.Icon {...props} icon="account" />}
               right={() => (
                 <Button
                   mode="contained"
                   onPress={() => toggleStatus(item.id)}
-                  buttonColor={isPresent ? '#4CAF50' : '#F44336'}
+                  buttonColor={isPresent ? '#66BB6A' : '#CF6679'}
                   style={styles.toggleBtn}
-                  labelStyle={{fontSize: 12, fontWeight: 'bold'}}
-
+                  labelStyle={{ fontSize: 12, fontWeight: 'bold' }}
                 >
                   {isPresent ? 'Present' : 'Absent'}
                 </Button>
@@ -176,7 +173,7 @@ const styles = StyleSheet.create({
   },
   listItem: {
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: AppTheme.colors.outlineVariant,
   },
   toggleBtn: {
     width: 100,
@@ -184,9 +181,8 @@ const styles = StyleSheet.create({
   },
   footer: {
     padding: 16,
-    borderTopWidth: 1,
-    borderTopColor: '#e0e0e0',
-    backgroundColor: '#fff',
+    borderTopColor: AppTheme.colors.outlineVariant,
+    backgroundColor: AppTheme.colors.background,
   },
   submitBtn: {
     paddingVertical: 8,

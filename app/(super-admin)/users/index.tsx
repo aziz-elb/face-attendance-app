@@ -80,14 +80,15 @@ export default function UserManagementPage() {
         data={filteredUsers}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <View style={[styles.userCard, { backgroundColor: colors.surface }]}>
+          <View style={[styles.userCard, { backgroundColor: colors.background }]}>
             <List.Item
               title={`${item.firstName} ${item.lastName}`}
-              description={`${item.email}${item.department ? ` • ${item.department.title}` : ''}`}
+              description={`${item.email}`}
+              descriptionStyle={{ fontSize: 10 }}
               left={props => <List.Icon {...props} icon="account" />}
               right={props => (
                 <View style={styles.rightActions}>
-                  <Text variant="bodySmall" style={{ marginRight: 8, color: colors.outline }}>
+                  <Text variant="bodySmall" style={{ marginRight: 8, color: colors.onSecondaryContainer }}>
                     {item.isActive ? 'Active' : 'Inactive'}
                   </Text>
                   <Switch

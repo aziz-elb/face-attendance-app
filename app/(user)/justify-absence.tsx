@@ -79,7 +79,7 @@ export default function JustifyAbsenceScreen() {
           numberOfLines={6}
           value={message}
           onChangeText={setMessage}
-          style={styles.input}
+          style={[styles.input, { backgroundColor: colors.surface }]}
         />
 
         <Text variant="bodySmall" style={styles.hint}>
@@ -118,15 +118,14 @@ const styles = StyleSheet.create({
   },
   input: {
     marginBottom: 16,
-    backgroundColor: '#fff',
-    minHeight: 150, 
-    textAlignVertical: 'top'
+    minHeight: 150,
+    textAlignVertical: 'top',
   },
   hint: {
     marginBottom: 24,
     opacity: 0.6,
   },
   button: {
-    borderRadius: 8,
+    borderRadius: 28,
   }
 });

@@ -45,12 +45,18 @@ export default function AttendanceScreen() {
     fetchAttendance();
   };
 
+  const STATUS_COLORS = {
+    RED: '#CF6679',      // theme error muted red
+    YELLOW: '#FFB74D',   // theme tertiary orange
+    GREEN: '#66BB6A',    // accessible green
+  };
+
   const getStatusColor = (item: Attendance) => {
     if (item.status !== 'ABSENT') return colors.outlineVariant;
-    if (!item.justification) return '#F44336'; // RED
-    if (item.justification.status === 'PENDING') return '#FF9800'; // YELLOW
-    if (item.justification.status === 'ACCEPTED') return '#4CAF50'; // GREEN
-    if (item.justification.status === 'REJECTED') return '#F44336'; // RED
+    if (!item.justification) return STATUS_COLORS.RED;
+    if (item.justification.status === 'PENDING') return STATUS_COLORS.YELLOW;
+    if (item.justification.status === 'ACCEPTED') return STATUS_COLORS.GREEN;
+    if (item.justification.status === 'REJECTED') return STATUS_COLORS.RED;
     return colors.outlineVariant;
   };
 
@@ -76,14 +82,14 @@ export default function AttendanceScreen() {
             title="Present"
             value={presentDays}
             icon="account-check"
-            color="#4CAF50"
+            color="#66BB6A"
           />
 
           <StatCard
             title="Absent"
             value={absences.length}
             icon="account-clock"
-            color="#F44336"
+            color="#CF6679"
           />
         </View>
 
@@ -123,13 +129,13 @@ export default function AttendanceScreen() {
                   />
                 )}
                 {item.status === 'PRESENT' && (
-                  <MaterialCommunityIcons name="check-circle" size={24} color="#4CAF50" />
+                  <MaterialCommunityIcons name="check-circle" size={24} color="#66BB6A" />
                 )}
                 {item.status === 'LATE' && (
-                  <MaterialCommunityIcons name="clock-alert" size={24} color="#FF9800" />
+                  <MaterialCommunityIcons name="clock-alert" size={24} color="#FFB74D" />
                 )}
                 {item.justification && item.justification.status === 'ACCEPTED' && (
-                  <MaterialCommunityIcons name="check-decagram" size={24} color="#4CAF50" />
+                  <MaterialCommunityIcons name="check-decagram" size={24} color="#66BB6A" />
                 )}
               </View>
             </Card.Content>
@@ -166,7 +172,6 @@ const styles = StyleSheet.create({
   attendanceCard: {
     marginBottom: 12,
     elevation: 1,
-    backgroundColor: '#fff',
   },
   cardContent: {
     flexDirection: 'row',
@@ -183,7 +188,7 @@ const styles = StyleSheet.create({
     marginTop: 4,
     paddingTop: 4,
     borderTopWidth: StyleSheet.hairlineWidth,
-    borderTopColor: '#eee',
+    borderTopColor: 'rgba(255,255,255,0.08)',
   },
   justificationText: {
     fontStyle: 'italic',

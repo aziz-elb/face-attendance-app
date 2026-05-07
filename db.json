@@ -8,12 +8,12 @@
       "password": "qwerty",
       "role": "USER",
       "department": {
-        "id": 1,
-        "title": "Marketing"
+        "id": 2,
+        "title": "Ressource Houmaine"
       },
       "isActive": true,
       "createdAt": "2026-01-01T08:00:00Z",
-      "updatedAt": "2026-05-06T22:19:11.423Z"
+      "updatedAt": "2026-05-07T11:13:21.631Z"
     },
     {
       "id": "3",
@@ -61,12 +61,12 @@
       "password": "123",
       "role": "ADMIN",
       "department": {
-        "id": 1,
-        "title": "Marketing"
+        "id": 2,
+        "title": "Ressource Houmaine"
       },
       "isActive": true,
       "createdAt": "2026-05-05T10:57:25.219Z",
-      "updatedAt": "2026-05-06T22:13:32.803Z",
+      "updatedAt": "2026-05-07T11:10:29.295Z",
       "id": "Q3XI3nF"
     },
     {
@@ -75,11 +75,29 @@
       "email": "admin2@gmail.com",
       "password": "123",
       "role": "ADMIN",
-      "department": null,
+      "department": {
+        "id": 2,
+        "title": "Ressource Houmaine"
+      },
       "isActive": true,
       "createdAt": "2026-05-05T10:57:39.231Z",
-      "updatedAt": "2026-05-05T10:57:54.849Z",
+      "updatedAt": "2026-05-07T11:10:34.305Z",
       "id": "Bc_6erm"
+    },
+    {
+      "firstName": "omar",
+      "lastName": "ali",
+      "email": "omar@gmail.com",
+      "password": "123",
+      "department": {
+        "id": "_psVudI",
+        "title": "Computer Science"
+      },
+      "role": "USER",
+      "isActive": true,
+      "createdAt": "2026-05-07T11:17:45.555Z",
+      "updatedAt": "2026-05-07T11:18:42.188Z",
+      "id": "c8SiFEj"
     }
   ],
   "departments": [
@@ -109,7 +127,7 @@
       "justification": {
         "message": "helllo theacher",
         "file_path": "document_placeholder.pdf",
-        "status": "ACCEPTED",
+        "status": "REJECTED",
         "isArchived": true
       },
       "createdAt": "2026-05-06T22:12:36.985Z",

@@ -98,7 +98,7 @@ export default function NotificationScreen() {
             <Text variant="bodyLarge" style={{ marginTop: 8 }}>No notifications yet</Text>
           </View>
         ) : (
-          <Surface style={styles.surface} elevation={1}>
+          <Surface style={[styles.surface, { backgroundColor: colors.surface }]} elevation={1}>
             {notifications.map((notif, index) => (
               <React.Fragment key={notif.id}>
                 <List.Item
@@ -181,7 +181,6 @@ const styles = StyleSheet.create({
   surface: {
     borderRadius: 12,
     overflow: 'hidden',
-    backgroundColor: '#fff',
   },
   title: {
     fontSize: 16,

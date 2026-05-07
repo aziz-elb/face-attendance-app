@@ -5,6 +5,7 @@ import { api } from '../../../lib/api';
 import { User } from '../../../lib/types';
 import { router } from 'expo-router';
 import { useLogout } from '@/hooks/useLogout';
+import { AppTheme } from '@/lib/theme';
 
 export default function AdminManagementPage() {
   const { colors } = useTheme();
@@ -139,7 +140,8 @@ export default function AdminManagementPage() {
         renderItem={({ item }) => (
           <List.Item
             title={`${item.firstName} ${item.lastName}`}
-            description={`${item.email}${item.department ? ` • ${item.department.title}` : ''}`}
+            description={`${item.email}`}
+            descriptionStyle={{ fontSize: 10 }}
             left={props => <List.Icon {...props} icon="shield-account" />}
             right={props => (
               <View style={styles.actions}>
@@ -214,7 +216,7 @@ const styles = StyleSheet.create({
   },
   listItem: {
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: AppTheme.colors.outlineVariant,
   },
   actions: {
     flexDirection: 'row',

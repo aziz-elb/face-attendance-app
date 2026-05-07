@@ -83,7 +83,7 @@ export default function EditInfoScreen() {
         <Appbar.Content title="Edit Info" titleStyle={{ fontWeight: 'bold' }} />
       </Appbar.Header>
       <ScrollView contentContainerStyle={styles.scrollContent}>
-        <Surface style={styles.surface} elevation={1}>
+        <Surface style={[styles.surface, { backgroundColor: colors.surface }]} elevation={1}>
           {error ? <HelperText type="error">{error}</HelperText> : null}
           {success ? <HelperText type="info" style={{ color: colors.primary }}>{success}</HelperText> : null}
 
@@ -150,13 +150,13 @@ const styles = StyleSheet.create({
   surface: {
     padding: 20,
     borderRadius: 12,
-    backgroundColor: 'white',
   },
   input: {
     marginBottom: 16,
   },
   button: {
     marginTop: 8,
+    borderRadius: 28,
   },
   cancelButton: {
     marginTop: 8,

@@ -1,7 +1,10 @@
+import { useLogout } from '@/hooks/useLogout';
+import { AppTheme } from '@/lib/theme';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useFocusEffect } from '@react-navigation/native';
 import { useRouter } from 'expo-router';
-import React, { useEffect, useState } from 'react';
-import { FlatList, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import React, { useCallback, useState } from 'react';
+import { FlatList, ScrollView, StyleSheet, View } from 'react-native';
 import {
   ActivityIndicator,
   Appbar,
@@ -15,11 +18,8 @@ import {
   Text,
   useTheme
 } from 'react-native-paper';
-import { useFocusEffect } from '@react-navigation/native';
-import { useCallback } from 'react';
 import { api } from '../../lib/api';
 import { Attendance, JustificationStatus, User } from '../../lib/types';
-import { useLogout } from '@/hooks/useLogout';
 
 export default function JustificationsScreen() {
   const router = useRouter();
@@ -87,12 +87,19 @@ export default function JustificationsScreen() {
     }
   };
 
+  const STATUS_COLORS = {
+    ACCEPTED: '#66BB6A',
+    REJECTED: '#CF6679',
+    PENDING: '#FFB74D',
+    DEFAULT: colors.onSurfaceVariant,
+  };
+
   const getStatusColor = (status: JustificationStatus) => {
     switch (status) {
-      case 'ACCEPTED': return '#4CAF50';
-      case 'REJECTED': return '#F44336';
-      case 'PENDING': return '#FF9800';
-      default: return '#757575';
+      case 'ACCEPTED': return STATUS_COLORS.ACCEPTED;
+      case 'REJECTED': return STATUS_COLORS.REJECTED;
+      case 'PENDING': return STATUS_COLORS.PENDING;
+      default: return STATUS_COLORS.DEFAULT;
     }
   };
 
@@ -132,7 +139,7 @@ export default function JustificationsScreen() {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={[styles.container]}>
       <Appbar.Header elevated >
         <Appbar.Content title="Justifications" titleStyle={{ fontWeight: 'bold' }} />
         <Appbar.Action icon="archive-clock-outline" onPress={() => router.push('/(admin)/archived-justifications')} />
@@ -140,21 +147,21 @@ export default function JustificationsScreen() {
       </Appbar.Header>
 
       {loading ? (
-        <View style={styles.center}>
+        <View style={[styles.center]}>
           <ActivityIndicator size="large" color={colors.primary} />
           <Text style={{ marginTop: 10 }}>Loading justifications...</Text>
         </View>
       ) : attendances.length === 0 ? (
-        <View style={styles.center}>
-          <MaterialCommunityIcons name="file-document-outline" size={64} color="#ccc" />
-          <Text variant="titleMedium" style={{ color: '#aaa', marginTop: 16 }}>No justifications found</Text>
+        <View style={[styles.center]}>
+          <MaterialCommunityIcons name="file-document-outline" size={64} color={colors.onSurfaceVariant} />
+          <Text variant="titleMedium" style={{ color: colors.onSurfaceVariant, marginTop: 16 }}>No justifications found</Text>
         </View>
       ) : (
         <FlatList
           data={attendances}
           renderItem={renderItem}
           keyExtractor={item => item.id}
-          contentContainerStyle={styles.list}
+          contentContainerStyle={[styles.list]}
         />
       )}
 
@@ -164,7 +171,7 @@ export default function JustificationsScreen() {
         <Modal
           visible={modalVisible}
           onDismiss={() => setModalVisible(false)}
-          contentContainerStyle={styles.modalContent}
+          contentContainerStyle={[styles.modalContent, { backgroundColor: colors.surface }]}
         >
           {selectedJustification && (
             <ScrollView>
@@ -183,7 +190,7 @@ export default function JustificationsScreen() {
               <View style={styles.detailRow}>
                 <Text variant="labelLarge">Current Status:</Text>
                 <Chip
-                  textStyle={{ fontSize: 10 , color: "white" }}
+                  textStyle={{ fontSize: 10, color: "white" }}
                   style={{ backgroundColor: getStatusColor(selectedJustification.justification?.status || 'PENDING') }}
 
                 >
@@ -214,7 +221,7 @@ export default function JustificationsScreen() {
                 <Button
                   mode="contained"
                   onPress={() => handleStatusUpdate(selectedJustification, 'ACCEPTED')}
-                  style={[styles.actionBtn, { backgroundColor: '#4CAF50' }]}
+                  style={[styles.actionBtn, { backgroundColor: STATUS_COLORS.ACCEPTED }]}
                   icon="check-circle"
                 >
                   Accept
@@ -222,7 +229,7 @@ export default function JustificationsScreen() {
                 <Button
                   mode="contained"
                   onPress={() => handleStatusUpdate(selectedJustification, 'REJECTED')}
-                  style={[styles.actionBtn, { backgroundColor: '#F44336' }]}
+                  style={[styles.actionBtn, { backgroundColor: STATUS_COLORS.REJECTED }]}
                   icon="close-circle"
                 >
                   Reject
@@ -232,7 +239,7 @@ export default function JustificationsScreen() {
               <Button
                 mode="outlined"
                 onPress={() => handleStatusUpdate(selectedJustification, 'PENDING')}
-                style={{ marginTop: 12 , borderRadius: 8}}
+                style={{ marginTop: 12, borderRadius: 8 }}
               >
                 Cancel
               </Button>
@@ -247,7 +254,7 @@ export default function JustificationsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8f9fa',
+    backgroundColor: AppTheme.colors.background
   },
   center: {
     flex: 1,
@@ -262,7 +269,6 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     borderRadius: 12,
     elevation: 2,
-    backgroundColor: '#fff',
     overflow: 'hidden',
   },
   cardHeader: {
@@ -272,10 +278,8 @@ const styles = StyleSheet.create({
   },
   messagePreview: {
     fontStyle: 'italic',
-    color: '#666',
   },
   modalContent: {
-    backgroundColor: 'white',
     padding: 20,
     margin: 20,
     borderRadius: 16,
@@ -294,7 +298,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   messageContainer: {
-    backgroundColor: '#f0f0f0',
+    backgroundColor: AppTheme.colors.surfaceVariant,
     padding: 16,
     borderRadius: 8,
     marginTop: 8,
@@ -306,11 +310,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     padding: 12,
-    backgroundColor: '#f5f5f5',
+    backgroundColor: AppTheme.colors.surfaceVariant,
     borderRadius: 8,
     marginTop: 8,
     borderWidth: 1,
-    borderColor: '#ddd',
+    borderColor: AppTheme.colors.outlineVariant,
     borderStyle: 'dashed',
   },
   modalActions: {

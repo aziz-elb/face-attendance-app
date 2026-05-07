@@ -1,14 +1,15 @@
 import React from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
-import { Text, Appbar, Surface, Button } from 'react-native-paper';
+import { Text, Appbar, useTheme } from 'react-native-paper';
 import StatCard from '../../components/StatCard';
 import { router } from 'expo-router';
 import { useLogout } from '@/hooks/useLogout';
 
 export default function AdminDashboard() {
     const handleLogout = useLogout();
+    const { colors } = useTheme();
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { backgroundColor: colors.background }]}>
       <Appbar.Header elevated>
         <Appbar.Content title="Dashboard" titleStyle={{ fontWeight: 'bold' }} />
         <Appbar.Action icon="logout" onPress={handleLogout} />
@@ -23,13 +24,13 @@ export default function AdminDashboard() {
             title="Total Users" 
             value="124" 
             icon="account-group" 
-            color="#2196F3" 
+            color={colors.primary}
           />
           <StatCard 
             title="Present" 
             value="98" 
             icon="account-check" 
-            color="#4CAF50" 
+            color="#66BB6A" 
           />
         </View>
 
@@ -38,13 +39,13 @@ export default function AdminDashboard() {
             title="Absent" 
             value="26" 
             icon="account-remove" 
-            color="#F44336" 
+            color="#CF6679" 
           />
           <StatCard 
             title="Late" 
             value="12" 
             icon="clock-alert" 
-            color="#FF9800" 
+            color="#FFB74D" 
           />
         </View>
 

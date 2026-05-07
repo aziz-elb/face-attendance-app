@@ -71,26 +71,26 @@ export default function ProfileScreen() {
         <View style={styles.actionContainer}>
           <Text variant="titleMedium" style={styles.sectionTitle}>Account Settings</Text>
           
-          <Card style={styles.actionCard} onPress={() => router.push('/(user)/edit-info')}>
+          <Card style={[styles.actionCard, { backgroundColor: colors.surface }]} onPress={() => router.push('/(user)/edit-info')}>
             <Card.Content style={styles.actionContent}>
               <View style={styles.actionLeft}>
                 <Avatar.Icon size={40} icon="account-edit" style={{ backgroundColor: colors.primaryContainer }} color={colors.primary} />
                 <View style={styles.actionText}>
                   <Text variant="bodyLarge" style={{ fontWeight: '600' }}>Edit Personal Info</Text>
-                  <Text variant="bodySmall" style={{ color: colors.outline }}>Update your profile details</Text>
+                  <Text variant="bodySmall" style={{ color: colors.onSurfaceVariant }}>Update your profile details</Text>
                 </View>
               </View>
               <List.Icon icon="chevron-right" />
             </Card.Content>
           </Card>
 
-          <Card style={styles.actionCard} onPress={() => router.push('/(user)/change-password')}>
+          <Card style={[styles.actionCard, { backgroundColor: colors.surface }]} onPress={() => router.push('/(user)/change-password')}>
             <Card.Content style={styles.actionContent}>
               <View style={styles.actionLeft}>
                 <Avatar.Icon size={40} icon="lock-reset" style={{ backgroundColor: colors.errorContainer }} color={colors.error} />
                 <View style={styles.actionText}>
                   <Text variant="bodyLarge" style={{ fontWeight: '600' }}>Change Password</Text>
-                  <Text variant="bodySmall" style={{ color: colors.outline }}>Secure your account</Text>
+                  <Text variant="bodySmall" style={{ color: colors.onSurfaceVariant }}>Secure your account</Text>
                 </View>
               </View>
               <List.Icon icon="chevron-right" />
@@ -143,7 +143,6 @@ const styles = StyleSheet.create({
   },
   actionCard: {
     marginBottom: 12,
-    backgroundColor: '#fff',
   },
   actionContent: {
     flexDirection: 'row',

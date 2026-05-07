@@ -4,6 +4,7 @@ import { Alert, FlatList, StyleSheet, View } from 'react-native';
 import { ActivityIndicator, Button, IconButton, List, Modal, Portal, Searchbar, Text, useTheme } from 'react-native-paper';
 import { api } from '../../../lib/api';
 import { Department, User } from '../../../lib/types';
+import { AppTheme } from '@/lib/theme';
 
 export default function ManageDepartmentUsers() {
   const { id } = useLocalSearchParams();
@@ -94,6 +95,7 @@ export default function ManageDepartmentUsers() {
               </View>
             )}
             description={`${item.email}`}
+            descriptionStyle={{ fontSize: 10 }}
             left={props => <List.Icon {...props} icon="account" />}
             right={props => (
               <IconButton
@@ -178,7 +180,7 @@ const styles = StyleSheet.create({
   },
   listItem: {
     borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    borderBottomColor: AppTheme.colors.outlineVariant,
   },
   emptyText: {
     textAlign: 'center',
