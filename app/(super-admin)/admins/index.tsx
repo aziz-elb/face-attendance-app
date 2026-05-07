@@ -4,6 +4,7 @@ import { ActivityIndicator, Appbar, Button, FAB, IconButton, List, Modal, Portal
 import { api } from '../../../lib/api';
 import { User } from '../../../lib/types';
 import { router } from 'expo-router';
+import { useLogout } from '@/hooks/useLogout';
 
 export default function AdminManagementPage() {
   const { colors } = useTheme();
@@ -12,6 +13,7 @@ export default function AdminManagementPage() {
   const [loading, setLoading] = useState(false);
   const [fetchLoading, setFetchLoading] = useState(true);
   const [editingAdmin, setEditingAdmin] = useState<User | null>(null);
+  const handleLogout = useLogout();
 
   const [formData, setFormData] = useState({
     firstName: '',
@@ -127,7 +129,7 @@ export default function AdminManagementPage() {
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <Appbar.Header elevated>
         <Appbar.Content title="Admins" titleStyle={{ fontWeight: 'bold' }} />
-        <Appbar.Action icon="logout" onPress={() => router.replace('/(auth)/login')} />
+        <Appbar.Action icon="logout" onPress={handleLogout} />
 
       </Appbar.Header>
 

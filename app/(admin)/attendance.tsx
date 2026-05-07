@@ -3,14 +3,18 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Alert, FlatList, Platform, StyleSheet, View } from 'react-native';
 import { ActivityIndicator, Appbar, Button, List, useTheme } from 'react-native-paper';
 import { api } from '../../lib/api';
+import { useLogout } from '@/hooks/useLogout';
+import { Attendance, AttendanceStatus, User } from '../../lib/types';
 
 export default function MarkAttendance() {
   const { colors } = useTheme();
-  const [users, setUsers] = useState([]);
+  const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
-  const [attendance, setAttendance] = useState({}); // { userId: status }
-  const [existingRecords, setExistingRecords] = useState([]); // Store today's records
+  const [attendance, setAttendance] = useState<Record<string, AttendanceStatus>>({}); // { userId: status }
+  const [existingRecords, setExistingRecords] = useState<Attendance[]>([]); // Store today's records
+  const handleLogout = useLogout();
+  
 
   const fetchUsers = useCallback(async () => {
     try {
@@ -33,7 +37,7 @@ export default function MarkAttendance() {
       setExistingRecords(todayRecords);
 
       // Initialize as PRESENT or with existing status
-      const initialAttendance: Record<string, string> = {};
+      const initialAttendance: Record<string, AttendanceStatus> = {};
       students.forEach(u => {
         const record = todayRecords.find(r => r.user_id === u.id);
         initialAttendance[u.id] = record ? record.status : 'PRESENT';
@@ -56,7 +60,7 @@ export default function MarkAttendance() {
     }, [fetchUsers])
   );
 
-  const toggleStatus = (userId) => {
+  const toggleStatus = (userId: string) => {
     setAttendance(prev => ({
       ...prev,
       [userId]: prev[userId] === 'PRESENT' ? 'ABSENT' : 'PRESENT'
@@ -111,7 +115,7 @@ export default function MarkAttendance() {
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <Appbar.Header elevated>
         <Appbar.Content title="Attendance" titleStyle={{ fontWeight: 'bold' }} />
-        <Appbar.Action icon="logout" onPress={() => router.replace('/(auth)/login')} />
+        <Appbar.Action icon="logout" onPress={handleLogout} />
       </Appbar.Header>
 
       <FlatList

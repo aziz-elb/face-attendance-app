@@ -4,6 +4,7 @@ import { Alert, FlatList, Platform, StyleSheet, View } from 'react-native';
 import { Appbar, Button, FAB, IconButton, List, Modal, Portal, Text, TextInput, useTheme } from 'react-native-paper';
 import { api } from '../../../lib/api';
 import { Department } from '../../../lib/types';
+import { useLogout } from '@/hooks/useLogout';
 
 export default function DepartmentsPage() {
   const { colors } = useTheme();
@@ -14,6 +15,7 @@ export default function DepartmentsPage() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [code, setCode] = useState('');
+  const handleLogout = useLogout();
 
   const fetchDepartments = async () => {
     try {
@@ -119,7 +121,7 @@ export default function DepartmentsPage() {
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <Appbar.Header elevated>
         <Appbar.Content title="Departments" titleStyle={{ fontWeight: 'bold' }} />
-        <Appbar.Action icon="logout" onPress={() => router.replace('/(auth)/login')} />
+        <Appbar.Action icon="logout" onPress={handleLogout} />
 
       </Appbar.Header>
 

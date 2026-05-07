@@ -3,10 +3,12 @@ import React, { useCallback, useState } from 'react';
 import { ScrollView, StyleSheet, View } from 'react-native';
 import { Appbar, Avatar, Button, Card, Divider, List, Text, useTheme } from 'react-native-paper';
 import { api } from '../../lib/api';
+import { useLogout } from '@/hooks/useLogout';
 
 export default function AdminProfile() {
   const { colors } = useTheme();
   const [user, setUser] = useState(api.currentUser);
+  const handleLogout = useLogout();
 
   // Refresh user data when screen comes into focus
   useFocusEffect(
@@ -15,15 +17,11 @@ export default function AdminProfile() {
     }, [])
   );
 
-  const handleExit = () => {
-    api.currentUser = null;
-    router.replace('/(auth)/login');
-  }
   return (
     <View style={styles.container}>
       <Appbar.Header elevated >
         <Appbar.Content title="Profile" titleStyle={{ fontWeight: 'bold' }} />
-        <Appbar.Action icon="logout" onPress={handleExit} />
+        <Appbar.Action icon="logout" onPress={handleLogout} />
       </Appbar.Header>
 
       <ScrollView contentContainerStyle={styles.content}>
@@ -85,7 +83,7 @@ export default function AdminProfile() {
 
           <Button
             mode="text"
-            onPress={handleExit}
+            onPress={handleLogout}
             style={styles.logoutButton}
             icon="logout"
             textColor={colors.error}

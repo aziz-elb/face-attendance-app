@@ -4,16 +4,25 @@ import { View, StyleSheet, FlatList, Alert } from 'react-native';
 import { Text, Appbar, List, IconButton, useTheme, ActivityIndicator, Searchbar, Portal, Modal, TextInput, Button, SegmentedButtons } from 'react-native-paper';
 import { api } from '../../lib/api';
 import { User } from '@/lib/types';
+import { useLogout } from '@/hooks/useLogout';
+
+
+interface StudentWithAttendance extends User {
+  attendanceRate: number;
+}
+
 
 export default function StudentListing() {
   const { colors } = useTheme();
-  const [users, setUsers] = useState([]);
+  const handleLogout = useLogout();
+  const [users, setUsers] = useState<StudentWithAttendance[]>([]);
+
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const [filter, setFilter] = useState('all'); // all, poor, moderate, good
   
   const [modalVisible, setModalVisible] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedUser, setSelectedUser] = useState<StudentWithAttendance | null>(null);
   const [notifMessage, setNotifMessage] = useState('');
   const [sendingNotif, setSendingNotif] = useState(false);
 
@@ -56,7 +65,7 @@ export default function StudentListing() {
     }, [fetchData])
   );
 
-  const openNotifModal = (user) => {
+  const openNotifModal = (user: StudentWithAttendance) => {
     setSelectedUser(user);
     setNotifMessage('');
     setModalVisible(true);
@@ -66,6 +75,7 @@ export default function StudentListing() {
     if (!notifMessage) return;
     setSendingNotif(true);
     try {
+      if (!selectedUser || !api.currentUser) return;
       await api.addNotification({
         recipient_id: selectedUser.id,
         sender_id: api.currentUser.id, 
@@ -80,7 +90,7 @@ export default function StudentListing() {
     }
   };
 
-  const filteredUsers = users.filter((u:User) => {
+  const filteredUsers = users.filter((u: StudentWithAttendance) => {
     const matchesSearch = `${u.firstName} ${u.lastName}`.toLowerCase().includes(searchQuery.toLowerCase());
     if (!matchesSearch) return false;
 
@@ -91,7 +101,7 @@ export default function StudentListing() {
     return true;
   });
 
-  const getRateColor = (rate) => {
+  const getRateColor = (rate: number) => {
     if (rate >= 85) return '#4CAF50';
     if (rate >= 70) return '#FF9800';
     return '#F44336';
@@ -103,7 +113,7 @@ export default function StudentListing() {
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <Appbar.Header elevated>
         <Appbar.Content title="Students" titleStyle={{ fontWeight: 'bold' }} />
-        <Appbar.Action icon="logout" onPress={() => router.replace('/(auth)/login')} />
+        <Appbar.Action icon="logout" onPress={handleLogout} />
       </Appbar.Header>
 
       <View style={styles.header}>
@@ -134,7 +144,7 @@ export default function StudentListing() {
         <FlatList
         data={filteredUsers}
         keyExtractor={(item) => item.id}
-        renderItem={({ item }:any  ) => (
+        renderItem={({ item }: { item: StudentWithAttendance }) => (
           <List.Item
             title={`${item.firstName} ${item.lastName} ${Math.round(item.attendanceRate)}%`}
             description={`${item.email}`}

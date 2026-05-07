@@ -1,9 +1,11 @@
 import StatCard from '@/components/StatCard';
+import { useLogout } from '@/hooks/useLogout';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Appbar, Card, Surface, Text, useTheme } from 'react-native-paper';
+  
 
 const KPICard = ({ title, value, icon, color, onPress }: { title: string, value: string, icon: string, color: string, onPress?: () => void }) => {
   const { colors } = useTheme();
@@ -26,12 +28,14 @@ const KPICard = ({ title, value, icon, color, onPress }: { title: string, value:
 };
 
 export default function SuperAdminDashboard() {
+  const handleLogout = useLogout();
+
   const { colors } = useTheme();
   return (
     <View style={styles.container}>
       <Appbar.Header elevated>
         <Appbar.Content title="Dashboard" titleStyle={{ fontWeight: 'bold' }} />
-        <Appbar.Action icon="logout" onPress={() => router.replace('/(auth)/login')} />
+        <Appbar.Action icon="logout" onPress={handleLogout} />
       </Appbar.Header>
 
 

@@ -4,12 +4,14 @@ import { ActivityIndicator, Appbar, Divider, List, Searchbar, Switch, Text, useT
 import { api } from '../../../lib/api';
 import { User } from '../../../lib/types';
 import { router } from 'expo-router';
+import { useLogout } from '@/hooks/useLogout';
 
 export default function UserManagementPage() {
   const { colors } = useTheme();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const handleLogout = useLogout();
 
   const fetchUsers = async () => {
     try {
@@ -63,7 +65,7 @@ export default function UserManagementPage() {
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <Appbar.Header elevated>
         <Appbar.Content title="Users" titleStyle={{ fontWeight: 'bold' }} />
-        <Appbar.Action icon="logout" onPress={() => router.replace('/(auth)/login')} />
+        <Appbar.Action icon="logout" onPress={handleLogout} />
 
       </Appbar.Header>
 

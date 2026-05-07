@@ -1,3 +1,4 @@
+import { useLogout } from '@/hooks/useLogout';
 import { api } from '@/lib/api';
 import { useFocusEffect, useRouter } from 'expo-router';
 import React, { useCallback, useState } from 'react';
@@ -9,6 +10,7 @@ export default function ProfileScreen() {
   const router = useRouter();
   const { colors } = useTheme();
   const [user, setUser] = useState(api.currentUser);
+  const handleLogout = useLogout()
 
   const fetchUserData = useCallback(async () => {
     if (!api.currentUser?.id) return;
@@ -27,15 +29,11 @@ export default function ProfileScreen() {
     }, [fetchUserData])
   );
 
-  const handleExit = () => {
-    api.currentUser = null;
-    router.replace('/(auth)/login');
-  }
   return (
     <ScrollView style={[styles.container, { backgroundColor: colors.background }]}>
        <Appbar.Header elevated >
         <Appbar.Content title="Profile" titleStyle={{ fontWeight: 'bold' }} />
-        <Appbar.Action icon="logout" onPress={handleExit} />
+        <Appbar.Action icon="logout" onPress={handleLogout} />
       </Appbar.Header>
       <View style={styles.content}>
         <View style={styles.header}>
@@ -103,7 +101,7 @@ export default function ProfileScreen() {
         <Button 
           mode="contained-tonal" 
           icon="logout" 
-          onPress={handleExit}
+          onPress={handleLogout}
           style={styles.logoutButton}
         >
           Logout

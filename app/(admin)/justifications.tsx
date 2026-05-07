@@ -19,6 +19,7 @@ import { useFocusEffect } from '@react-navigation/native';
 import { useCallback } from 'react';
 import { api } from '../../lib/api';
 import { Attendance, JustificationStatus, User } from '../../lib/types';
+import { useLogout } from '@/hooks/useLogout';
 
 export default function JustificationsScreen() {
   const router = useRouter();
@@ -28,6 +29,7 @@ export default function JustificationsScreen() {
   const [users, setUsers] = useState<Record<string, User>>({});
   const [selectedJustification, setSelectedJustification] = useState<Attendance | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const handleLogout = useLogout();
 
   useFocusEffect(
     useCallback(() => {
@@ -134,7 +136,7 @@ export default function JustificationsScreen() {
       <Appbar.Header elevated >
         <Appbar.Content title="Justifications" titleStyle={{ fontWeight: 'bold' }} />
         <Appbar.Action icon="archive-clock-outline" onPress={() => router.push('/(admin)/archived-justifications')} />
-        <Appbar.Action icon="logout" onPress={() => router.replace('/(auth)/login')} />
+        <Appbar.Action icon="logout" onPress={handleLogout} />
       </Appbar.Header>
 
       {loading ? (

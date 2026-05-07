@@ -3,10 +3,14 @@ import React, { useState, useCallback } from 'react';
 import { View, StyleSheet, ScrollView, Platform, Alert } from 'react-native';
 import { Avatar, Button, Card, Divider, List, Text, Appbar, useTheme } from 'react-native-paper';
 import { api } from '../../lib/api';
+import { useLogout } from '@/hooks/useLogout';
+
 
 export default function SuperAdminProfile() {
   const { colors } = useTheme();
   const [user, setUser] = useState(api.currentUser);
+  const handleLogout = useLogout();
+
 
   // Refresh user data when screen comes into focus
   useFocusEffect(
@@ -23,17 +27,7 @@ export default function SuperAdminProfile() {
     role: 'Super Administrator' as any
   };
 
-  const handleLogout = () => {
-    if (Platform.OS === "android") {
-      Alert.alert('Logout', 'Are you sure you want to logout?', [
-        { text: 'Cancel' },
-        { text: 'Logout', onPress: () => router.replace('/(auth)/login') }
-      ]);
-    } else {
-  
-      router.replace('/(auth)/login');
-    }
-  };
+
 
   return (
     <View style={styles.container}>

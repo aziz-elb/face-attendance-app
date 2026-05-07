@@ -3,13 +3,15 @@ import { View, StyleSheet, ScrollView } from 'react-native';
 import { Text, Appbar, Surface, Button } from 'react-native-paper';
 import StatCard from '../../components/StatCard';
 import { router } from 'expo-router';
+import { useLogout } from '@/hooks/useLogout';
 
 export default function AdminDashboard() {
+    const handleLogout = useLogout();
   return (
     <View style={styles.container}>
       <Appbar.Header elevated>
         <Appbar.Content title="Dashboard" titleStyle={{ fontWeight: 'bold' }} />
-        <Appbar.Action icon="logout" onPress={() => router.replace('/(auth)/login')} />
+        <Appbar.Action icon="logout" onPress={handleLogout} />
 
       </Appbar.Header>
       
