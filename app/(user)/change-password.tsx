@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Button, HelperText, Surface, TextInput, useTheme } from 'react-native-paper';
+import { api } from '../../lib/api';
 
 export default function ChangePasswordScreen() {
   const { colors } = useTheme();
@@ -18,6 +19,8 @@ export default function ChangePasswordScreen() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [showPass, setShowPass] = useState(false);
+
+  const userId = api.currentUser?.id; // Placeholder, should be 
 
   const handleUpdate = async () => {
     if (!formData.currentPassword || !formData.newPassword || !formData.confirmPassword) {
@@ -35,10 +38,29 @@ export default function ChangePasswordScreen() {
     setSuccess('');
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // 1. Fetch user to verify current password
+      const user = await api.getUser(userId);
+
+      if (user.password !== formData.currentPassword) {
+        setError('Current password is incorrect');
+        setLoading(false);
+        return;
+      }
+
+      // 2. Update password
+      await api.updateUser(userId, {
+        password: formData.newPassword
+      });
+
       setSuccess('Password updated successfully!');
-      setTimeout(() => router.back(), 1500);
+      setFormData({
+        currentPassword: '',
+        newPassword: '',
+        confirmPassword: '',
+      })
+      
+
+      router.push('/(user)/profile')
     } catch (err) {
       setError('Failed to update password');
     } finally {

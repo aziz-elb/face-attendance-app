@@ -8,7 +8,7 @@ export default function SuperAdminLayout() {
   return (
     <Tabs
       screenOptions={{
-        headerShown: true,
+        headerShown: false,
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.outline,
         tabBarStyle: {
@@ -85,6 +85,7 @@ export default function SuperAdminLayout() {
       <Tabs.Screen
         name="profile"
         options={{
+          headerShown: false,
           title: "Super Profile",
           tabBarLabel: "Profile",
           tabBarIcon: ({ color, size }) => (

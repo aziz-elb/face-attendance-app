@@ -1,7 +1,7 @@
 import { router } from 'expo-router';
 import React, { useEffect, useState } from 'react';
 import { Alert, FlatList, Platform, StyleSheet, View } from 'react-native';
-import { Button, FAB, IconButton, List, Modal, Portal, Text, TextInput, useTheme } from 'react-native-paper';
+import { Appbar, Button, FAB, IconButton, List, Modal, Portal, Text, TextInput, useTheme } from 'react-native-paper';
 import { api } from '../../../lib/api';
 import { Department } from '../../../lib/types';
 
@@ -117,6 +117,10 @@ export default function DepartmentsPage() {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <Appbar.Header elevated>
+        <Appbar.Content title="Departments" titleStyle={{ fontWeight: 'bold' }} />
+      </Appbar.Header>
+
       <FlatList
         data={departments}
         keyExtractor={(item) => String(item.id)}

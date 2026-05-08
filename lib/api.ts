@@ -15,6 +15,12 @@ export const api = {
     return Array.isArray(data) ? data.map(Models.user) : [];
   },
 
+  getUser: async (id: string): Promise<User> => {
+    const response = await fetch(`${API_URL}/users/${id}`);
+    const data = await response.json();
+    return Models.user(data);
+  },
+
   login: async (email: string, password: string): Promise<User> => {
     const response = await fetch(`${API_URL}/users?email=${email}&password=${password}`);
     const users = await response.json();

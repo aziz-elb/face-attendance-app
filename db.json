@@ -2,18 +2,18 @@
   "users": [
     {
       "id": "1",
-      "firstName": "Mohamed",
-      "lastName": "Badiaa",
+      "firstName": "Mohamedd",
+      "lastName": "Badia",
       "email": "mohamed.badia@demo.com",
-      "password": "password",
+      "password": "1234",
       "role": "USER",
       "department": {
-        "id": 2,
-        "title": "Ressource Houmaine"
+        "id": 1,
+        "title": "Marketing"
       },
-      "isActive": false,
+      "isActive": true,
       "createdAt": "2026-01-01T08:00:00Z",
-      "updatedAt": "2026-05-05T15:31:49.404Z"
+      "updatedAt": "2026-05-06T08:30:07.173Z"
     },
     {
       "id": "3",
@@ -32,35 +32,41 @@
       "firstName": "aziz",
       "lastName": "elb",
       "email": "aziz@gmail.com",
-      "password": "abcd123",
-      "department": {},
-      "role": "SUPER_ADMIN",
+      "password": "123",
+      "department": null,
+      "role": "ADMIN",
       "isActive": true,
       "createdAt": "2026-05-01T10:39:40.750Z",
-      "updatedAt": "2026-05-05T15:36:01.926Z"
+      "updatedAt": "2026-05-05T16:03:15.725Z"
     },
     {
       "firstName": "Ahmed",
       "lastName": "kadiri",
       "email": "ahmed@gmail.com",
       "password": "123",
-      "department": null,
+      "department": {
+        "id": 1,
+        "title": "Marketing"
+      },
       "role": "USER",
       "isActive": true,
       "createdAt": "2026-05-03T18:38:06.024Z",
-      "updatedAt": "2026-05-05T15:36:46.391Z",
+      "updatedAt": "2026-05-05T16:03:23.969Z",
       "id": "u_R2zpd"
     },
     {
-      "firstName": "admin",
+      "firstName": "adminn",
       "lastName": "one",
       "email": "admin1@gmail.com",
-      "password": "123",
+      "password": "123456",
       "role": "ADMIN",
-      "department": null,
-      "isActive": false,
+      "department": {
+        "id": 1,
+        "title": "Marketing"
+      },
+      "isActive": true,
       "createdAt": "2026-05-05T10:57:25.219Z",
-      "updatedAt": "2026-05-05T15:16:26.841Z",
+      "updatedAt": "2026-05-05T16:54:20.125Z",
       "id": "Q3XI3nF"
     },
     {
@@ -70,7 +76,7 @@
       "password": "123",
       "role": "ADMIN",
       "department": null,
-      "isActive": false,
+      "isActive": true,
       "createdAt": "2026-05-05T10:57:39.231Z",
       "updatedAt": "2026-05-05T10:57:54.849Z",
       "id": "Bc_6erm"
@@ -96,224 +102,207 @@
   ],
   "attendance": [
     {
-      "id": "1",
-      "user_id": "1",
-      "date": "2026-05-01",
-      "status": "PRESENT",
-      "is_justified": false,
-      "justification": null
-    },
-    {
-      "id": "2",
-      "user_id": "1",
-      "date": "2026-04-30",
-      "status": "LATE",
-      "is_justified": false,
-      "justification": null
-    },
-    {
-      "user_id": "1",
-      "date": "2026-05-03",
-      "status": "ABSENT",
-      "is_justified": false,
-      "justification": null,
-      "createdAt": "2026-05-03T19:20:47.893Z",
-      "id": "bEkFHv5"
-    },
-    {
-      "user_id": "1",
-      "date": "2026-05-03",
-      "status": "ABSENT",
-      "is_justified": false,
-      "justification": null,
-      "createdAt": "2026-05-03T22:48:04.418Z",
-      "id": "yq5RvbX"
-    },
-    {
       "user_id": "u_R2zpd",
-      "date": "2026-05-03",
-      "status": "ABSENT",
-      "is_justified": false,
-      "justification": null,
-      "createdAt": "2026-05-03T22:48:04.418Z",
-      "id": "rD_l8Kj"
-    },
-    {
-      "user_id": "1",
-      "date": "2026-05-03",
-      "status": "ABSENT",
-      "is_justified": false,
-      "justification": null,
-      "createdAt": "2026-05-03T22:48:04.998Z",
-      "id": "Go6MrL3"
-    },
-    {
-      "user_id": "u_R2zpd",
-      "date": "2026-05-03",
-      "status": "ABSENT",
-      "is_justified": false,
-      "justification": null,
-      "createdAt": "2026-05-03T22:48:04.999Z",
-      "id": "Hmb0iCj"
-    },
-    {
-      "user_id": "1",
-      "date": "2026-05-03",
-      "status": "ABSENT",
-      "is_justified": false,
-      "justification": null,
-      "createdAt": "2026-05-03T22:49:44.953Z",
-      "id": "0_BzQ7M"
-    },
-    {
-      "user_id": "u_R2zpd",
-      "date": "2026-05-03",
-      "status": "ABSENT",
-      "is_justified": false,
-      "justification": null,
-      "createdAt": "2026-05-03T22:49:44.953Z",
-      "id": "7U7Xbzb"
-    },
-    {
-      "user_id": "1",
-      "date": "2026-05-03",
-      "status": "ABSENT",
-      "is_justified": false,
-      "justification": null,
-      "createdAt": "2026-05-03T22:50:42.656Z",
-      "id": "4DZqy2O"
-    },
-    {
-      "user_id": "u_R2zpd",
-      "date": "2026-05-03",
-      "status": "ABSENT",
-      "is_justified": false,
-      "justification": null,
-      "createdAt": "2026-05-03T22:50:42.656Z",
-      "id": "JtGhRO8"
-    },
-    {
-      "user_id": "1",
-      "date": "2026-05-03",
-      "status": "ABSENT",
-      "is_justified": false,
-      "justification": null,
-      "createdAt": "2026-05-03T23:02:33.809Z",
-      "id": "jK6puOh"
-    },
-    {
-      "user_id": "u_R2zpd",
-      "date": "2026-05-03",
-      "status": "PRESENT",
-      "is_justified": false,
-      "justification": null,
-      "createdAt": "2026-05-03T23:02:33.810Z",
-      "id": "FLs0XW7"
-    },
-    {
-      "user_id": "1",
-      "date": "2026-05-03",
-      "status": "ABSENT",
-      "is_justified": false,
-      "justification": null,
-      "createdAt": "2026-05-03T23:03:02.073Z",
-      "id": "wxZrNIb"
-    },
-    {
-      "user_id": "u_R2zpd",
-      "date": "2026-05-03",
-      "status": "ABSENT",
-      "is_justified": false,
-      "justification": null,
-      "createdAt": "2026-05-03T23:03:02.074Z",
-      "id": "Ibsx5_C"
-    },
-    {
-      "user_id": "1",
-      "date": "2026-05-04",
-      "status": "ABSENT",
-      "is_justified": false,
-      "justification": null,
-      "createdAt": "2026-05-04T12:16:40.777Z",
-      "id": "rqdYzi-"
-    },
-    {
-      "user_id": "u_R2zpd",
-      "date": "2026-05-04",
+      "date": "2026-05-05",
       "status": "ABSENT",
       "is_justified": true,
       "justification": {
-        "message": "Teacher i was sleep i dind woke ip at time",
+        "message": "heu theacher i was sleep",
         "file_path": "document_placeholder.pdf",
         "status": "ACCEPTED",
         "isArchived": false
       },
-      "createdAt": "2026-05-04T12:16:40.778Z",
-      "id": "2WXXzbX"
+      "createdAt": "2026-05-05T16:15:04.357Z",
+      "id": 2
+    },
+    {
+      "user_id": "1",
+      "date": "2026-05-04",
+      "status": "PRESENT",
+      "is_justified": false,
+      "justification": null,
+      "createdAt": "2026-05-04T08:00:00.000Z",
+      "id": 3
+    },
+    {
+      "user_id": "u_R2zpd",
+      "date": "2026-05-04",
+      "status": "PRESENT",
+      "is_justified": false,
+      "justification": null,
+      "createdAt": "2026-05-04T08:05:00.000Z",
+      "id": 4
+    },
+    {
+      "user_id": "1",
+      "date": "2026-05-03",
+      "status": "ABSENT",
+      "is_justified": true,
+      "justification": {
+        "message": "hey wassap",
+        "file_path": "document_placeholder.pdf",
+        "status": "REJECTED",
+        "isArchived": false
+      },
+      "createdAt": "2026-05-03T09:15:00.000Z",
+      "id": 5
+    },
+    {
+      "user_id": "u_R2zpd",
+      "date": "2026-05-03",
+      "status": "PRESENT",
+      "is_justified": false,
+      "justification": null,
+      "createdAt": "2026-05-03T08:00:00.000Z",
+      "id": 6
+    },
+    {
+      "user_id": "1",
+      "date": "2026-05-02",
+      "status": "PRESENT",
+      "is_justified": false,
+      "justification": null,
+      "createdAt": "2026-05-02T07:55:00.000Z",
+      "id": 7
+    },
+    {
+      "user_id": "u_R2zpd",
+      "date": "2026-05-02",
+      "status": "ABSENT",
+      "is_justified": true,
+      "justification": {
+        "message": "hiasdf",
+        "file_path": "document_placeholder.pdf",
+        "status": "REJECTED",
+        "isArchived": false
+      },
+      "createdAt": "2026-05-02T10:00:00.000Z",
+      "id": 8
+    },
+    {
+      "user_id": "1",
+      "date": "2026-05-06",
+      "status": "ABSENT",
+      "is_justified": true,
+      "justification": {
+        "message": "hey teacher i was in a journey i could not assist sorry",
+        "file_path": "document_placeholder.pdf",
+        "status": "ACCEPTED",
+        "isArchived": false
+      },
+      "createdAt": "2026-05-06T07:44:13.916Z",
+      "id": 9
+    },
+    {
+      "user_id": "u_R2zpd",
+      "date": "2026-05-06",
+      "status": "PRESENT",
+      "is_justified": false,
+      "justification": null,
+      "createdAt": "2026-05-06T07:44:13.917Z",
+      "id": 10
+    },
+    {
+      "user_id": "1",
+      "date": "2026-05-07",
+      "status": "ABSENT",
+      "is_justified": true,
+      "justification": {
+        "message": "Hey teacher i was runnnig so a jump and fall in a river",
+        "file_path": "document_placeholder.pdf",
+        "status": "ACCEPTED",
+        "isArchived": false
+      },
+      "createdAt": "2026-05-07T08:00:39.220Z",
+      "id": 11
+    },
+    {
+      "user_id": "u_R2zpd",
+      "date": "2026-05-07",
+      "status": "PRESENT",
+      "is_justified": false,
+      "justification": null,
+      "createdAt": "2026-05-07T08:00:39.221Z",
+      "id": 12
+    },
+    {
+      "user_id": "1",
+      "date": "2026-05-08",
+      "status": "ABSENT",
+      "is_justified": true,
+      "justification": {
+        "message": "Hshsjshzhzz\nSsjzjzuz\nSjdjdjzd\nDjdud",
+        "file_path": "document_placeholder.pdf",
+        "status": "ACCEPTED",
+        "isArchived": false
+      },
+      "createdAt": "2026-05-08T08:25:32.947Z",
+      "id": 13
+    },
+    {
+      "user_id": "u_R2zpd",
+      "date": "2026-05-08",
+      "status": "PRESENT",
+      "is_justified": false,
+      "justification": null,
+      "createdAt": "2026-05-08T08:25:32.947Z",
+      "id": 14
     }
   ],
   "notifications": [
     {
-      "id": "1",
-      "recipient_id": "1",
-      "sender_id": "3",
-      "content": "Welcome to the system!",
-      "status": "Unread",
-      "isArchived": false
+      "recipient_id": "u_R2zpd",
+      "sender_id": "Q3XI3nF",
+      "content": "Helo there",
+      "status": "Read",
+      "isArchived": false,
+      "createdAt": "2026-05-05T16:50:35.719Z",
+      "id": 3
     },
     {
       "recipient_id": "1",
-      "sender_id": "ADMIN_ID",
+      "sender_id": "Q3XI3nF",
+      "content": "heelo there",
+      "status": "Read",
+      "isArchived": true,
+      "createdAt": "2026-05-05T18:21:22.915Z",
+      "id": 5
+    },
+    {
+      "recipient_id": "1",
+      "sender_id": "Q3XI3nF",
+      "content": "Hello",
+      "status": "Read",
+      "isArchived": true,
+      "createdAt": "2026-05-06T07:39:26.172Z",
+      "id": 6
+    },
+    {
+      "recipient_id": "1",
+      "sender_id": "Q3XI3nF",
+      "content": "heeey",
+      "status": "Read",
+      "isArchived": true,
+      "createdAt": "2026-05-06T07:42:06.292Z",
+      "id": 7
+    },
+    {
+      "recipient_id": "1",
+      "sender_id": "Q3XI3nF",
       "content": "to much absence",
-      "status": "Unread",
-      "isArchived": false,
-      "createdAt": "2026-05-03T19:17:08.351Z",
-      "id": "lQjdKBM"
-    },
-    {
-      "recipient_id": "u_R2zpd",
-      "sender_id": "ADMIN_ID",
-      "content": "cc cv",
-      "status": "Unread",
-      "isArchived": false,
-      "createdAt": "2026-05-03T19:17:33.790Z",
-      "id": "-nWBL8_"
+      "status": "Read",
+      "isArchived": true,
+      "createdAt": "2026-05-07T08:03:02.973Z",
+      "id": 8
     },
     {
       "recipient_id": "1",
-      "sender_id": "ADMIN_ID",
-      "content": "hiiuu",
-      "status": "Unread",
-      "isArchived": false,
-      "createdAt": "2026-05-03T19:17:52.556Z",
-      "id": "8-svrBU"
-    },
-    {
-      "recipient_id": "1",
-      "sender_id": "ADMIN_ID",
-      "content": "toooo much ziin",
-      "status": "Unread",
-      "isArchived": false,
-      "createdAt": "2026-05-03T19:20:34.368Z",
-      "id": "nIetvkp"
-    },
-    {
-      "recipient_id": "1",
-      "sender_id": "ADMIN_ID",
-      "content": "heelo",
-      "status": "Unread",
-      "isArchived": false,
-      "createdAt": "2026-05-04T12:11:46.380Z",
-      "id": "284GZ5v"
-    },
-    {
-      "recipient_id": "u_R2zpd",
-      "sender_id": "ADMIN_ID",
-      "content": "hello there dear student",
-      "status": "Unread",
-      "isArchived": false,
-      "createdAt": "2026-05-04T12:35:50.042Z",
-      "id": "o7Lsoat"
+      "sender_id": "Q3XI3nF",
+      "content": "sggsfdg",
+      "status": "Read",
+      "isArchived": true,
+      "createdAt": "2026-05-08T08:30:06.401Z",
+      "id": 9
     }
   ]
 }

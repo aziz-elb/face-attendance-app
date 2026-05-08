@@ -22,8 +22,8 @@ export default function UserLayout() {
         tabBarStyle: {
           backgroundColor: colors.surface,
           borderTopColor: colors.outlineVariant,
-          height: 60,
-          paddingBottom: 8,
+          // height: 60,
+          // paddingBottom: 8,
         },
         headerStyle: {
           backgroundColor: colors.surface,

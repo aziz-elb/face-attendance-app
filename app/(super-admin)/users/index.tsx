@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Alert, FlatList, Platform, StyleSheet, View } from 'react-native';
-import { ActivityIndicator, Button, Divider, List, Searchbar, Switch, Text, useTheme } from 'react-native-paper';
+import { ActivityIndicator, Appbar, Button, Divider, List, Searchbar, Switch, Text, useTheme } from 'react-native-paper';
 import { api } from '../../../lib/api';
 import { User } from '../../../lib/types';
 
@@ -60,6 +60,10 @@ export default function UserManagementPage() {
 
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
+      <Appbar.Header elevated>
+        <Appbar.Content title="Users" titleStyle={{ fontWeight: 'bold' }} />
+      </Appbar.Header>
+      
       <Searchbar
         placeholder="Search users..."
         onChangeText={setSearchQuery}

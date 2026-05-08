@@ -15,12 +15,15 @@ export default function AdminProfile() {
     }, [])
   );
 
+  const handleExit = () => {
+    api.currentUser = null;
+    router.replace('/(auth)/login');
+  }
   return (
     <View style={styles.container}>
-      <Appbar.Header elevated mode="center-aligned">
+      {/* <Appbar.Header elevated mode="center-aligned">
         <Appbar.Content title="Admin Profile" titleStyle={{ fontWeight: 'bold' }} />
-        <Appbar.Action icon="logout" onPress={() => router.replace('/(auth)/login')} />
-      </Appbar.Header>
+      </Appbar.Header> */}
       
       <ScrollView contentContainerStyle={styles.content}>
         <Card style={styles.profileCard}>
@@ -81,7 +84,7 @@ export default function AdminProfile() {
 
           <Button 
             mode="text" 
-            onPress={() => {}} 
+            onPress={handleExit} 
             style={styles.logoutButton}
             icon="logout"
             textColor={colors.error}

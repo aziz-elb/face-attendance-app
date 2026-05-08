@@ -1,13 +1,13 @@
-import { router } from 'expo-router';
-import { StyleSheet, View } from 'react-native';
-import { Text, Card, Surface, useTheme } from 'react-native-paper';
-import { ScrollView } from 'react-native-gesture-handler';
+import StatCard from '@/components/StatCard';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { StyleSheet, View } from 'react-native';
+import { ScrollView } from 'react-native-gesture-handler';
+import { Appbar, Card, Surface, Text, useTheme } from 'react-native-paper';
 
 const KPICard = ({ title, value, icon, color, onPress }: { title: string, value: string, icon: string, color: string, onPress?: () => void }) => {
   const { colors } = useTheme();
   return (
-    <Card 
+    <Card
       style={[styles.card, { borderLeftWidth: 6, borderLeftColor: color }]}
       onPress={onPress}
     >
@@ -28,88 +28,74 @@ export default function SuperAdminDashboard() {
   const { colors } = useTheme();
 
   return (
-    <ScrollView style={[styles.container, { backgroundColor: colors.background }]}>
-      <View style={styles.header}>
-        <Text variant="headlineSmall" style={styles.welcomeText}>Welcome, Super Admin</Text>
-        <Text variant="bodyMedium" style={{ color: colors.outline }}>Here's an overview of your organization</Text>
-      </View>
+    <View style={styles.container}>
+      <Appbar.Header elevated>
+        <Appbar.Content title="Dashboard" titleStyle={{ fontWeight: 'bold' }} />
+      </Appbar.Header>
 
-      <View style={styles.grid}>
-        <KPICard 
-          title="Total Users" 
-          value="156" 
-          icon="account-group" 
-          color="#6200ee" 
-          onPress={() => router.push('/(super-admin)/users')}
-        />
-        <KPICard 
-          title="Active Admins" 
-          value="12" 
-          icon="shield-check" 
-          color="#03dac6" 
-          onPress={() => router.push('/(super-admin)/admins')}
-        />
-        <KPICard 
-          title="Departments" 
-          value="8" 
-          icon="office-building" 
-          color="#ff0266" 
-          onPress={() => router.push('/(super-admin)/departments')}
-        />
-        <KPICard 
-          title="Pending Requests" 
-          value="5" 
-          icon="clock-outline" 
-          color="#ff9800" 
-        />
-      </View>
 
-  
-    </ScrollView>
+      <ScrollView contentContainerStyle={styles.content}>
+        <Text variant="titleLarge" style={styles.sectionTitle}>Global Attendance</Text>
+
+
+
+        <View style={styles.statsGrid}>
+          <StatCard
+            title="Total Users"
+            value="124"
+            icon="account-group"
+            color="#2196F3"
+          />
+          <StatCard
+            title="Present"
+            value="98"
+            icon="account-check"
+            color="#4CAF50"
+          />
+        </View>
+
+        <View style={styles.statsGrid}>
+          <StatCard
+            title="Absent"
+            value="26"
+            icon="account-remove"
+            color="#F44336"
+          />
+          <StatCard
+            title="Late"
+            value="12"
+            icon="clock-alert"
+            color="#FF9800"
+          />
+        </View>
+
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
   },
-  header: {
-    marginBottom: 24,
+  content: {
+    padding: 12,
   },
-  welcomeText: {
+  sectionTitle: {
+    marginVertical: 16,
+    marginHorizontal: 8,
     fontWeight: 'bold',
   },
-  grid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-between',
-    marginBottom: 16,
-  },
-  card: {
-    width: '48%',
-    marginBottom: 16,
-    elevation: 2,
-    backgroundColor: '#ffffff',
-  },
-  cardContent: {
+  statsGrid: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 12,
-    paddingHorizontal: 12,
   },
-  cardTextContainer: {
-    flex: 1,
+  actionSurface: {
+    padding: 16,
+    borderRadius: 12,
+    margin: 8,
   },
-  iconContainer: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  recentActivityCard: {
-    marginBottom: 32,
+  actionButton: {
+    marginVertical: 6,
   }
 });

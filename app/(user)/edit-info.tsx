@@ -1,23 +1,44 @@
 import { useRouter } from 'expo-router';
-import React, { useState } from 'react';
-import { KeyboardAvoidingView, Platform, StyleSheet } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Button, HelperText, Surface, TextInput, useTheme } from 'react-native-paper';
+import { Button, HelperText, Surface, TextInput, useTheme, ActivityIndicator } from 'react-native-paper';
+import { api } from '../../lib/api';
 
 export default function EditInfoScreen() {
   const { colors } = useTheme();
   const router = useRouter();
 
-  // Mock initial data - in a real app this would come from a state manager or context
   const [formData, setFormData] = useState({
-    firstName: 'Ahmed',
-    lastName: 'Kadiri',
-    email: 'ahmed@gmail.com',
+    firstName: '',
+    lastName: '',
+    email: '',
   });
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+
+  const userId = api.currentUser?.id; // Placeholder, should be 
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const user = await api.getUser(userId);
+        setFormData({
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+        });
+      } catch (err) {
+        setError('Failed to load user information');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchUser();
+  }, []);
 
   const handleSave = async () => {
     if (!formData.firstName || !formData.lastName || !formData.email) {
@@ -25,21 +46,32 @@ export default function EditInfoScreen() {
       return;
     }
 
-    setLoading(true);
+    setSaving(true);
     setError('');
     setSuccess('');
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await api.updateUser(userId, {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+      });
       setSuccess('Information updated successfully!');
-      setTimeout(() => router.back(), 1500);
+      router.push('/(user)/profile')
     } catch (err) {
       setError('Failed to update information');
     } finally {
-      setLoading(false);
+      setSaving(false);
     }
   };
+
+  if (loading) {
+    return (
+      <View style={[styles.container, { backgroundColor: colors.background, justifyContent: 'center' }]}>
+        <ActivityIndicator size="large" />
+      </View>
+    );
+  }
 
   return (
     <KeyboardAvoidingView
@@ -57,6 +89,7 @@ export default function EditInfoScreen() {
             onChangeText={(val) => setFormData({ ...formData, firstName: val })}
             mode="outlined"
             style={styles.input}
+            left={<TextInput.Icon icon="account-outline" />}
           />
 
           <TextInput
@@ -65,24 +98,25 @@ export default function EditInfoScreen() {
             onChangeText={(val) => setFormData({ ...formData, lastName: val })}
             mode="outlined"
             style={styles.input}
+            left={<TextInput.Icon icon="account-outline" />}
           />
 
           <TextInput
-            label="Email"
+            label="Email Address"
             value={formData.email}
             onChangeText={(val) => setFormData({ ...formData, email: val })}
             mode="outlined"
             keyboardType="email-address"
             autoCapitalize="none"
             style={styles.input}
-            left={<TextInput.Icon icon="email" />}
+            left={<TextInput.Icon icon="email-outline" />}
           />
 
           <Button
             mode="contained"
             onPress={handleSave}
-            loading={loading}
-            disabled={loading}
+            loading={saving}
+            disabled={saving}
             style={styles.button}
           >
             Save Changes
@@ -91,7 +125,7 @@ export default function EditInfoScreen() {
           <Button
             mode="text"
             onPress={() => router.back()}
-            disabled={loading}
+            disabled={saving}
             style={styles.cancelButton}
           >
             Cancel

@@ -29,7 +29,7 @@ export default function AdminLayout() {
       <Tabs.Screen
         name="attendance"
         options={{
-          title: "Take Attendance",
+          title: "Attendance",
           tabBarLabel: "Mark",
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="checkbox-marked-circle-outline" color={color} size={size} />

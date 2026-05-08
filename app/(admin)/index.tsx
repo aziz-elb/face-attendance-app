@@ -7,7 +7,7 @@ export default function AdminDashboard() {
   return (
     <View style={styles.container}>
       <Appbar.Header elevated>
-        <Appbar.Content title="Admin Console" subtitle="System Overview" />
+        <Appbar.Content title="Dashboard" />
       </Appbar.Header>
       
       <ScrollView contentContainerStyle={styles.content}>
@@ -43,15 +43,7 @@ export default function AdminDashboard() {
           />
         </View>
 
-        <Text variant="titleMedium" style={styles.sectionTitle}>Quick Actions</Text>
-        <Surface style={styles.actionSurface} elevation={1}>
-          <Button icon="qrcode-scan" mode="contained" onPress={() => {}} style={styles.actionButton}>
-            Scan Attendance
-          </Button>
-          <Button icon="account-plus" mode="outlined" onPress={() => {}} style={styles.actionButton}>
-            Add New User
-          </Button>
-        </Surface>
+        
       </ScrollView>
     </View>
   );

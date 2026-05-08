@@ -23,6 +23,7 @@ export default function JustificationsScreen() {
   const { colors } = useTheme();
   const [loading, setLoading] = useState(true);
   const [attendances, setAttendances] = useState<Attendance[]>([]);
+  const [oldAttendances, setOldAttendances] = useState<Attendance[]>([]);
   const [users, setUsers] = useState<Record<string, User>>({});
   const [selectedJustification, setSelectedJustification] = useState<Attendance | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
@@ -40,7 +41,8 @@ export default function JustificationsScreen() {
       ]);
 
       // Filter only those with justifications
-      const withJustifications = attendanceData.filter(a => a.justification !== null);
+      const withJustifications = attendanceData.filter(a => a.justification !== null && a.justification.status === 'PENDING');
+      const oldJustifications = attendanceData.filter(a => a.justification !== null && a.justification.status !== 'PENDING');
       
       // Map users for easy lookup
       const userMap: Record<string, User> = {};
@@ -51,6 +53,11 @@ export default function JustificationsScreen() {
       setAttendances(withJustifications.sort((a, b) => 
         new Date(b.date).getTime() - new Date(a.date).getTime()
       ));
+
+      setOldAttendances(oldJustifications.sort((a, b) => 
+        new Date(b.date).getTime() - new Date(a.date).getTime()
+      ));
+
       setUsers(userMap);
     } catch (error) {
       console.error("Error fetching justifications:", error);
@@ -107,13 +114,13 @@ export default function JustificationsScreen() {
               </Text>
             </View>
             <Chip 
-              textStyle={{ color: 'white', fontSize: 10 }} 
+              textStyle={{ color: 'white', fontSize: 10 , margin: 2}} 
               style={{ backgroundColor: getStatusColor(status), height: 24 }}
             >
               {status}
             </Chip>
           </View>
-          <Divider style={{ marginVertical: 8 }} />
+          
           <Text variant="bodyMedium" numberOfLines={2} style={styles.messagePreview}>
             "{item.justification?.message}"
           </Text>
@@ -130,7 +137,7 @@ export default function JustificationsScreen() {
 
   return (
     <View style={styles.container}>
-      <Appbar.Header elevated mode="center-aligned">
+      <Appbar.Header elevated >
         <Appbar.Content title="Justifications" titleStyle={{ fontWeight: 'bold' }} />
         <Appbar.Action icon="refresh" onPress={fetchData} />
       </Appbar.Header>
@@ -153,6 +160,15 @@ export default function JustificationsScreen() {
           contentContainerStyle={styles.list}
         />
       )}
+
+      <Text variant="titleMedium" style={{marginLeft: 10}}>Justification history</Text>
+
+      <FlatList
+        data={oldAttendances}
+        renderItem={renderItem}
+        keyExtractor={item => item.id}
+        contentContainerStyle={styles.list}
+      />
 
       <Portal>
         <Modal

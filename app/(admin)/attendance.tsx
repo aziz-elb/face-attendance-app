@@ -9,6 +9,7 @@ export default function MarkAttendance() {
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [attendance, setAttendance] = useState({}); // { userId: status }
+  const [existingRecords, setExistingRecords] = useState([]); // Store today's records
 
   useEffect(() => {
     fetchUsers();
@@ -16,19 +17,29 @@ export default function MarkAttendance() {
 
   const fetchUsers = async () => {
     try {
-      const data = await api.getUsers();
+      const today = new Date().toISOString().split('T')[0];
+      const [usersData, attendanceData] = await Promise.all([
+        api.getUsers(),
+        api.getAttendance()
+      ]);
+
       // Filter only regular users of the SAME department as the admin
       const adminDeptId = api.currentUser?.department?.id;
-      const students = data.filter(u => 
+      const students = usersData.filter(u => 
         u.role === 'USER' && 
         u.department?.id === adminDeptId
       );
       setUsers(students);
       
-      // Initialize all as PRESENT by default
+      // Get today's attendance records
+      const todayRecords = attendanceData.filter(a => a.date === today);
+      setExistingRecords(todayRecords);
+
+      // Initialize as PRESENT or with existing status
       const initialAttendance = {};
       students.forEach(u => {
-        initialAttendance[u.id] = 'PRESENT';
+        const record = todayRecords.find(r => r.user_id === u.id);
+        initialAttendance[u.id] = record ? record.status : 'PRESENT';
       });
       setAttendance(initialAttendance);
     } catch (error) {
@@ -48,19 +59,29 @@ export default function MarkAttendance() {
   const handleSubmit = async () => {
     setSubmitting(true);
     try {
-      const date = new Date().toISOString().split('T')[0];
-      const promises = Object.entries(attendance).map(([userId, status]) => 
-        api.addAttendance({
-          user_id: userId,
-          date,
-          status,
-          is_justified: false,
-          justification: null
-        })
-      );
+      const today = new Date().toISOString().split('T')[0];
+      const promises = Object.entries(attendance).map(([userId, status]) => {
+        const existing = existingRecords.find(r => r.user_id === userId);
+        
+        if (existing) {
+          // Update existing record for today
+          return api.updateAttendance(existing.id, { status });
+        } else {
+          // Create new record for today
+          return api.addAttendance({
+            user_id: userId,
+            date: today,
+            status,
+            is_justified: false,
+            justification: null
+          });
+        }
+      });
       
       await Promise.all(promises);
-      Alert.alert('Success', 'Attendance saved successfully for today');
+      // Refresh to update existingRecords state
+      await fetchUsers();
+      Alert.alert('Success', 'Attendance synchronized successfully for today');
     } catch (error) {
       Alert.alert('Error', 'Failed to save attendance');
     } finally {
@@ -73,7 +94,7 @@ export default function MarkAttendance() {
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <Appbar.Header elevated>
-        <Appbar.Content title="Take Attendance" subtitle={new Date().toDateString()} />
+        <Appbar.Content title="Attendance" titleStyle={{ fontWeight: 'bold' }}  />
       </Appbar.Header>
 
       <FlatList

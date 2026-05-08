@@ -31,7 +31,8 @@ export default function JustifyAbsenceScreen() {
           message: message.trim(),
           file_path: "document_placeholder.pdf", // In a real app, this would be an uploaded file path
           status: 'PENDING',
-          isArchived: false
+          isArchived: false,
+          
         }
       });
       if (Platform.OS === "web") {
@@ -40,7 +41,8 @@ export default function JustifyAbsenceScreen() {
       else {
         Alert.alert('Success', 'Justification submitted successfully');
       }
-      router.back();
+      router.push('/(user)/attendance');
+      setMessage("")
     } catch (error) {
       if (Platform.OS === "web") {
         alert("Error: Failed to submit justification");
@@ -73,7 +75,7 @@ export default function JustifyAbsenceScreen() {
           numberOfLines={6}
           value={message}
           onChangeText={setMessage}
-          style={styles.input}
+          style={styles.input , {minHeight: 150 , textAlignVertical: 'top'}}
         />
 
         <Text variant="bodySmall" style={styles.hint}>

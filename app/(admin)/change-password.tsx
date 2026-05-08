@@ -1,20 +1,20 @@
-import React, { useState } from 'react';
-import { View, StyleSheet, ScrollView, Alert } from 'react-native';
-import { TextInput, Button, Surface, HelperText, useTheme } from 'react-native-paper';
 import { useRouter } from 'expo-router';
+import React, { useState } from 'react';
+import { Alert, Platform, ScrollView, StyleSheet, View } from 'react-native';
+import { Button, HelperText, Surface, TextInput, useTheme } from 'react-native-paper';
 import { api } from '../../lib/api';
 
 export default function AdminChangePassword() {
   const { colors } = useTheme();
   const router = useRouter();
   const user = api.currentUser;
-  
+
   const [formData, setFormData] = useState({
     currentPassword: '',
     newPassword: '',
     confirmPassword: '',
   });
-  
+
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState('');
 
@@ -22,27 +22,53 @@ export default function AdminChangePassword() {
     if (!user) return;
 
     if (formData.newPassword !== formData.confirmPassword) {
-      Alert.alert('Error', 'New passwords do not match');
+      if (Platform.OS === "web") {
+        alert("Error: New passwords do not match");
+      }
+      else {
+        Alert.alert('Error', 'New passwords do not match');
+      }
       return;
     }
 
     if (formData.newPassword.length < 6) {
-      Alert.alert('Error', 'Password must be at least 6 characters');
+      if (Platform.OS === "web") {
+        alert("Error: Password must be at least 6 characters");
+      }
+      else {
+        Alert.alert('Error', 'Password must be at least 6 characters');
+      }
       return;
     }
 
     setLoading(true);
     try {
+      // In a real app, you'd verify currentPassword first. 
+      if (user.password !== formData.currentPassword) {
+        if (Platform.OS === "web") {
+          alert('Error\nIncorrect current password');
+          return;
+        }
+        Alert.alert('Error', 'Incorrect current password');
+        return;
+      }
+
       const updatedUser = await api.updateUser(user.id, {
         password: formData.newPassword
       });
-      
+
       api.currentUser = updatedUser;
-      
+
       setSuccess('Admin password changed!');
       setTimeout(() => router.replace('/(admin)/profile'), 1000);
+      setFormData({ currentPassword: '', newPassword: '', confirmPassword: '' });
     } catch (error: any) {
-      Alert.alert('Error', error.message || 'Failed to change password');
+      if (Platform.OS === "web") {
+        alert("Error: Failed to change password");
+      }
+      else {
+        Alert.alert('Error', 'Failed to change password');
+      }
     } finally {
       setLoading(false);
     }
@@ -53,11 +79,11 @@ export default function AdminChangePassword() {
       <ScrollView contentContainerStyle={styles.content}>
         <Surface style={styles.surface} elevation={1}>
           {success ? <HelperText type="info" style={{ color: colors.primary }}>{success}</HelperText> : null}
-          
+
           <TextInput
             label="Current Password"
             value={formData.currentPassword}
-            onChangeText={(val) => setFormData({...formData, currentPassword: val})}
+            onChangeText={(val) => setFormData({ ...formData, currentPassword: val })}
             mode="outlined"
             secureTextEntry
             style={styles.input}
@@ -66,7 +92,7 @@ export default function AdminChangePassword() {
           <TextInput
             label="New Admin Password"
             value={formData.newPassword}
-            onChangeText={(val) => setFormData({...formData, newPassword: val})}
+            onChangeText={(val) => setFormData({ ...formData, newPassword: val })}
             mode="outlined"
             secureTextEntry
             style={styles.input}
@@ -75,16 +101,16 @@ export default function AdminChangePassword() {
           <TextInput
             label="Confirm New Password"
             value={formData.confirmPassword}
-            onChangeText={(val) => setFormData({...formData, confirmPassword: val})}
+            onChangeText={(val) => setFormData({ ...formData, confirmPassword: val })}
             mode="outlined"
             secureTextEntry
             style={styles.input}
           />
 
-          <Button 
-            mode="contained" 
-            onPress={handleUpdate} 
-            loading={loading} 
+          <Button
+            mode="contained"
+            onPress={handleUpdate}
+            loading={loading}
             style={styles.button}
             disabled={loading}
           >

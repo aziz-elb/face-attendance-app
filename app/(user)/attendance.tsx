@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { StyleSheet, View, Alert, RefreshControl, Platform } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Card, Text, IconButton, useTheme, ActivityIndicator } from 'react-native-paper';
-import { useRouter } from 'expo-router';
+import { Card, Text, IconButton, useTheme, ActivityIndicator, Divider } from 'react-native-paper';
+import { useRouter, useFocusEffect } from 'expo-router';
 import { api } from '../../lib/api';
 import { Attendance } from '../../lib/types';
 import StatCard from '../../components/StatCard';
@@ -15,13 +15,11 @@ export default function AttendanceScreen() {
   const [refreshing, setRefreshing] = useState(false);
   const [attendance, setAttendance] = useState<Attendance[]>([]);
 
-  const fetchAttendance = async () => {
+  const fetchAttendance = useCallback(async () => {
     try {
       const data = await api.getAttendance();
-      // Only show attendance for current user
-      // In a real app, the API would filter this, but here we do it client-side for simplicity
-      // assuming api.currentUser.id exists if set during login
-      const userId = "u_R2zpd"; // Placeholder, should be api.currentUser.id
+     
+      const userId = api.currentUser.id; 
       setAttendance(data.filter(a => a.user_id === userId).sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()));
     } catch (error) {
       if (Platform.OS === "web") {
@@ -34,11 +32,13 @@ export default function AttendanceScreen() {
       setLoading(false);
       setRefreshing(false);
     }
-  };
-
-  useEffect(() => {
-    fetchAttendance();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchAttendance();
+    }, [fetchAttendance])
+  );
 
   const onRefresh = () => {
     setRefreshing(true);
@@ -73,17 +73,18 @@ export default function AttendanceScreen() {
             icon="account-check"
             color="#4CAF50"
           />
+          
           <StatCard
-            title="Late"
-            value={lateDays}
-            icon="clock-alert"
-            color="#FF9800"
+            title="Absent"
+            value={absences.length}
+            icon="account-clock"
+            color="#F44336"
           />
         </View>
 
         <Text variant="titleMedium" style={styles.sectionTitle}>Attendance History</Text>
 
-        {attendance.map((item) => (
+        {attendance.filter(item => item.status ==="ABSENT").map((item) => (
           <Card 
             key={item.id} 
             style={[
@@ -96,9 +97,12 @@ export default function AttendanceScreen() {
                 <Text variant="titleMedium" style={{ fontWeight: 'bold' }}>{new Date(item.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</Text>
                 <Text variant="bodyMedium" style={{ color: colors.outline }}>Status: {item.status}</Text>
                 {item.justification && (
-                  <Text variant="bodySmall" style={{ color: getStatusColor(item), fontWeight: 'bold' }}>
-                    Justification: {item.justification.status}
-                  </Text>
+                  <View style={styles.justificationContainer}>
+                    <Text variant="bodySmall" style={{ color: getStatusColor(item), fontWeight: 'bold' }}>
+                      Justification: {item.justification.status}
+                    </Text>
+                    
+                  </View>
                 )}
               </View>
               
@@ -118,6 +122,9 @@ export default function AttendanceScreen() {
                 )}
                 {item.status === 'LATE' && (
                   <MaterialCommunityIcons name="clock-alert" size={24} color="#FF9800" />
+                )}
+                {item.justification && item.justification.status === 'ACCEPTED' && (
+                  <MaterialCommunityIcons name="check-decagram" size={24} color="#4CAF50" />
                 )}
               </View>
             </Card.Content>
@@ -166,6 +173,17 @@ const styles = StyleSheet.create({
   },
   actionSection: {
     marginLeft: 16,
+  },
+  justificationContainer: {
+    marginTop: 4,
+    paddingTop: 4,
+    borderTopWidth: StyleSheet.hairlineWidth,
+    borderTopColor: '#eee',
+  },
+  justificationText: {
+    fontStyle: 'italic',
+    color: '#666',
+    marginTop: 2,
   },
   emptyContainer: {
     alignItems: 'center',

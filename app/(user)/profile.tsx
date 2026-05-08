@@ -1,5 +1,6 @@
-import { useRouter } from 'expo-router';
-import React from 'react';
+import { api } from '@/lib/api';
+import { useFocusEffect, useRouter } from 'expo-router';
+import React, { useCallback, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { Avatar, Button, Card, Divider, List, Text, useTheme } from 'react-native-paper';
@@ -7,33 +8,55 @@ import { Avatar, Button, Card, Divider, List, Text, useTheme } from 'react-nativ
 export default function ProfileScreen() {
   const router = useRouter();
   const { colors } = useTheme();
+  const [user, setUser] = useState(api.currentUser);
+
+  const fetchUserData = useCallback(async () => {
+    if (!api.currentUser?.id) return;
+    try {
+      const updatedUser = await api.getUser(api.currentUser.id);
+      api.currentUser = updatedUser;
+      setUser(updatedUser);
+    } catch (error) {
+      console.error("Failed to refresh user data:", error);
+    }
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchUserData();
+    }, [fetchUserData])
+  );
 
   return (
     <ScrollView style={[styles.container, { backgroundColor: colors.background }]}>
       <View style={styles.content}>
         <View style={styles.header}>
-          <Avatar.Text size={100} label="AE" style={{ backgroundColor: colors.primary }} />
-          <Text variant="headlineSmall" style={styles.name}>Ahmed Kadiri</Text>
-          <Text variant="bodyLarge" style={styles.email}>ahmed@gmail.com</Text>
+          <Avatar.Text 
+            size={100} 
+            label={(user?.firstName?.charAt(0) || '') + (user?.lastName?.charAt(0) || '')} 
+            style={{ backgroundColor: colors.primary }} 
+          />
+          <Text variant="headlineSmall" style={styles.name}>{user?.firstName} {user?.lastName}</Text>
+          <Text variant="bodyLarge" style={styles.email}>{user?.email}</Text>
         </View>
 
         <Card style={styles.infoCard}>
           <Card.Content>
             <List.Item
               title="Department"
-              description="Marketing"
+              description={user?.department?.title || 'No department'}
               left={props => <List.Icon {...props} icon="domain" />}
             />
             <Divider />
             <List.Item
               title="Role"
-              description="Full-time Employee"
+              description={user?.role || 'No role'}
               left={props => <List.Icon {...props} icon="account-tie" />}
             />
             <Divider />
             <List.Item
               title="Employee ID"
-              description="u_R2zpd"
+              description={user?.id || 'No ID'}
               left={props => <List.Icon {...props} icon="identifier" />}
             />
           </Card.Content>

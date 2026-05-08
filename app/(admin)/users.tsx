@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { useFocusEffect } from 'expo-router';
 import { View, StyleSheet, FlatList, Alert } from 'react-native';
 import { Text, Appbar, List, IconButton, useTheme, ActivityIndicator, Searchbar, Portal, Modal, TextInput, Button, SegmentedButtons } from 'react-native-paper';
 import { api } from '../../lib/api';
@@ -15,7 +16,7 @@ export default function StudentListing() {
   const [notifMessage, setNotifMessage] = useState('');
   const [sendingNotif, setSendingNotif] = useState(false);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     setLoading(true);
     try {
       const [allUsers, allAttendance] = await Promise.all([
@@ -23,7 +24,11 @@ export default function StudentListing() {
         api.getAttendance()
       ]);
 
-      const adminDeptId = api.currentUser?.department?.id;
+      const adminDeptId = api.currentUser?.department?.id || "";
+      if(!adminDeptId){
+        setLoading(false);
+        return;
+      }
       const students = allUsers.filter(u => 
         u.role === 'USER' && 
         u.department?.id === adminDeptId
@@ -42,11 +47,13 @@ export default function StudentListing() {
     } finally {
       setLoading(false);
     }
-  };
-
-  useEffect(() => {
-    fetchData();
   }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      fetchData();
+    }, [fetchData])
+  );
 
   const openNotifModal = (user) => {
     setSelectedUser(user);
@@ -60,7 +67,7 @@ export default function StudentListing() {
     try {
       await api.addNotification({
         recipient_id: selectedUser.id,
-        sender_id: 'ADMIN_ID', // Replace with actual current admin ID
+        sender_id: api.currentUser.id, 
         content: notifMessage,
       });
       Alert.alert('Success', 'Notification sent');
@@ -94,7 +101,7 @@ export default function StudentListing() {
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <Appbar.Header elevated>
-        <Appbar.Content title="Students" subtitle="Attendance & Performance" />
+        <Appbar.Content title="Students" titleStyle={{ fontWeight: 'bold' }} />
       </Appbar.Header>
 
       <View style={styles.header}>
@@ -117,7 +124,12 @@ export default function StudentListing() {
         />
       </View>
 
-      <FlatList
+      {filteredUsers.length === 0 ? (
+        <View >
+          <Text variant="titleMedium" style={{textAlign: 'center', marginTop: 16}}>No users found</Text>
+        </View>
+      ) : (
+        <FlatList
         data={filteredUsers}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
@@ -135,6 +147,7 @@ export default function StudentListing() {
           />
         )}
       />
+)}
 
       <Portal>
         <Modal 
