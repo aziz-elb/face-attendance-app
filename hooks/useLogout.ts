@@ -4,8 +4,8 @@ import { api } from '../lib/api';
 
 export const useLogout = () => {
   const logout = () => {
-    const performLogout = () => {
-      api.currentUser = null;
+    const performLogout = async () => {
+      await api.logoutLocal();
       router.replace('/(auth)/login');
     };
 

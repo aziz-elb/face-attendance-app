@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Alert, FlatList, Platform, StyleSheet, View } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
 import { ActivityIndicator, Appbar, Button, FAB, IconButton, List, Modal, Portal, Text, TextInput, useTheme } from 'react-native-paper';
 import { api } from '../../../lib/api';
 import { User } from '../../../lib/types';
@@ -15,6 +16,7 @@ export default function AdminManagementPage() {
   const [fetchLoading, setFetchLoading] = useState(true);
   const [editingAdmin, setEditingAdmin] = useState<User | null>(null);
   const handleLogout = useLogout();
+  const isFocused = useIsFocused();
 
   const [formData, setFormData] = useState({
     firstName: '',
@@ -40,8 +42,10 @@ export default function AdminManagementPage() {
   };
 
   useEffect(() => {
-    fetchAdmins();
-  }, []);
+    if (isFocused) {
+      fetchAdmins();
+    }
+  }, [isFocused]);
 
   const showModal = (admin: User | null = null) => {
     if (admin) {
@@ -62,20 +66,23 @@ export default function AdminManagementPage() {
   const hideModal = () => setVisible(false);
 
   const handleSave = async () => {
-    if (!formData.email || !formData.firstName || !formData.lastName || !formData.password) {
+    if (!formData.email || !formData.firstName || !formData.lastName || (!editingAdmin && !formData.password)) {
+      const msg = editingAdmin ? "Please fill all required fields" : "Please fill all fields including password";
       if (Platform.OS === "web") {
-        alert("Error: Please fill all fields");
+        alert("Error: " + msg);
         return;
       }
       else {
-        Alert.alert('Error', 'Please fill all fields');
+        Alert.alert('Error', msg);
         return;
       }
     }
     setLoading(true);
     try {
       if (editingAdmin) {
-        await api.updateUser(editingAdmin.id, formData);
+        const updateData = { ...formData };
+        if (!updateData.password) delete (updateData as any).password;
+        await api.updateUser(editingAdmin.id, updateData);
       } else {
         await api.signup({ ...formData, role: 'ADMIN', isActive: true });
       }
@@ -182,16 +189,15 @@ export default function AdminManagementPage() {
             keyboardType="email-address"
             style={styles.input}
           />
-          {!editingAdmin && (
-            <TextInput
-              label="Password"
-              value={formData.password}
-              onChangeText={(v) => setFormData({ ...formData, password: v })}
-              mode="outlined"
-              secureTextEntry
-              style={styles.input}
-            />
-          )}
+          <TextInput
+            label="Password"
+            placeholder={editingAdmin ? "Leave empty to keep current" : ""}
+            value={formData.password}
+            onChangeText={(v) => setFormData({ ...formData, password: v })}
+            mode="outlined"
+            secureTextEntry
+            style={styles.input}
+          />
           <View style={styles.modalButtons}>
             <Button onPress={hideModal}>Cancel</Button>
             <Button mode="contained" onPress={handleSave} loading={loading} style={styles.saveBtn}>

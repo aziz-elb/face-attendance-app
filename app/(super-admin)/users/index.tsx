@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Alert, FlatList, Platform, StyleSheet, View } from 'react-native';
-import { ActivityIndicator, Appbar, Divider, List, Searchbar, Switch, Text, useTheme } from 'react-native-paper';
+import { useIsFocused } from '@react-navigation/native';
+import { ActivityIndicator, Appbar, Divider, List, Searchbar, SegmentedButtons, Switch, Text, useTheme } from 'react-native-paper';
 import { api } from '../../../lib/api';
 import { User } from '../../../lib/types';
 import { router } from 'expo-router';
@@ -12,13 +13,15 @@ export default function UserManagementPage() {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   const handleLogout = useLogout();
+  const isFocused = useIsFocused();
+  const [filterRole, setFilterRole] = useState<'ALL' | 'USER' | 'ADMIN'>('ALL');
 
   const fetchUsers = async () => {
     try {
       const data = await api.getUsers();
       // Show all users except Super Admin maybe? Or just role USER as requested.
       // The request says "Users Pages", usually means regular users.
-      setUsers(data.filter(u => u.role === 'USER'));
+      setUsers(data.filter(u => u.role !== 'SUPER_ADMIN'));
     } catch (error) {
       if (Platform.OS === "web") {
         alert("Error: Failed to fetch users");
@@ -32,8 +35,10 @@ export default function UserManagementPage() {
   };
 
   useEffect(() => {
-    fetchUsers();
-  }, []);
+    if (isFocused) {
+      fetchUsers();
+    }
+  }, [isFocused]);
 
   const toggleStatus = async (user: User) => {
     try {
@@ -50,10 +55,12 @@ export default function UserManagementPage() {
     }
   };
 
-  const filteredUsers = users.filter(u =>
-    `${u.firstName} ${u.lastName}`.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    u.email.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  const filteredUsers = users.filter(u => {
+    const matchesSearch = `${u.firstName} ${u.lastName}`.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      u.email.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesRole = filterRole === 'ALL' || u.role === filterRole;
+    return matchesSearch && matchesRole;
+  });
 
   if (loading) return (
     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -69,12 +76,27 @@ export default function UserManagementPage() {
 
       </Appbar.Header>
 
+
+
       <Searchbar
         placeholder="Search users..."
         onChangeText={setSearchQuery}
         value={searchQuery}
         style={styles.searchBar}
       />
+
+      <View style={styles.filterContainer}>
+        <SegmentedButtons
+          value={filterRole}
+          onValueChange={(value) => setFilterRole(value as any)}
+          buttons={[
+            { value: 'ALL', label: 'All' },
+            { value: 'USER', label: 'Users' },
+            { value: 'ADMIN', label: 'Admins' },
+          ]}
+          style={styles.segmentedButtons}
+        />
+      </View>
 
       <FlatList
         data={filteredUsers}
@@ -85,7 +107,7 @@ export default function UserManagementPage() {
               title={`${item.firstName} ${item.lastName}`}
               description={`${item.email}`}
               descriptionStyle={{ fontSize: 10 }}
-              left={props => <List.Icon {...props} icon="account" />}
+              left={props => <List.Icon {...props} icon="account" color={item.role === "ADMIN" ? colors.tertiary : colors.secondary} />}
               right={props => (
                 <View style={styles.rightActions}>
                   <Text variant="bodySmall" style={{ marginRight: 8, color: colors.onSecondaryContainer }}>
@@ -111,8 +133,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   searchBar: {
-    margin: 16,
+    marginHorizontal: 16,
     elevation: 4,
+    marginTop : 16,
+  },
+  filterContainer: {
+    padding: 16,
+  },
+  segmentedButtons: {
+    borderRadius: 8,
   },
   userCard: {
     backgroundColor: '#fff',

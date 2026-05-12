@@ -51,15 +51,8 @@ export default function SuperAdminLayout() {
         name="departments/[id]"
         options={{
           href: null,
+          headerShown: false,
           title: "Department Users",
-          tabBarStyle: { display: 'none' },
-          headerShown: true, // Assurez-vous que le header est affiché
-          headerLeft: () => (
-            <IconButton
-              icon="arrow-left" // Nom de l'icône selon votre bibliothèque
-              onPress={() => router.push("/(super-admin)/departments")} // Redirige vers la page précédente
-            />
-          ),
         }}
       />
       <Tabs.Screen

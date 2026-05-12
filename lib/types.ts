@@ -15,7 +15,7 @@ export interface User {
   email: string;
   password?: string;
   role: UserRole;
-  department: DepartmentRef | null;
+  department: string;
   isActive: boolean;
   createdAt: string;
   updatedAt: string;

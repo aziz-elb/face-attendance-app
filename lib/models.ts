@@ -5,23 +5,14 @@ export const Models = {
    * Normalizes a user object from the API/DB
    */
   user: (data: any): User => {
-    let department: DepartmentRef | null = null;
-
-    if (data.department) {
-      department = {
-        id: data.department.id,
-        title: data.department.title
-      };
-    }
-
     return {
-      id: String(data.id || ''),
+      id: String(data._id || data.id || ''), // Supporte _id de MongoDB
       firstName: data.firstName || '',
       lastName: data.lastName || '',
       email: data.email || '',
       password: data.password,
       role: data.role || 'USER',
-      department: department,
+      department: String(data.department || ''),
       isActive: data.isActive ?? false,
       createdAt: data.createdAt || new Date().toISOString(),
       updatedAt: data.updatedAt || new Date().toISOString(),
@@ -32,7 +23,7 @@ export const Models = {
    * Normalizes a department object
    */
   department: (data: any): Department => ({
-    id: data.id,
+    id: data._id || data.id,
     title: data.title || '',
     description: data.description || '',
     code: data.code || '',
@@ -44,7 +35,7 @@ export const Models = {
    * Normalizes an attendance object
    */
   attendance: (data: any): Attendance => ({
-    id: String(data.id || ''),
+    id: String(data._id || data.id || ''),
     user_id: String(data.user_id || ''),
     date: data.date || new Date().toISOString().split('T')[0],
     status: data.status || 'ABSENT',
@@ -57,7 +48,7 @@ export const Models = {
    * Normalizes a notification object
    */
   notification: (data: any): Notification => ({
-    id: String(data.id || ''),
+    id: String(data._id || data.id || ''),
     recipient_id: String(data.recipient_id || ''),
     sender_id: String(data.sender_id || ''),
     content: data.content || '',

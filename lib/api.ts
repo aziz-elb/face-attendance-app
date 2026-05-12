@@ -1,185 +1,172 @@
-import { Platform } from "react-native";
 import { Models } from "./models";
 import { Attendance, Department, Notification, User } from "./types";
-
-const API_URL = Platform.OS === "android" ? "http://192.168.1.8:3000" : "http://localhost:3000";
-// Note: 10.0.2.2 is the default IP for Android Emulator to access localhost. 
-// For physical devices, use the machine's local IP (e.g., 192.168.x.x).
+import apiClient from "./api/client"; 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const api = {
   currentUser: null as User | null,
 
+  // ========== UTILISATEURS ==========
+
   getUsers: async (): Promise<User[]> => {
-    const response = await fetch(`${API_URL}/users`);
-    const data = await response.json();
+    // ✅ MODIFIÉ : apiClient extrait déjà result.data via l'intercepteur
+    const data = await apiClient.get('/users');
+    return Array.isArray(data) ? data.map(Models.user) : [];
+  },
+
+  getUsersByDepartment: async (deptId: string): Promise<User[]> => {
+    const data = await apiClient.get(`/users/department/${deptId}`);
     return Array.isArray(data) ? data.map(Models.user) : [];
   },
 
   getUser: async (id: string): Promise<User> => {
-    const response = await fetch(`${API_URL}/users/${id}`);
-    const data = await response.json();
+    // ✅ MODIFIÉ
+    const data = await apiClient.get(`/users/${id}`);
     return Models.user(data);
   },
 
   login: async (email: string, password: string): Promise<User> => {
-    const response = await fetch(`${API_URL}/users?email=${email}&password=${password}`);
-    const users = await response.json();
-    if (Array.isArray(users) && users.length > 0) {
-      const user = Models.user(users[0]);
-      if (user.isActive === false) {
-        throw new Error("Your account is deactivated. Please contact the administrator.");
-      }
-      return user;
+    // ✅ MODIFIÉ : Le backend utilise GET avec query params, pas POST !
+    // L'URL devient /users?email=X&password=Y
+    const userResult = await apiClient.get('/users', {
+      params: { email, password }
+    });
+
+    // Le backend retourne { data: User } pour cette route login spéciale
+    const user = Models.user(userResult);
+    
+    if (!user.isActive) {
+      throw new Error("Your account is deactivated. Please contact the administrator.");
     }
-    throw new Error("Invalid email or password");
+    
+    api.currentUser = user;
+    await api.saveUser(user); // Sauvegarde locale
+    return user;
   },
 
-  signup: async (userData: Partial<User> ): Promise<User> => {
-    const existingResponse = await fetch(`${API_URL}/users?email=${userData.email}`);
-    const existingUsers = await existingResponse.json();
-
-    if (Array.isArray(existingUsers) && existingUsers.length > 0) {
-      throw new Error("User with this email already exists");
+  saveUser: async (user: User) => {
+    try {
+      await AsyncStorage.setItem('user', JSON.stringify(user));
+    } catch (e) {
+      console.error("Error saving user", e);
     }
+  },
 
-    const response = await fetch(`${API_URL}/users`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        ...userData,
-        department: userData.department || null,
-        role: userData.role || "USER",
-        isActive: userData.isActive || false,
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString(),
-      }),
+  loadUser: async (): Promise<User | null> => {
+    try {
+      const stored = await AsyncStorage.getItem('user');
+      if (stored) {
+        const user = JSON.parse(stored);
+        api.currentUser = user;
+        return user;
+      }
+    } catch (e) {
+      console.error("Error loading user", e);
+    }
+    return null;
+  },
+
+  logoutLocal: async () => {
+    try {
+      await AsyncStorage.removeItem('user');
+      api.currentUser = null;
+    } catch (e) {
+      console.error("Error clearing storage", e);
+    }
+  },
+
+  signup: async (userData: Partial<User>): Promise<User> => {
+    // ✅ MODIFIÉ
+    const data = await apiClient.post('/users', {
+      ...userData,
+      role: userData.role || "USER",
+      isActive: userData.isActive ?? false, // Par défaut désactivé selon les specs
     });
-    return Models.user(await response.json());
+    return Models.user(data);
+  },
+
+  updateUser: async (id: string, userData: Partial<User>): Promise<User> => {
+    // ✅ MODIFIÉ
+    const data = await apiClient.patch(`/users/${id}`, userData);
+    return Models.user(data);
   },
 
   deleteUser: async (id: string): Promise<void> => {
-    await fetch(`${API_URL}/users/${id}`, { method: 'DELETE' });
+    // ✅ MODIFIÉ
+    await apiClient.delete(`/users/${id}`);
   },
 
-
-
-
-  // DEPARTEMENTS CRUD 
+  // ========== DÉPARTEMENTS ==========
 
   getDepartments: async (): Promise<Department[]> => {
-    const response = await fetch(`${API_URL}/departments`);
-    const data = await response.json();
+    // ✅ MODIFIÉ
+    const data = await apiClient.get('/departments');
     return Array.isArray(data) ? data.map(Models.department) : [];
   },
 
   addDepartment: async (dept: Partial<Department>): Promise<Department> => {
-    const response = await fetch(`${API_URL}/departments`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...dept, createdAt: new Date().toISOString(), updatedAt: new Date().toISOString() }),
-    });
-    return Models.department(await response.json());
+    // ✅ MODIFIÉ
+    const data = await apiClient.post('/departments', dept);
+    return Models.department(data);
   },
 
   updateDepartment: async (id: string | number, dept: Partial<Department>): Promise<Department> => {
-    const response = await fetch(`${API_URL}/departments/${id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ ...dept, updatedAt: new Date().toISOString() }),
-    });
-    return Models.department(await response.json());
+    // ✅ MODIFIÉ
+    const data = await apiClient.patch(`/departments/${id}`, dept);
+    return Models.department(data);
   },
 
   deleteDepartment: async (id: string | number): Promise<void> => {
-    await fetch(`${API_URL}/departments/${id}`, { method: 'DELETE' });
+    // ✅ MODIFIÉ
+    await apiClient.delete(`/departments/${id}`);
   },
 
-  updateUser: async (id: string, userData: Partial<User>): Promise<User> => {
-    const response = await fetch(`${API_URL}/users/${id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        ...userData,
-        updatedAt: new Date().toISOString()
-      }),
+  // ========== PRÉSENCES (ATTENDANCE) ==========
+
+  getAttendance: async (userId?: string): Promise<Attendance[]> => {
+    // ✅ MODIFIÉ : Ajout du filtre optionnel par utilisateur
+    const data = await apiClient.get('/attendance', {
+      params: userId ? { user_id: userId } : {}
     });
-
-    if (!response.ok) throw new Error('Update failed');
-
-    return Models.user(await response.json());
-  },
-
-
-  // ATTENDANCE CRUD 
-
-  getAttendance: async (): Promise<Attendance[]> => {
-    const response = await fetch(`${API_URL}/attendance`);
-    const data = await response.json();
     return Array.isArray(data) ? data.map(Models.attendance) : [];
   },
 
   addAttendance: async (attendanceData: Partial<Attendance>): Promise<Attendance> => {
-    const response = await fetch(`${API_URL}/attendance`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        ...attendanceData,
-        is_justified: attendanceData.is_justified || false,
-        justification: attendanceData.justification || null,
-        createdAt: new Date().toISOString(),
-      }),
-    });
-    return Models.attendance(await response.json());
+    // ✅ MODIFIÉ
+    const data = await apiClient.post('/attendance', attendanceData);
+    return Models.attendance(data);
   },
+
   updateAttendance: async (id: string, attendanceData: Partial<Attendance>): Promise<Attendance> => {
-    const response = await fetch(`${API_URL}/attendance/${id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        ...attendanceData,
-      }),
-    });
-    return Models.attendance(await response.json());
+    // ✅ MODIFIÉ
+    const data = await apiClient.patch(`/attendance/${id}`, attendanceData);
+    return Models.attendance(data);
   },
 
+  // ========== NOTIFICATIONS ==========
 
-  // NOTIFICATIONS CRUD 
-
-  getNotifications: async (): Promise<Notification[]> => {
-    const response = await fetch(`${API_URL}/notifications`);
-    const data = await response.json();
+  getNotifications: async (recipientId?: string): Promise<Notification[]> => {
+    // ✅ MODIFIÉ : Ajout du filtre par destinataire
+    const data = await apiClient.get('/notifications', {
+      params: recipientId ? { recipient_id: recipientId } : {}
+    });
     return Array.isArray(data) ? data.map(Models.notification) : [];
   },
 
   addNotification: async (notifData: Partial<Notification>): Promise<Notification> => {
-    const response = await fetch(`${API_URL}/notifications`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        ...notifData,
-        status: "Unread",
-        isArchived: false,
-        createdAt: new Date().toISOString(),
-      }),
-    });
-    return Models.notification(await response.json());
+    // ✅ MODIFIÉ
+    const data = await apiClient.post('/notifications', notifData);
+    return Models.notification(data);
   },
 
   updateNotification: async (id: string, notifData: Partial<Notification>): Promise<Notification> => {
-    const response = await fetch(`${API_URL}/notifications/${id}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        ...notifData,
-      }),
-    });
-    return Models.notification(await response.json());
+    // ✅ MODIFIÉ
+    const data = await apiClient.patch(`/notifications/${id}`, notifData);
+    return Models.notification(data);
   },
 
   deleteNotification: async (id: string): Promise<void> => {
-    await fetch(`${API_URL}/notifications/${id}`, { method: 'DELETE' });
+    // ✅ MODIFIÉ
+    await apiClient.delete(`/notifications/${id}`);
   },
-
 };
-
-

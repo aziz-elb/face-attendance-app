@@ -46,8 +46,7 @@ export default function SignupScreen() {
         firstName,
         lastName,
         email,
-        password,
-        department: { id: "_psVudI", title: "Computer Science" }, // Default department
+        password
       });
 
       // Success - go to login
