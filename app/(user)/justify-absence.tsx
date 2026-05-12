@@ -79,12 +79,9 @@ export default function JustifyAbsenceScreen() {
           numberOfLines={6}
           value={message}
           onChangeText={setMessage}
-          style={[styles.input, { backgroundColor: colors.surface }]}
+          style={[styles.input, { backgroundColor: colors.surface  , marginBottom : 20}]}
         />
 
-        <Text variant="bodySmall" style={styles.hint}>
-          Note: You can attach supporting documents (medical certificates, etc.) once the file upload feature is enabled.
-        </Text>
 
         <Button
           mode="contained"

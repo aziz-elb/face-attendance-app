@@ -77,6 +77,22 @@ export default function AdminLayout() {
       />
 
       {/* Hidden screens reachable from Profile */}
+
+        <Tabs.Screen
+        name="attendance-today"
+        options={{
+          href: null,
+          headerShown: false,
+          title: "Today's History",
+          headerLeft: () => (
+            <IconButton
+              icon="arrow-left"
+              onPress={() => router.replace('/(admin)/attendance')}
+            />
+          ),
+        }}
+      />
+
       <Tabs.Screen
         name="edit-info"
         options={{

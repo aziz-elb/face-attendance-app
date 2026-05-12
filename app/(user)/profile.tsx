@@ -49,9 +49,9 @@ export default function ProfileScreen() {
         <Card style={styles.infoCard}>
           <Card.Content>
             <List.Item
-              title="Department"
-              description={user?.department?.title || 'No department'}
-              left={props => <List.Icon {...props} icon="domain" />}
+              title="Email"
+              description={user?.email || 'No email'}
+              left={props => <List.Icon {...props} icon="email" />}
             />
             <Divider />
             <List.Item
@@ -61,7 +61,7 @@ export default function ProfileScreen() {
             />
             <Divider />
             <List.Item
-              title="Employee ID"
+              title="ID"
               description={user?.id || 'No ID'}
               left={props => <List.Icon {...props} icon="identifier" />}
             />

@@ -1,36 +1,54 @@
 import StatCard from '@/components/StatCard';
 import { useLogout } from '@/hooks/useLogout';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { router } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
+import React, { useCallback, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { Appbar, Card, Surface, Text, useTheme } from 'react-native-paper';
-  
-
-const KPICard = ({ title, value, icon, color, onPress }: { title: string, value: string, icon: string, color: string, onPress?: () => void }) => {
-  const { colors } = useTheme();
-  return (
-    <Card
-      style={[styles.card, { borderLeftWidth: 6, borderLeftColor: color }]}
-      onPress={onPress}
-    >
-      <Card.Content style={styles.cardContent}>
-        <View style={styles.cardTextContainer}>
-          <Text variant="labelMedium" style={{ color: colors.outline }}>{title}</Text>
-          <Text variant="headlineMedium" style={{ fontWeight: 'bold', color: colors.onSurface }}>{value}</Text>
-        </View>
-        <Surface style={[styles.iconContainer, { backgroundColor: color + '20' }]} elevation={0}>
-          <MaterialCommunityIcons name={icon as any} size={32} color={color} />
-        </Surface>
-      </Card.Content>
-    </Card>
-  );
-};
+import { Appbar, Card, Surface, Text, useTheme, ActivityIndicator } from 'react-native-paper';
+import { api } from '@/lib/api';
 
 export default function SuperAdminDashboard() {
   const handleLogout = useLogout();
-
   const { colors } = useTheme();
+
+  const [loading, setLoading] = useState(true);
+  const [stats, setStats] = useState({
+    students: 0,
+    departments: 0,
+    admins: 0,
+    superAdmins: 0
+  });
+
+  const loadStats = useCallback(async () => {
+    setLoading(true);
+    try {
+      const [allUsers, allDepartments] = await Promise.all([
+        api.getUsers(),
+        api.getDepartments()
+      ]);
+
+      setStats({
+        students: allUsers.filter(u => u.role === 'USER').length,
+        departments: allDepartments.length,
+        admins: allUsers.filter(u => u.role === 'ADMIN').length,
+        superAdmins: allUsers.filter(u => u.role === 'SUPER_ADMIN').length
+      });
+    } catch (error) {
+      console.error("Super admin dashboard load error:", error);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      loadStats();
+    }, [loadStats])
+  );
+
+  if (loading) return <ActivityIndicator style={{ flex: 1 }} />;
+
   return (
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <Appbar.Header elevated>
@@ -38,38 +56,35 @@ export default function SuperAdminDashboard() {
         <Appbar.Action icon="logout" onPress={handleLogout} />
       </Appbar.Header>
 
-
       <ScrollView contentContainerStyle={styles.content}>
-        <Text variant="titleLarge" style={styles.sectionTitle}>Global Attendance</Text>
-
-
+        <Text variant="titleLarge" style={styles.sectionTitle}>Global Overview</Text>
 
         <View style={styles.statsGrid}>
           <StatCard
-            title="Total Users"
-            value="124"
+            title="Students"
+            value={String(stats.students)}
             icon="account-group"
             color={colors.primary}
           />
           <StatCard
-            title="Present"
-            value="98"
-            icon="account-check"
+            title="Departments"
+            value={String(stats.departments)}
+            icon="office-building"
             color="#66BB6A"
           />
         </View>
 
         <View style={styles.statsGrid}>
           <StatCard
-            title="Absent"
-            value="26"
-            icon="account-remove"
+            title="Admins"
+            value={String(stats.admins)}
+            icon="account-tie"
             color="#CF6679"
           />
           <StatCard
-            title="Late"
-            value="12"
-            icon="clock-alert"
+            title="Super Admins"
+            value={String(stats.superAdmins)}
+            icon="account-lock"
             color="#FFB74D"
           />
         </View>

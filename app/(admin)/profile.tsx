@@ -47,16 +47,17 @@ export default function AdminProfile() {
             />
             <Divider />
             <List.Item
-              title="Department"
-              description={user?.department?.title || 'No Department assigned'}
-              left={props => <List.Icon {...props} icon="office-building" />}
-            />
-            <Divider />
-            <List.Item
               title="Role"
               description={user?.role}
-              left={props => <List.Icon {...props} icon="account"  />}
+              left={props => <List.Icon {...props} icon="account" />}
             />
+            <List.Item
+              title="ID"
+              description={user?.id || 'No ID'}
+              left={props => <List.Icon {...props} icon="identifier" />}
+            />
+            <Divider />
+
           </List.Section>
         </Card>
 

@@ -1,6 +1,6 @@
-import { router, useFocusEffect } from 'expo-router';
+import { Link, router, useFocusEffect } from 'expo-router';
 import React, { useCallback, useEffect, useState } from 'react';
-import { Alert, FlatList, Platform, StyleSheet, View } from 'react-native';
+import { Alert, FlatList, Platform, StyleSheet, Text, View } from 'react-native';
 import { ActivityIndicator, Appbar, Button, List, useTheme } from 'react-native-paper';
 import { api } from '../../lib/api';
 import { useLogout } from '@/hooks/useLogout';
@@ -15,29 +15,36 @@ export default function MarkAttendance() {
   const [attendance, setAttendance] = useState<Record<string, AttendanceStatus>>({}); // { userId: status }
   const [existingRecords, setExistingRecords] = useState<Attendance[]>([]); // Store today's records
   const handleLogout = useLogout();
-  
+
 
   const fetchUsers = useCallback(async () => {
     try {
       const today = new Date().toISOString().split('T')[0];
+      const adminDeptId = api.currentUser?.department || "";
+
+      if (!adminDeptId) {
+        setLoading(false);
+        return;
+      }
+
       const [usersData, attendanceData] = await Promise.all([
-        api.getUsers(),
+        api.getUsersByDepartment(adminDeptId),
         api.getAttendance()
       ]);
 
-      // Filter only regular users of the SAME department as the admin
-      const adminDeptId = api.currentUser?.department?.id;
-      const students = usersData.filter(u =>
-        u.role === 'USER' &&
-        u.department?.id === adminDeptId
-      );
+      // Filter only regular users
+      const students = usersData.filter(u => u.role === 'USER');
       setUsers(students);
 
-      // Get today's attendance records
-      const todayRecords = attendanceData.filter(a => a.date === today);
+      // Get today's attendance records - handle date comparison carefully
+      const todayRecords = (attendanceData || []).filter(a => {
+        if (!a.date) return false;
+        // Compare only YYYY-MM-DD part
+        return a.date.split('T')[0] === today;
+      });
       setExistingRecords(todayRecords);
 
-      // Initialize as PRESENT or with existing status
+      // Initialize with existing status or PRESENT
       const initialAttendance: Record<string, AttendanceStatus> = {};
       students.forEach(u => {
         const record = todayRecords.find(r => r.user_id === u.id);
@@ -45,10 +52,11 @@ export default function MarkAttendance() {
       });
       setAttendance(initialAttendance);
     } catch (error) {
+      console.error("Fetch users error:", error);
       if (Platform.OS === "web") {
-        alert('Error\nFailed to load users')
+        alert('Error: Failed to load data. Please check your connection.');
       } else {
-        Alert.alert('Error', 'Failed to load users');
+        Alert.alert('Error', 'Failed to load data');
       }
     } finally {
       setLoading(false);
@@ -72,38 +80,29 @@ export default function MarkAttendance() {
     setSubmitting(true);
     try {
       const today = new Date().toISOString().split('T')[0];
-      const promises = Object.entries(attendance).map(([userId, status]) => {
-        const existing = existingRecords.find(r => r.user_id === userId);
+      const records = Object.entries(attendance).map(([userId, status]) => ({
+        user_id: userId,
+        status: status
+      }));
 
-        if (existing) {
-          // Update existing record for today
-          return api.updateAttendance(existing.id, { status });
-        } else {
-          // Create new record for today
-          return api.addAttendance({
-            user_id: userId,
-            date: today,
-            status,
-            is_justified: false,
-            justification: null
-          });
-        }
-      });
+      await api.syncAttendance(today, records);
 
-      await Promise.all(promises);
       // Refresh to update existingRecords state
       await fetchUsers();
-      if (Platform.OS === "web") {
-        alert('Success\nAttendance synchronized successfully for today')
-      } else {
 
-        Alert.alert('Success', 'Attendance synchronized successfully for today');
+      const successMsg = 'Attendance synchronized successfully for today';
+      if (Platform.OS === "web") {
+        alert('Success: ' + successMsg);
+      } else {
+        Alert.alert('Success', successMsg);
       }
     } catch (error) {
+      console.error("Submit attendance error:", error);
+      const errorMsg = 'Failed to save attendance';
       if (Platform.OS === "web") {
-        alert('Error\nFailed to save attendance')
+        alert('Error: ' + errorMsg);
       } else {
-        Alert.alert('Error', 'Failed to save attendance');
+        Alert.alert('Error', errorMsg);
       }
     } finally {
       setSubmitting(false);
@@ -118,6 +117,13 @@ export default function MarkAttendance() {
         <Appbar.Content title="Attendance" titleStyle={{ fontWeight: 'bold' }} />
         <Appbar.Action icon="logout" onPress={handleLogout} />
       </Appbar.Header>
+
+      <View style={{ padding: 16, borderBottomWidth: 1, borderBottomColor: AppTheme.colors.outlineVariant, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Text style={{ fontWeight: 'bold', color: colors.primary, fontSize: 16 }}>
+          {String(new Date().toLocaleDateString())}
+        </Text>
+        <Button icon="history" onPress={() => router.push('/(admin)/attendance-today')} style={{ marginTop: 4 }}>History</Button>
+      </View>
 
       <FlatList
         data={users}

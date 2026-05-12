@@ -36,7 +36,7 @@ export const Models = {
    */
   attendance: (data: any): Attendance => ({
     id: String(data._id || data.id || ''),
-    user_id: String(data.user_id || ''),
+    user_id: String(data.user_id?._id || data.user_id?.id || data.user_id || ''),
     date: data.date || new Date().toISOString().split('T')[0],
     status: data.status || 'ABSENT',
     is_justified: data.is_justified ?? false,
@@ -49,8 +49,8 @@ export const Models = {
    */
   notification: (data: any): Notification => ({
     id: String(data._id || data.id || ''),
-    recipient_id: String(data.recipient_id || ''),
-    sender_id: String(data.sender_id || ''),
+    recipient_id: String(data.recipient_id?._id || data.recipient_id?.id || data.recipient_id || ''),
+    sender_id: String(data.sender_id?._id || data.sender_id?.id || data.sender_id || ''),
     content: data.content || '',
     status: data.status || 'Unread',
     isArchived: data.isArchived ?? false,

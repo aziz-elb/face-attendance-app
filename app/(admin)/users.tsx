@@ -30,25 +30,22 @@ export default function StudentListing() {
   const fetchData = useCallback(async () => {
     setLoading(true);
     try {
-      const [allUsers, allAttendance] = await Promise.all([
-        api.getUsers(),
-        api.getAttendance()
-      ]);
-
-      const adminDeptId = api.currentUser?.department?.id || "";
+      const adminDeptId = api.currentUser?.department || "";
       if(!adminDeptId){
         setLoading(false);
         return;
       }
-      const students = allUsers.filter(u => 
-        u.role === 'USER' && 
-        u.department?.id === adminDeptId
-      ).map(u => {
+
+      const [deptUsers, allAttendance] = await Promise.all([
+        api.getUsersByDepartment(adminDeptId),
+        api.getAttendance()
+      ]);
+
+      const students = deptUsers.filter(u => u.role === 'USER').map(u => {
         const userAtt = allAttendance.filter(a => a.user_id === u.id);
         const totalDays = userAtt.length;
         const presentDays = userAtt.filter(a => a.status === 'PRESENT').length;
-        // Mock some data if no attendance yet to demonstrate filtering
-        const rate = totalDays > 0 ? (presentDays / totalDays) * 100 : Math.floor(Math.random() * 40) + 60; 
+        const rate = totalDays > 0 ? (presentDays / totalDays) * 100 : 0; 
         return { ...u, attendanceRate: rate };
       });
 

@@ -123,10 +123,13 @@ export const api = {
 
   // ========== PRÉSENCES (ATTENDANCE) ==========
 
-  getAttendance: async (userId?: string): Promise<Attendance[]> => {
-    // ✅ MODIFIÉ : Ajout du filtre optionnel par utilisateur
+  getAttendance: async (userId?: string, date?: string): Promise<Attendance[]> => {
+    // ✅ MODIFIÉ : Ajout des filtres optionnels
     const data = await apiClient.get('/attendance', {
-      params: userId ? { user_id: userId } : {}
+      params: { 
+        ...(userId && { user_id: userId }),
+        ...(date && { date })
+      }
     });
     return Array.isArray(data) ? data.map(Models.attendance) : [];
   },
@@ -141,6 +144,11 @@ export const api = {
     // ✅ MODIFIÉ
     const data = await apiClient.patch(`/attendance/${id}`, attendanceData);
     return Models.attendance(data);
+  },
+
+  syncAttendance: async (date: string, records: { user_id: string, status: string }[]): Promise<Attendance[]> => {
+    const data = await apiClient.post('/attendance/bulk', { date, records });
+    return Array.isArray(data) ? data.map(Models.attendance) : [];
   },
 
   // ========== NOTIFICATIONS ==========

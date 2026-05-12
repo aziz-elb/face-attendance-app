@@ -106,7 +106,7 @@ export default function AttendanceScreen() {
             <Card.Content style={styles.cardContent}>
               <View style={styles.infoSection}>
                 <Text variant="titleMedium" style={{ fontWeight: 'bold' }}>{new Date(item.date).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}</Text>
-                <Text variant="bodyMedium" style={{ color: colors.outline }}>Status: {item.status}</Text>
+                <Text variant="bodyMedium" style={{ color: colors.outlineVariant }}>Status: {item.status}</Text>
                 {item.justification && (
                   <View style={styles.justificationContainer}>
                     <Text variant="bodySmall" style={{ color: getStatusColor(item), fontWeight: 'bold' }}>
