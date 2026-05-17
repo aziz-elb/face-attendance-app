@@ -2,7 +2,8 @@ import axios from 'axios';
 import { Platform } from 'react-native';
 
 // ✅ MODIFIÉ : Configuration de l'URL de base selon l'environnement
-const API_URL = Platform.OS === "android" ? "http://localhost:3000" : "http://localhost:3000";
+export const SERVER_IP = "192.168.214.44"; // IP locale pour l'appareil physique Android
+const API_URL = Platform.OS === "android" ? `http://${SERVER_IP}:3000` : "http://localhost:3000";
 // Note: Utilisez votre IP locale (ex: 192.168.1.8) si vous testez sur un appareil physique Android
 
 const apiClient = axios.create({

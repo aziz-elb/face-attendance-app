@@ -111,6 +111,18 @@ export default function UserLayout() {
           ),
         }}
       />
+
+      <Tabs.Screen
+        name="upload-photo"
+        options={{
+          href: null,
+          title: "Upload Photo",
+          tabBarStyle: { display: 'none' },
+          headerLeft: () => (
+            <IconButton icon="arrow-left" onPress={() => router.replace('/(user)/profile')} />
+          ),
+        }}
+      />
     </Tabs>
   );
 }

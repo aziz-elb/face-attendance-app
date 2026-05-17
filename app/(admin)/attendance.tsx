@@ -115,14 +115,31 @@ export default function MarkAttendance() {
     <View style={[styles.container, { backgroundColor: colors.background }]}>
       <Appbar.Header elevated>
         <Appbar.Content title="Attendance" titleStyle={{ fontWeight: 'bold' }} />
+        <Text style={{ fontWeight: 'bold', color: colors.primary, fontSize: 16 }}>
+          {String(new Date().toLocaleDateString())}
+        </Text>
         <Appbar.Action icon="logout" onPress={handleLogout} />
       </Appbar.Header>
 
       <View style={{ padding: 16, borderBottomWidth: 1, borderBottomColor: AppTheme.colors.outlineVariant, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-        <Text style={{ fontWeight: 'bold', color: colors.primary, fontSize: 16 }}>
-          {String(new Date().toLocaleDateString())}
-        </Text>
-        <Button icon="history" onPress={() => router.push('/(admin)/attendance-today')} style={{ marginTop: 4 }}>History</Button>
+        
+        <View style={{ flexDirection: 'row', gap: 8, alignItems: 'center' , justifyContent: 'space-between' , width: '100%' }}>
+          <Button 
+            icon="camera-account" 
+            mode="contained-tonal" 
+            onPress={() => router.push('/(admin)/mark-attendance')}
+            style={{ marginTop: 4 }}
+          >
+            Face Scan
+          </Button>
+          <Button 
+            icon="history" 
+            onPress={() => router.push('/(admin)/attendance-today')} 
+            style={{ marginTop: 4 }}
+          >
+            History
+          </Button>
+        </View>
       </View>
 
       <FlatList

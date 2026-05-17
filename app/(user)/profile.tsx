@@ -31,16 +31,16 @@ export default function ProfileScreen() {
 
   return (
     <ScrollView style={[styles.container, { backgroundColor: colors.background }]}>
-       <Appbar.Header elevated >
+      <Appbar.Header elevated >
         <Appbar.Content title="Profile" titleStyle={{ fontWeight: 'bold' }} />
         <Appbar.Action icon="logout" onPress={handleLogout} />
       </Appbar.Header>
       <View style={styles.content}>
         <View style={styles.header}>
-          <Avatar.Text 
-            size={100} 
-            label={(user?.firstName?.charAt(0) || '') + (user?.lastName?.charAt(0) || '')} 
-            style={{ backgroundColor: colors.primary }} 
+          <Avatar.Text
+            size={100}
+            label={(user?.firstName?.charAt(0) || '') + (user?.lastName?.charAt(0) || '')}
+            style={{ backgroundColor: colors.primary }}
           />
           <Text variant="headlineSmall" style={styles.name}>{user?.firstName} {user?.lastName}</Text>
           <Text variant="bodyLarge" style={styles.email}>{user?.email}</Text>
@@ -70,7 +70,20 @@ export default function ProfileScreen() {
 
         <View style={styles.actionContainer}>
           <Text variant="titleMedium" style={styles.sectionTitle}>Account Settings</Text>
-          
+
+          <Card style={[styles.actionCard, { backgroundColor: colors.surface }]} onPress={() => router.push('/(user)/upload-photo')}>
+            <Card.Content style={styles.actionContent}>
+              <View style={styles.actionLeft}>
+                <Avatar.Icon size={40} icon="camera" style={{ backgroundColor: colors.tertiary }} color={colors.onTertiary} />
+                <View style={styles.actionText}>
+                  <Text variant="bodyLarge" style={{ fontWeight: '600' }}>Add photo</Text>
+                  <Text variant="bodySmall" style={{ color: colors.onSurfaceVariant }}>add photo for face recognition</Text>
+                </View>
+              </View>
+              <List.Icon icon="chevron-right" />
+            </Card.Content>
+          </Card>
+
           <Card style={[styles.actionCard, { backgroundColor: colors.surface }]} onPress={() => router.push('/(user)/edit-info')}>
             <Card.Content style={styles.actionContent}>
               <View style={styles.actionLeft}>
@@ -98,9 +111,9 @@ export default function ProfileScreen() {
           </Card>
         </View>
 
-        <Button 
-          mode="contained-tonal" 
-          icon="logout" 
+        <Button
+          mode="contained-tonal"
+          icon="logout"
           onPress={handleLogout}
           style={styles.logoutButton}
         >

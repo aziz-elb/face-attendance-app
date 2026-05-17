@@ -1,7 +1,9 @@
 import { Models } from "./models";
 import { Attendance, Department, Notification, User } from "./types";
-import apiClient from "./api/client"; 
+import apiClient, { SERVER_IP } from "./api/client";
+import recognitionClient from "./api/recognition-client";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Platform } from 'react-native';
 
 export const api = {
   currentUser: null as User | null,
@@ -34,11 +36,11 @@ export const api = {
 
     // Le backend retourne { data: User } pour cette route login spéciale
     const user = Models.user(userResult);
-    
+
     if (!user.isActive) {
       throw new Error("Your account is deactivated. Please contact the administrator.");
     }
-    
+
     api.currentUser = user;
     await api.saveUser(user); // Sauvegarde locale
     return user;
@@ -96,6 +98,113 @@ export const api = {
     await apiClient.delete(`/users/${id}`);
   },
 
+  registerFace: async (userId: string, imageUri: string, departmentId?: string): Promise<any> => {
+    const formData = new FormData();
+    formData.append('student_id', userId);
+    if (departmentId) {
+      formData.append('department_id', departmentId);
+    }
+
+    const uriParts = imageUri.split('/');
+    const fileName = uriParts[uriParts.length - 1] || 'photo.jpg';
+
+    // Determine MIME type based on file extension
+    let type = 'image/jpeg';
+    if (fileName.toLowerCase().endsWith('.png')) {
+      type = 'image/png';
+    } else if (fileName.toLowerCase().endsWith('.gif')) {
+      type = 'image/gif';
+    }
+
+    if (Platform.OS === 'web') {
+      const response = await fetch(imageUri);
+      const blob = await response.blob();
+      formData.append('image', blob, fileName);
+    } else {
+      formData.append('image', {
+        uri: imageUri,
+        name: fileName,
+        type: type,
+      } as any);
+    }
+
+    const RECOGNITION_URL = Platform.OS === "android" ? `http://${SERVER_IP}:8000` : "http://localhost:8000";
+
+    const response = await fetch(`${RECOGNITION_URL}/register`, {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errText = await response.text();
+      let errMsg = "Registration failed";
+      try {
+        const errJson = JSON.parse(errText);
+        errMsg = errJson.detail || errJson.error || errMsg;
+        if (Array.isArray(errMsg)) {
+          errMsg = errMsg.map(e => e.msg || JSON.stringify(e)).join(', ');
+        }
+      } catch (e) {}
+      throw new Error(errMsg);
+    }
+
+    return await response.json();
+  },
+
+  matchFace: async (imageUri: string): Promise<any> => {
+    const formData = new FormData();
+    const uriParts = imageUri.split('/');
+    const fileName = uriParts[uriParts.length - 1] || 'photo.jpg';
+
+    // Determine MIME type based on file extension
+    let type = 'image/jpeg';
+    if (fileName.toLowerCase().endsWith('.png')) {
+      type = 'image/png';
+    } else if (fileName.toLowerCase().endsWith('.gif')) {
+      type = 'image/gif';
+    }
+
+    if (Platform.OS === 'web') {
+      const response = await fetch(imageUri);
+      const blob = await response.blob();
+      formData.append('image', blob, fileName);
+    } else {
+      formData.append('image', {
+        uri: imageUri,
+        name: fileName,
+        type: type,
+      } as any);
+    }
+
+    const RECOGNITION_URL = Platform.OS === "android" ? `http://${SERVER_IP}:8000` : "http://localhost:8000";
+
+    const response = await fetch(`${RECOGNITION_URL}/match`, {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errText = await response.text();
+      let errMsg = "Match failed";
+      try {
+        const errJson = JSON.parse(errText);
+        errMsg = errJson.detail || errJson.error || errMsg;
+        if (Array.isArray(errMsg)) {
+          errMsg = errMsg.map(e => e.msg || JSON.stringify(e)).join(', ');
+        }
+      } catch (e) {}
+      throw new Error(errMsg);
+    }
+
+    return await response.json();
+  },
+
+  closeAttendanceSession: async (departmentId: string): Promise<any> => {
+    return await recognitionClient.post('/close-attendance', null, {
+      params: { department_id: departmentId }
+    });
+  },
+
   // ========== DÉPARTEMENTS ==========
 
   getDepartments: async (): Promise<Department[]> => {
@@ -126,7 +235,7 @@ export const api = {
   getAttendance: async (userId?: string, date?: string): Promise<Attendance[]> => {
     // ✅ MODIFIÉ : Ajout des filtres optionnels
     const data = await apiClient.get('/attendance', {
-      params: { 
+      params: {
         ...(userId && { user_id: userId }),
         ...(date && { date })
       }
